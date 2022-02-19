@@ -1,3 +1,4 @@
+/*
 #include<stdio.h>
 
 int main() {
@@ -19,4 +20,26 @@ int main() {
         }
     }
     return 0;
+}
+*/
+
+#include <stdio.h>
+
+int main() {
+
+	int now_hour, now_minute;
+	int cooking_time;
+
+	int tmp;
+
+	scanf("%d %d %d", &now_hour, &now_minute, &cooking_time);
+
+	tmp = now_hour * 60 + now_minute + cooking_time;
+
+	now_hour = ( (int)(tmp / 60) ) % 24;
+	now_minute = tmp % 60;
+
+	printf("%d %d\n", now_hour, now_minute);
+
+	return 0;
 }
