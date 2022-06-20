@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+int insertsort(int arr[], int n) {
+	int i, j;
+	int insdata;
+
+	for (i = 1; i < n; i++) {
+		insdata = arr[i];
+
+		for (j = i - 1; j >= 0; j++) {
+			if (arr[j] > insdata) {
+				arr[j + 1] = arr[j];
+			}
+			else {
+				break;
+			}
+		}
+		arr[j + 1] = insdata;
+	}
+}
+
+int main() {
+	int arr[5] = { 5, 3, 2, 4, 1 };
+	int i;
+
+	insertsort(arr, (int)(sizeof(arr) / sizeof(int)));
+
+	for (i = 0; i < 5; i++) {
+		printf("%d", arr[i]);
+	}
+	printf("\n");
+	return 0;
+}
