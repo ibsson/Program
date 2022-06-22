@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+void cut(char arr[], int cut_num_1, int cut_num_2) {
+	for (int i = 0; i < 101; i++) {
+		arr[cut_num_1 - 1] = arr[cut_num_2];
+		cut_num_1++;
+		cut_num_2++;
+	}
+	printf(arr);
+}
+
+int main() {
+
+	char num[101];
+	int cut_num_1 = 0;
+	int cut_num_2 = 0;
+	int count = 0;
+
+	printf("enter: ");
+	scanf_s("%s", num, 101);
+	for (int i = 0; i < 101; i++) {
+		if (num[i] == 0) {
+			break;
+		}
+		else {
+			count++;
+		}
+	}
+	for ( ; ; ) {
+		printf("cut start: ");
+		scanf_s("%d", &cut_num_1);
+		if (cut_num_1 > count || cut_num_1 <= 0) {
+			printf("again\n");
+			continue;
+		}
+		else {
+			break;
+		}
+	}
+	
+	for ( ; ; ) {
+		printf("cut finish: ");
+		scanf_s("%d", &cut_num_2);
+		if (cut_num_2 > count || cut_num_2 <= cut_num_1) {
+			printf("again\n");
+			continue;
+		}
+		else {
+			break;
+		}
+	}
+
+	cut(num, cut_num_1, cut_num_2);
+}
