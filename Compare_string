@@ -2,7 +2,18 @@
 
 int compare(char string_1[], char string_2[]) {
 
-	for (int i = 0; i < 101; i++) {
+	int a = 0;
+	int count = 0;
+
+	while (1) {
+		if (string_2[a] == 0) {
+			break;
+		}
+		a++;
+		count++;
+	}
+
+	for (int i = 0; i < count; i++) {
 		if (string_1[i] == string_2[i]) {
 			continue;
 		}
@@ -11,22 +22,41 @@ int compare(char string_1[], char string_2[]) {
 			break;
 		}
 	}
-
 	return 1;
 }
 
-int main() {
-	char string_1[101];
-	char string_2[101];
+void enter() {
 
+	char string_1[101];
+	char string_2[21];
+
+	printf("enter string_1: ");
 	scanf_s("%s", string_1, 101);
-	scanf_s("%s", string_2, 101);
+	printf("enter string_2: ");
+	scanf_s("%s", string_2, 21);
 
 	if (compare(string_1, string_2)) {
-		printf("they are same.");
+		printf("they are same.\n");
 	}
 	else {
-		printf("they are not same.");
+		printf("they are not same.\n");
+	}
+
+}
+
+int main() {
+
+	int num = 0;
+
+	while (1) {
+		printf("enter number: ");
+		scanf_s("%d", &num);
+		if (num == 1) {  // 1을 누르면 enter 실행
+			enter();
+		}
+		else {  //1이 아닌 다른 숫자를 누르면 프로그램 종료
+			break;
+		}
 	}
 
 	return 0;
