@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+int find(char string_1[], char string_2[]) {
+	int a = 0;
+	int count = 0;
+
+	for (int i = 0; i < 101; i++) {
+		if (string_1[i] == string_2[a]) {
+			if (string_2[a+1] == 0) {
+				return i;
+			}
+			a++;
+			continue;
+		}
+		else if (string_1[i] != string_2[a]) {
+			if (i == 100) {
+				return 0;
+			}
+			a = 0;
+			continue;
+		}
+	}
+}
+
+int main() {
+	
+	char string_1[101];
+	char string_2[21];
+	int count = 1;
+	int a = 0;
+	
+	printf("enter: ");
+	scanf_s("%s", string_1, 101);
+	printf("What string are you looking for?: ");
+	scanf_s("%s", string_2, 21);
+
+	while (1) {
+		if (string_2[a] == 0) {
+			break;
+		}
+		a++;
+		count++;
+	}
+
+	int b = find(string_1, string_2);
+
+	if (b) {
+		printf("%d ~ %d 번째에 있습니다", ((b + 2) - count + 1), (b + 1));
+	}
+	else {
+		printf("없습니다");
+	}
+
+	return 0;
+}
