@@ -109,6 +109,7 @@ int find_string(char s_orig[], int start, int end, char s_find[]) {
 			if (s_find[count + 1] == 0) {
 				return i + 1;
 			}
+			count++;
 		}
 	}
 
