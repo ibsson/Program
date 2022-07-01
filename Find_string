@@ -1,3 +1,4 @@
+/*
 #include <stdio.h>
 
 int find(char string_1[], char string_2[]) {
@@ -6,7 +7,7 @@ int find(char string_1[], char string_2[]) {
 
 	for (int i = 0; i < 101; i++) {
 		if (string_1[i] == string_2[a]) {
-			if (string_2[a+1] == 0) {
+			if (string_2[a + 1] == 0) {
 				return i;
 			}
 			a++;
@@ -23,12 +24,12 @@ int find(char string_1[], char string_2[]) {
 }
 
 int main() {
-	
+
 	char string_1[101];
 	char string_2[21];
 	int count = 1;
 	int a = 0;
-	
+
 	printf("enter: ");
 	scanf_s("%s", string_1, 101);
 	printf("What string are you looking for?: ");
@@ -49,6 +50,89 @@ int main() {
 	}
 	else {
 		printf("없습니다");
+	}
+
+	return 0;
+}
+*/
+
+#include <stdio.h>
+
+int compare_char(char a, char b) {
+
+	if (a == b)
+		return 1;
+
+	return 0;
+}
+
+int get_string_len(char string[]) {
+
+	int count = 0;
+
+	while (1) {
+		if (string[count] == 0) {
+			return count;
+		}
+		count++;
+	}
+
+	return 0;
+}
+
+int find_string(char s_orig[], int start, int end, char s_find[]) {
+
+	int len_orig = get_string_len(s_orig);
+	int len_find = get_string_len(s_find);
+
+	if (len_orig < len_find || start > len_orig || end <= 0 || start > end) {
+		return 0;
+	}
+
+	start = (start <= 0) ? 1 : start;
+	end = (len_orig < end) ? len_orig : end;
+
+	for (int i = start - 1; i < end; i++) {
+		int count = 0;
+
+		if (!compare_char(s_orig[i], s_find[count])) {
+			continue;
+		}
+
+		for (int k = i; k < end; k++) {
+
+			if (s_orig[k] != s_find[count]) {
+				break;
+			}
+
+			if (s_find[count + 1] == 0) {
+				return i + 1;
+			}
+			count++;
+		}
+	}
+
+	return 0;
+}
+
+int main() {
+
+	char string_1[101];
+	char string_2[21];
+
+	printf("enter: ");
+	scanf_s("%s", string_1, (int)(sizeof(string_1)/sizeof(char)));
+	printf("What string are you looking for?: ");
+	scanf_s("%s", string_2, (int)(sizeof(string_2) / sizeof(char)));
+
+	int position = find_string(string_1, -10, get_string_len(string_1), string_2);
+
+	if (position) {
+		printf("찾는 문자열이 %d ~ %d 번째에 있습니다.\n",
+			position, (position - 1) + get_string_len(string_2));
+	}
+	else {
+		printf("찾는 문자열이 없습니다.\n");
 	}
 
 	return 0;
