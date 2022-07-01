@@ -93,13 +93,14 @@ int find_string(char s_orig[], int start, int end, char s_find[]) {
 	end = (len_orig < end) ? len_orig : end;
 
 	for (int i = start - 1; i < end; i++) {
+	
 		int count = 0;
-
 		if (!compare_char(s_orig[i], s_find[count])) {
 			continue;
 		}
 
-		for (int k = i; k < end; k++) {
+		count++;
+		for (int k = i + 1; k < end; k++) {
 
 			if (s_orig[k] != s_find[count]) {
 				break;
@@ -108,7 +109,6 @@ int find_string(char s_orig[], int start, int end, char s_find[]) {
 			if (s_find[count + 1] == 0) {
 				return i + 1;
 			}
-			count++;
 		}
 	}
 
@@ -121,11 +121,11 @@ int main() {
 	char string_2[21];
 
 	printf("enter: ");
-	scanf_s("%s", string_1, (int)(sizeof(string_1)/sizeof(char)));
+	scanf_s("%s", string_1, (int)(sizeof(string_1) / sizeof(char)));
 	printf("What string are you looking for?: ");
 	scanf_s("%s", string_2, (int)(sizeof(string_2) / sizeof(char)));
 
-	int position = find_string(string_1, -10, get_string_len(string_1), string_2);
+	int position = find_string(string_1, 0, get_string_len(string_1), string_2);
 
 	if (position) {
 		printf("찾는 문자열이 %d ~ %d 번째에 있습니다.\n",
