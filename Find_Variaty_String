@@ -1,0 +1,96 @@
+#include <stdio.h>
+
+int compare_char(char a, char b) {
+
+	if (a == b)
+		return 1;
+
+	return 0;
+}
+
+int get_string_len(char string[]) {
+
+	int count = 0;
+
+	while (1) {
+		if (string[count] == 0) {
+			return count;
+		}
+		count++;
+	}
+
+	return 0;
+}
+
+int find_string(char s_orig[], int start, int end, char s_find[], int pos_all[]) {
+
+	int len_orig = get_string_len(s_orig);
+	int len_find = get_string_len(s_find);
+
+	if (len_orig < len_find || start > len_orig || end <= 0 || start > end) {
+		return 0;
+	}
+
+	start = (start <= 0) ? 1 : start;
+	end = (len_orig < end) ? len_orig : end;
+
+	int find_count = 0;
+
+	for (int i = start - 1; i < end; i++) {
+		int count = 0;
+
+		if (!compare_char(s_orig[i], s_find[count])) {
+			continue;
+		}
+
+		count++;
+
+		for (int k = i + 1; k < end; k++) {
+
+			if (s_orig[k] != s_find[count]) {
+				break;
+			}
+
+			if (s_find[count + 1] == 0) {
+				pos_all[find_count] = i + 1;
+				find_count++;
+
+				i += len_find;
+				if (i > end) {
+					return find_count;
+				}
+				break;
+			}
+
+			count++;
+			if (s_orig[k + 1] != 0) {
+				continue;
+			}
+		}
+	}
+
+	return find_count;
+}
+
+int main() {
+
+	char string_1[101];
+	char string_2[21];
+
+	int pos_all[100];
+
+	printf("enter: ");
+	scanf_s("%s", string_1, (int)(sizeof(string_1) / sizeof(char)));
+	printf("What string are you looking for?: ");
+	scanf_s("%s", string_2, (int)(sizeof(string_2) / sizeof(char)));
+
+	int find_count = find_string(string_1, 0, get_string_len(string_1), string_2, pos_all);
+
+	printf("찾은 문자열의 갯수는 %d개 입니다.\n", find_count);
+
+	for (int i = 0; i < find_count; i++) {
+		printf("%d ~ %d\n", pos_all[i], pos_all[i] + get_string_len(string_2) - 1);
+	}
+
+	return 0;
+}
