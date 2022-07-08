@@ -1,0 +1,84 @@
+#include <stdio.h>
+
+int get_string_len(char string[]) {
+
+	int count = 0;
+
+	while (1) {
+		if (string[count] == 0) {
+			return count;
+		}
+		count++;
+	}
+}
+
+int change(char str[], char change_str[], int start, int finish) {
+
+	int a = 0;
+	int len = get_string_len(change_str);
+
+	if (len != (finish - start + 1)) {
+		return 0;
+	}
+
+	for (int i = start; i <= finish; i++) {
+		str[i - 1] = change_str[a];
+		a++;
+	}
+	return 1;
+}
+
+void enter() {
+
+	char str[101];
+	char change_str[21];
+	int start_num = 0;
+	int finish_num = 0;
+	int room = 0;
+	int len = get_string_len(str);
+
+	printf("enter: ");
+	scanf_s("%s", str, (int)(sizeof(str) / sizeof(char)));
+
+	printf("enter start number: ");
+	scanf_s("%d", &start_num);
+
+	printf("enter finish number: ");
+	scanf_s("%d", &finish_num);
+
+	if (start_num > finish_num) {
+		room = start_num;
+		start_num = finish_num;
+		finish_num = room;
+	}
+
+	printf("무엇으로 바꾸고 싶은가요?: ");
+	scanf_s("%s", change_str, (int)(sizeof(change_str) / sizeof(char)));
+
+	if (!change(str, change_str, start_num, finish_num)) {
+		printf("바꾸고 싶은 위치와 글자 수가 일치하지 않습니다.\n");
+	}
+	else {
+		printf(str);
+		printf("\n");
+	}
+}
+
+int main() {
+	
+	while (1) {
+		int a = 0;
+
+		printf("1은 실행, 끝내려면 아무 키나 눌러주십시오: ");
+		scanf_s("%d", &a);
+
+		if (a == 1) {
+			enter();
+		}
+		else if (a != 1){
+			break;
+		}
+	}
+
+	return 0;
+}
