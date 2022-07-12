@@ -1,0 +1,84 @@
+#include <stdio.h>
+
+int num[300];
+
+void cal(int odd[]) {
+
+    int calculate = 0;
+
+    if (odd[1] != 0) {
+        calculate = odd[0] ^ odd[1];
+    }
+
+    for (int i = 1; i <= 300; i++) {
+        if (odd[i + 1] < 0) {
+            break;
+        }
+        else if (odd[i + 1] != 0) {
+            calculate = calculate ^ odd[i + 1];
+        }
+    }
+
+    printf("%d", calculate);
+}
+
+void find(int room[]) {
+
+    int cnt = 1;
+    int odd[300];
+    int a = 0;
+
+    for (int i = 0; i < 300; i++) {
+        if (room[i] == room[i + 1]) {
+            cnt++;
+            continue;
+        }
+        else if (room[i] != room[i + 1]) {
+            if (cnt % 2 != 0) {
+                odd[a] = room[i];
+                a++;
+            }
+            cnt = 1;
+        }
+    }
+    cal(odd);
+}
+
+void check(int T, int num[]) {
+
+    int N = 0;
+    int tmp = 0;
+    int room[301];
+    int a = 0;
+
+    scanf_s("%d", &N);
+    for (int i = 0; i < N; i++) {
+        scanf_s("%d", &tmp);
+
+        tmp = tmp + 100;
+
+        num[tmp] ++;
+    }
+
+    for (int i = 0; i <= 200; i++) {
+        for (int k = 0; k < num[i]; k++) {
+            room[a] = i - 100;;
+            a++;
+        }
+    }
+    find(room);
+}
+
+int main() {
+
+    FILE* pf;
+    freopen_s(&pf, "input.txt", "r", stdin);
+
+    int T = 0;
+
+    scanf_s("%d", &T);
+
+    check(T, num);
+
+    return 0;
+}
