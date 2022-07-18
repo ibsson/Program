@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+char str[301]; //본래 문자열
+char target[21]; //타겟
+
+int get_string_len(char string[]) {
+
+	int count = 0;
+
+	while (1) {
+		if (string[count] == 0) {
+			return count;
+		}
+		count++;
+	}
+}
+
+int enter() {
+
+	int a = 1;
+	int cnt = 1;
+
+	scanf_s("%s", str, 301);
+
+	scanf_s("%s", target, 21);
+
+	for (int i = 0; i < 301; i++) {
+		if (str[i] == target[0]) {
+			for (int k = i + 1; k < 21; k++) {
+				if (target[a] == 0) {     //끝까지 같을경우
+					break;
+				}
+				if (str[k] != target[a]) {
+					a = 1;
+					break;
+				}
+				a++;
+			}
+		}
+	}
+
+	return a;
+}
+
+int main() {
+
+	while (1) {
+		int a = enter();
+		int len = get_string_len(target);
+
+		if (len != a) {
+			printf("문자열이 없습니다.\n");
+		}
+		else if (len == a) {
+			break;
+		}
+	}
+
+	return 0;
+}
