@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+int main() {
+
+	int input_num[2][101] = { 0 };
+	int N = 0;
+	int temp = 0;
+	int cnt = 1;
+	int calculate = 0;
+	int T = 0;
+
+	scanf_s("%d", &T);
+
+	for (int t = 1; t <= T; t++) {
+
+		scanf_s("%d", &N);
+
+		for (int i = 0; i < N; i++)
+			scanf_s("%d", &input_num[0][i]);
+
+		for (int i = 0; i < N; i++)
+			for (int j = i + 1; j < N; j++)
+				if (input_num[0][i] > input_num[0][j]) {
+					temp = input_num[0][i];
+					input_num[0][i] = input_num[0][j];
+					input_num[0][j] = temp;
+				}
+
+		for (int i = 0; i < N; i++) {
+			for (int k = i + 1; k < 100; k++) {
+				if (input_num[0][i] == input_num[0][k]) {
+					cnt++;
+				}
+				else if (input_num[0][i] != input_num[0][k]) {
+					input_num[1][i] = cnt;
+					cnt = 1;
+					i = k - 1;
+					break;
+				}
+			}
+		}
+
+		for (int i = 0; i < N; i++) {
+			if (input_num[1][i] == 0) {
+				continue;
+			}
+			if (input_num[1][i] % 2 != 0) {
+				calculate ^= input_num[0][i];
+			}
+		}
+
+		printf("Case #%d\n", t);
+		printf("%d\n", calculate);
+
+		if (t != T) {
+			for (int i = 0; i < 101; i++) {
+				input_num[0][i] = 0;
+				input_num[1][i] = 0;
+			}
+			calculate = 0;
+		}
+	}
+
+	return 0;
+}
