@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main() {
+
+	char str[20];
+
+	printf("문자열을 입력하세요 : ");
+	scanf_s("%s", str, 20);
+
+	printf("입력된 문자열은 %s 입니다.\n", str); //띄어쓰기를 포함해 '네이버 블로그' 라고 치면 '네이버'만 나옴 -> 띄어쓰기와 줄바꿈이 scanf 종료 시점임.
+
+
+	return 0;
+}
