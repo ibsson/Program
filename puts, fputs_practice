@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int main() {
+	const char * str1 = "simple string";
+	char str2[] = "Simple string";
+
+	printf("1. puts test ______ \n");
+	puts(str1); //puts는 개행이 자동으로 됨
+	puts(str2);
+	puts("So Simple string");
+
+	printf("2. fputs test ____ \n");
+	fputs(str1, stdout); printf("\n"); //fputs는 개행이 자동으로 안됨
+	fputs(str2, stdout); printf("\n");
+	fputs("So simple string", stderr); printf("\n");
+
+	printf("3. end of main ___\n");
+	return 0;
+}
