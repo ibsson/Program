@@ -13,15 +13,24 @@ int main(){
     double q[NUM];
     double f[NUM];
 
-
     for(int i = 0; i < NUM; i++){
+        printf("input a-%d : ", i);
         scanf("%lf", &p[i]);                  //p a0 ~ an까지 입력
+        if (p[i] > 100000 || p[i] < -100000) { // 입력 받은 수가 -100000 보다 작거나, 100000 보다 크면 다시 입력 받음
+            printf("re-input : \n");
+            i--;
+        }
     }
     for(int i = 0; i < NUM; i++){
+        printf("input b-%d : ", i);
         scanf("%lf", &q[i]);                  //q a0 ~ an까지 입력
+        if (q[i] > 100000 || q[i] < -100000) { // 입력 받은 수가 -100000 보다 작거나, 100000 보다 크면 다시 입력 받음
+            printf("re-input : \n");
+            i--;
+        }
     }
 
-    printf("x : ");
+    printf("input x : ");
     scanf("%d", &x);                          //x값 입력
 
     printf("%lf\n", eval (p, x, NUM));        //p의 값
@@ -34,6 +43,7 @@ int main(){
 }
 
 double eval(double p[], double x, int n){
+
 
     double room_1 = 0;
 
