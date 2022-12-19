@@ -15,9 +15,7 @@ int main() {
 	for (int i = (num + 1); i < (2 * num); i++) {
 		for (int k = 2; k < i; k++) {
 			if (i % k == 0) break;
-			if ((k + 1) == i) {
-				cnt++;
-			}
+			if ((k + 1) == i) cnt++;
 		}
 	}
 
