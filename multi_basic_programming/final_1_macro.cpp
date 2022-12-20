@@ -1,35 +1,28 @@
 #include <stdio.h>
 
-#define SWAP(num1, num2, type) do{ \
-	type room; \
-	room = num1; \
-	num1 = num2; \
-	num2 = room; \
-} while (0)
+#define swap_1(a, b) ( (a) ^= (b) ^= (a) ^= (b))
+
+#define SWAP(num1, num2, type) do{ type room; room = num1; num1 = num2; num2 = room; } while (0)
 
 int main() {
 
 	int num1 = 0;
 	int num2 = 0;
 	int room1 = 0;
-	int room2 = 0;
 
 	scanf_s("%d %d", &num1, &num2);
 
 	if (num1 > num2) {
-		SWAP(num1, num2, int);
+		swap_1(num1, num2);
 	}
 
-	room1 = num1;
+	if (num1 % 2 == 0) num1 += 1;
 
-	for (int i = 0; i <= (num2 - num1); i++) {
-		if ((room1 % 2) != 0) {
-			room2 += room1;
-		}
-		room1 += 1;
+	for (int i = num1; i <= num2; i += 2) {
+		room1 += num1;
 	}
 
-	printf("%d\n", room2);
+	printf("%d\n", room1);
 
 	return 0;
 }
