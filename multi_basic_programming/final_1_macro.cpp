@@ -19,7 +19,7 @@ int main() {
 	if (num1 % 2 == 0) num1 += 1;
 
 	for (int i = num1; i <= num2; i += 2) {
-		room1 += num1;
+		room1 += i;
 	}
 
 	printf("%d\n", room1);
