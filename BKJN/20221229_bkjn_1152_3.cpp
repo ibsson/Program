@@ -16,14 +16,7 @@ int main() {
 
 	fgets(word, sizeof(word), stdin);
 
-	int a = get_word_start_pos();
-
-	if (a == -1) {
-		printf("0\n");
-		return 0;
-	}
-
-	for (int i = a; i < (int)(sizeof(word) / sizeof(char)); i++) {
+	for (int i = get_word_start_pos(); i < (int)(sizeof(word) / sizeof(char)); i++) {
 
 		if (word[i] < 'A' || 'z' < word[i]) {
 
