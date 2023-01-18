@@ -1,19 +1,23 @@
+#include <stdio.h>
+
+int num[10000000] = { 0 };
+
 void quicksort(int L, int R) {
 
 	int left = L;
 	int right = R;
-	int pivot = room[((L + R) / 2)];
-	int num = 0;
+	int pivot = num[((L + R) / 2)];
+	int room = 0;
 
 	do {
-		while (room[left] > pivot) left++;
+		while (num[left] > pivot) left++;
 
-		while (room[right] < pivot) right--;
+		while (num[right] < pivot) right--;
 
 		if (left <= right) {
-			num = room[left];
-			room[left] = room[right];
-			room[right] = num;
+			room = num[left];
+			num[left] = num[right];
+			num[right] = room;
 			left++;
 			right--;
 		}
@@ -24,4 +28,23 @@ void quicksort(int L, int R) {
 
 	if (left < R) quicksort(left, R);
 
+}
+
+int main() {
+
+	int N = 0;
+
+	scanf_s("%d", &N);
+
+	for (int i = 0; i < N; i++) {
+		scanf_s("%d", &num[i]);
+	}
+
+	quicksort(0, (N - 1));
+
+	for (int i = 0; i < N; i++) {
+		printf("%d ", num[i]);
+	}
+
+	return 0;
 }
