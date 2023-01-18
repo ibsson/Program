@@ -47,7 +47,7 @@ int main() {
 
 	int N = 0;
 
-	scanf("%d", &N);
+	scanf_s("%d", &N);
 
 	int cnt = get(N);
 
