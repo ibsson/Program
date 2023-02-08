@@ -1,3 +1,5 @@
+//소수 구하는 알고리즘
+
 #include <stdio.h>
 
 int num[1000001] = { 0 };
