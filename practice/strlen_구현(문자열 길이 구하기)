@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+char str[51];
+
+int get_len(){
+	
+	int count = 0;
+	
+	for(int i = 0; i < 51; i++){
+		if(str[i] == '\0') break;
+		
+		count++;
+	}
+	
+	return count;
+}
+
+int main() {
+	
+	scanf("%s", str);
+
+	printf("%d\n", get_len());
+
+	return 0;
+}
