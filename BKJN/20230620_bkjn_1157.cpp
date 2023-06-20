@@ -46,7 +46,7 @@ int get_len(){
 
 int main() {
 	
-	char alphabet[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //알파벳은 26개지만 널문자가 들어갈 공간으로 한칸 더 만들어줌(컴파일러마다 널문자 공간 유무로 오류가 뜰수도 안뜰수도 있음. 그냥 한칸 더 만들어 두는걸 습관화 하자)
+	char alphabet[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; /*알파벳은 26개지만 널문자가 들어갈 공간으로 한칸 더 만들어줌(컴파일러마다 널문자 공간 유무로 오류가 뜰수도 안뜰수도 있음. 그냥 한칸 더 만들어 두는걸 습관화 하자)*/
 	
 	scanf("%ls", word);
 	
