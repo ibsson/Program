@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int gcd_euclid(int num1, int num2){
+	
+	int temp = 0;
+	
+	while(num2 != 0){
+		if(num1 > num2){
+			temp = num1;
+			num1 = num2;
+			num2 = temp % num2;
+		}
+		else if(num1 < num2){
+			num2 = num2 % num1;
+		}
+	}
+	
+	return num1;
+}
+
+int main() {
+	
+	int num1, num2 = 0;
+	int max = 0;
+	int min = 0;
+	
+	scanf("%d %d", &num1, &num2);
+	
+	max = gcd_euclid(num1, num2);  //유클리드 호제법 (최대공약수 구하기, A를 B로 나눴을 때 나머지가 r이라면 A와 B의 최대공약수는 B와 r의 최대공약수와 같다)
+	
+	min = ((num1 * num2) / max);  //최소공배수는 두 수 곱한거를 최대공약수로 나누면 됨.
+	
+	printf("%d\n", max);
+	printf("%d\n", min);
+	
+	return 0;
+}
