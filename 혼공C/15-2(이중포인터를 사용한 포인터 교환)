@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+void swap_ptr(char **ppa, char **ppb){
+	
+	char *tmp;
+	
+	tmp = *ppa;
+	*ppa = *ppb;
+	*ppb = tmp;
+}
+
+int main(void){
+	
+	char *pa = "success";
+	char *pb = "failure";
+	
+	printf("pa -> %s, pb -> %s\n", pa, pb);
+	swap_ptr(&pa, &pb);
+	printf("pa -> %s, pb -> %s\n", pa, pb);
+	
+	return 0;
+}
