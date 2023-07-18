@@ -26,7 +26,7 @@ int main(void){
 	return 0;
 }
 
-void func((*fp)(int, int)){
+void func(int (*fp)(int, int)){
 	int a, b = 0;
 	int res = 0;
 	
