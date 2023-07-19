@@ -7,6 +7,10 @@ int main(void){
 	double *pd;
 	
 	pi = (int *)malloc(sizeof(int));
+	if(pi == NULL){                           //동적할당에 실패하면 NULL포인터 반환
+		printf("# 메모리가 부족합니다.\n");
+		exit(1);                          //프로그램을 바로 종료
+	}
 	
 	pd = (double *)malloc(sizeof(double));
 	
