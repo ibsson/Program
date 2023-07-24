@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct profile{
+	char name[20];
+	int age;
+	double height;
+	char *intro;
+};
+
+int main(void){
+	
+	struct profile hayun;
+	
+	strcpy(hayun.name, "서하윤"); //hayun.name = "서하윤";를 쓰면 안됨
+	hayun.age = 17;
+	hayun.height = 164.5;
+	
+	hayun.intro = (char *)malloc(80);
+	printf("자기소개 : ");
+	gets(hayun.intro);
+	
+	printf("이름 : %s\n", hayun.name);
+	printf("나이 : %d\n", hayun.age);
+	printf("키 : %.1lf\n", hayun.height);
+	printf("자기소개 : %s\n", hayun.intro);
+	free(hayun.intro);
+	
+	return 0;
+}
