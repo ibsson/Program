@@ -1,0 +1,29 @@
+ #include <stdio.h>
+
+struct profile{
+	int age;
+	double height;
+};
+
+struct student{
+	struct profile pf;
+	int id;
+	double grade;
+};
+
+int main(void){
+	
+	struct student hayun;
+	
+	hayun.pf.age = 17;
+	hayun.pf.height = 164.5;
+	hayun.id = 315;
+	hayun.grade = 4.3;
+	
+	printf("나이 : %d\n", hayun.pf.age);
+	printf("키 : %.1lf\n", hayun.pf.height);
+	printf("학번 : %d\n", hayun.id);
+	printf("학점 : %.1lf\n", hayun.grade);
+	
+	return 0;
+}
