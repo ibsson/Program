@@ -4,7 +4,7 @@
 
 int num[1000001] = { 0 };
 
-void eratos(int M, int N) {
+void eratos(int N) {
 
 	num[1] = 1;
 
@@ -23,7 +23,7 @@ int main(void) {
 	scanf_s("%d", &M);
 	scanf_s("%d", &N);
 
-	eratos(M, N);
+	eratos(N);
 
 	for (int j = M; j <= N; j++) {
 		if (num[j] == 0) printf("%d\n", j);
