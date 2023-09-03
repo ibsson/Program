@@ -20,3 +20,5 @@ int main(void) {
 
 	return 0;
 }
+
+//재귀보다 이게 더 빠름
