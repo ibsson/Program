@@ -4,9 +4,9 @@ int main(void) {
 
 	int N, M = 0;
 	char cas[51][51];
+	int tmp = 0;
 	int cnt_row = 0;
 	int cnt_col = 0;
-	int tmp = 0;
 
 	scanf("%d %d", &N, &M);
 
