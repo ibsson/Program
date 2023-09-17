@@ -1,0 +1,83 @@
+#include <stdio.h>
+
+int data[2][1000] = { 0 };
+int num[1000] = { 0 };
+int cnt = 0;
+int tmp = 1;
+int k = 1;
+
+void pop(int jump) {
+
+	int i = 1;
+	int pos = 0;
+	int room = 0;
+
+	for (int i = 0; i < jump; i++) {
+
+		if (tmp > cnt) {
+			tmp = 1;
+		}
+
+		if (data[1][tmp] == -1) {
+			while (1) {
+				if (tmp > cnt) {
+					tmp = 1;
+				}
+				if (data[1][tmp] != -1) break;
+				tmp++;
+			}
+		}
+		
+		if (i + 1 == jump) {
+			room = data[1][tmp];
+
+			data[1][tmp] = -1;
+			num[k] = tmp;
+			k++;
+			if (k == cnt + 1) break;
+			pos = tmp;
+
+			while (1) {
+				if (pos < 1) {
+					pos = cnt;
+				}
+				if (data[1][pos] != -1) {
+					data[1][pos] = room;
+					break;
+				}
+				pos--;
+			}
+		}
+		tmp++;
+	}
+}
+
+
+int main() {
+
+	int jump;
+
+	scanf_s("%d %d", &cnt, &jump);
+
+	for (int i = 1; i <= cnt; i++) {
+		data[0][i] = i;
+		data[1][i] = i + 1;
+	}
+	data[1][cnt] = 1;
+
+	for (int i = 0; i < cnt; i++) {
+		pop(jump);
+	}
+
+	printf("<");
+
+	for (int i = 1; i <= cnt; i++) {
+		printf("%d", num[i]);
+		if (i == cnt) break;
+		printf(",");
+		printf(" ");
+	}
+	printf(">");
+
+	return 0;
+}
