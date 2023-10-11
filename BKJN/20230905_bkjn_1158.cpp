@@ -1,3 +1,69 @@
+
+//New solution
+
+#include <stdio.h>
+
+#define DATA_LEN_MAX 5000
+
+int data[2][DATA_LEN_MAX];
+int cnt = 0;
+int address_now = 0;
+
+
+int pop(int jump) {
+
+	if (jump <= 0)
+		return -1;
+
+	int address_previous;
+
+	for (int i = 0; i < jump; i++) {
+		address_previous = address_now;
+		address_now = data[1][address_now];
+	}
+
+	int return_value = data[0][address_now];
+
+	data[1][address_previous] = data[1][address_now];
+	address_now = address_previous;
+
+	return return_value;
+}
+
+int main() {
+
+	scanf("%d", &cnt);
+
+	if (cnt < 1 || cnt >= DATA_LEN_MAX)
+		cnt = DATA_LEN_MAX;
+
+	for (int i = 0; i < cnt; i++) {
+		data[0][i] = i + 1;
+		data[1][i] = i + 1;
+	}
+	data[1][cnt - 1] = 0;
+
+	address_now = cnt - 1;
+
+	int interval;
+	scanf("%d", &interval);
+
+	printf("<");
+	for (int i = 0; i < cnt; i++) {
+		printf("%d", pop(interval));
+		if (i != cnt - 1)
+			printf(", ");
+	}
+	printf(">");
+
+	return 0;
+}
+
+
+// Old solution
+
+
+
 #include <stdio.h>
 
 int main(void) {
