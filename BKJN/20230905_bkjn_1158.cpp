@@ -60,8 +60,62 @@ int main() {
 }
 
 
-// Old solution
+// Myself
 
+
+#include <stdio.h>
+
+int data[2][5000];
+int now = 0;
+
+int pop(int jump){
+	
+	int pre = 0;
+	int result = 0;
+	
+	for(int i = 0; i < jump; i++){
+		pre = now;
+		now = data[1][now];
+	}
+	result = data[0][now];
+	
+	data[1][pre] = data[1][now];
+	now = pre;
+	
+	return result;
+}
+
+int main(void){
+	
+	int N = 0;
+	int K = 0;
+	
+	scanf("%d", &N);
+	
+	for(int i = 0; i < N; i++){
+		data[0][i] = i + 1;
+		data[1][i] = i + 1;
+	}
+	data[1][N - 1] = 0;
+	
+	now = N - 1;
+	
+	scanf("%d", &K);
+	
+	printf("<");
+	for(int i = 0; i < N; i++){
+		printf("%d", pop(K));
+		if(i != N - 1){
+			printf(", ");
+		}
+	}
+	printf(">\n");
+	
+	return 0;
+}
+
+
+// Old solution
 
 
 #include <stdio.h>
