@@ -1,3 +1,64 @@
+//구조체, 동적할당
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct NODE {
+	int data;
+	int next;
+} node_s;
+
+int cnt = 0;
+int address_now = 0;
+node_s* node;
+
+int pop(int jump) {
+
+	int address_previous = 0;
+
+	for (int i = 0; i < jump; i++) {
+		address_previous = address_now;
+		address_now = node[address_now].next;
+	}
+
+	int return_value = node[address_now].data;
+
+	node[address_previous].next = node[address_now].next;
+	address_now = address_previous;
+
+	return return_value;
+}
+
+int main() {
+
+	scanf_s("%d", &cnt);
+
+	node = (node_s*)malloc(sizeof(node_s) * cnt);
+
+	for (int i = 0; i < cnt; i++) {
+		node[i].data = i + 1;
+		node[i].next = i + 1;
+	}
+	node[cnt - 1].next = 0;
+
+	address_now = cnt - 1;
+
+	int interval;
+	scanf_s("%d", &interval);
+
+	printf("<");
+	for (int i = 0; i < cnt; i++) {
+		printf("%d", pop(interval));
+		if (i != cnt - 1)
+			printf(", ");
+	}
+	printf(">");
+
+	free(node);
+
+	return 0;
+}
+
 
 //New solution
 
