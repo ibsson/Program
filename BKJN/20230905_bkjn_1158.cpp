@@ -1,3 +1,66 @@
+//원형 연결리스트
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+}Node_s;
+
+int main() {
+    int N = 0;
+	int K = 0;
+	
+    scanf("%d %d", &N, &K);
+
+    // 연결 리스트 초기화
+    Node_s* head = NULL;
+    Node_s* tail = NULL;
+	
+    for (int i = 1; i <= N; i++) {
+        Node_s* newNode = (Node_s*)malloc(sizeof(Node_s));
+        newNode->data = i;
+        newNode->next = NULL;
+        
+        if (head == NULL) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+    tail->next = head; // 원형 연결 리스트 생성
+
+    printf("<");
+	
+    Node_s* current = head;
+    Node_s* prev = NULL;
+	
+    while (N > 0) {
+        int count = 1;
+        while (count < K) {
+            prev = current;
+            current = current->next;
+            count++;
+        }
+        if (prev != NULL) {
+            printf("%d, ", current->data);
+            prev->next = current->next;
+        } else {
+            printf("%d", current->data);
+        }
+        Node_s* temp = current;
+        current = current->next;
+        free(temp);
+        N--;
+    }
+    printf(">\n");
+
+    return 0;
+}
+
 //구조체, 동적할당
 
 #include <stdio.h>
