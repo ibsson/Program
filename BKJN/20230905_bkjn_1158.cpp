@@ -1,3 +1,176 @@
+
+// 포인트 사용, 원형(단방향)연결리스트
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+}Node_s;
+
+int node_cnt = 0;
+
+Node_s* node_add(Node_s* now_node, int input_data) {
+
+    Node_s* newNode = (Node_s*)malloc(sizeof(Node_s));
+
+    newNode->data = input_data;
+
+    if (now_node == NULL) {
+        newNode->next = newNode;
+    }
+    else {
+        newNode->next = now_node->next;
+        now_node->next = newNode;
+    }
+
+    node_cnt++;
+
+    return newNode;
+}
+
+Node_s* node_pop(Node_s* now_node, int jump, int* return_data) {
+
+    Node_s* temp = now_node;
+    Node_s* previous_node = NULL;
+
+    for (int i = 0; i < jump; i++) {
+        previous_node = temp;
+        temp = temp->next;
+    }
+
+    *return_data = (temp->data);
+
+    previous_node->next = temp->next;
+
+    node_cnt--;
+
+    free(temp);
+
+    return previous_node;
+}
+
+
+int main() {
+    int N = 0;
+    int K = 0;
+
+    scanf_s("%d %d", &N, &K);
+
+    Node_s* now_node = NULL;
+
+    // 원형 연결 리스트 생성
+    for (int i = 1; i <= N; i++) {
+        now_node = node_add(now_node, i);
+    }
+
+    printf("<");
+
+    // 데이터 출력
+    for (int i = 1; i <= N; i++) {
+        int get_data = 0;
+
+        now_node = node_pop(now_node, K, &get_data);
+        printf("%d", get_data);
+
+        if (i != N) printf(" ");
+    }
+    printf(">\n");
+
+    return 0;
+}
+
+
+// 포인트포인트 사용, 원형(단방향)연결리스트
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+}Node_s;
+
+int node_cnt = 0;
+
+Node_s* node_add(Node_s* now_node, int input_data) {
+
+    Node_s* newNode = (Node_s*)malloc(sizeof(Node_s));
+
+    newNode->data = input_data;
+
+    if (now_node == NULL) {
+        newNode->next = newNode;
+    }
+    else {
+        newNode->next = now_node->next;
+        now_node->next = newNode;
+    }
+
+    node_cnt++;
+
+    return newNode;
+}
+
+int node_pop(Node_s* now_node, int jump, Node_s** renew_now_node) {
+
+    Node_s* temp = now_node;
+    Node_s* previous_node = NULL;
+
+    int return_data = 0;
+
+    for (int i = 0; i < jump; i++) {
+        previous_node = temp;
+        temp = temp->next;
+    }
+
+    return_data = temp->data;
+
+    previous_node->next = temp->next;
+
+    *renew_now_node = previous_node;
+
+    node_cnt--;
+
+    free(temp);
+
+    return return_data;
+}
+
+
+int main() {
+    int N = 0;
+    int K = 0;
+
+    scanf_s("%d %d", &N, &K);
+
+    Node_s* now_node = NULL;
+
+    // 원형 연결 리스트 생성
+    for (int i = 1; i <= N; i++) {
+        now_node = node_add(now_node, i);
+    }
+
+    printf("<");
+
+    // 데이터 출력
+    for (int i = 1; i <= N; i++) {
+
+        printf("%d", node_pop(now_node, K, &now_node));
+
+        if (i != N) printf(" ");
+    }
+    printf(">\n");
+
+    return 0;
+}
+
+
+
+/////////////////////////////////////////////////
+
+
 //원형 연결리스트
 
 #include <stdio.h>
