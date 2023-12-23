@@ -1,3 +1,26 @@
+//0ms solution #1
+
+#include<stdio.h>
+
+int main(void) {
+	int arr[5000],m,n,i,k; 
+
+	scanf("%d %d", &m, &n);
+	for (i = 0; i < m; i++) {
+		arr[i] = i+1;
+	}
+	k = n - 1;			    
+	printf("<%d", arr[k]);
+	for (m=m; m > 1; m--) {			
+		for (i = k--; i < m - 1; i++) {
+			arr[i] = arr[i + 1];
+		}
+		k = (k + n) % (m - 1);
+		printf(", %d", arr[k]);
+	}
+	printf(">");
+}
+
 
 // 포인트 사용, 원형(단방향)연결리스트
 
