@@ -1,3 +1,5 @@
+//시간초과 fail
+
 #include <stdio.h>
 
 int main(void){
