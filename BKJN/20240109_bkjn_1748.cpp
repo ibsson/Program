@@ -1,3 +1,33 @@
+#include <stdio.h>
+#include <math.h>
+
+int countDigits(int number) {
+    int count = 0;
+    while (number > 0) {
+        number /= 10;
+        count++;
+    }
+    return count;
+}
+
+int main() {
+    int N;
+    scanf("%d", &N);
+
+    int result = 0;
+    int digits = countDigits(N);
+
+    for (int i = 1; i < digits; i++) {
+        result += i * (9 * pow(10, i - 1));
+    }
+
+    result += digits * (N - pow(10, digits - 1) + 1);
+
+    printf("%d\n", result);
+
+    return 0;
+}
+
 //시간초과 fail
 
 #include <stdio.h>
