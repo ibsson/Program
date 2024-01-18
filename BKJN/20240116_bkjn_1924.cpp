@@ -1,3 +1,52 @@
+//Sol #3
+
+#include <stdio.h>
+
+int main(void){
+	
+	int x = 0;
+	int y = 0;
+	int day[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	char *week[7] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+	int tmp = 0;
+	
+	scanf("%d %d", &x, &y);
+	
+	for(int i = 0; i < (x - 1); i++){
+		tmp += day[i];
+	}
+	
+	tmp += y;
+	
+	tmp %= 7;
+	
+	switch(tmp){
+		case 0:
+			printf("%s\n", week[0]);
+			break;
+		case 1:
+			printf("%s\n", week[1]);
+			break;
+		case 2:
+			printf("%s\n", week[2]);
+			break;
+		case 3:
+			printf("%s\n", week[3]);
+			break;
+		case 4:
+			printf("%s\n", week[4]);
+			break;
+		case 5:
+			printf("%s\n", week[5]);
+			break;
+		case 6:
+			printf("%s\n", week[6]);
+			break;
+	}
+	
+	return 0;
+}
+
 //배열 사용
 
 #include <stdio.h>
