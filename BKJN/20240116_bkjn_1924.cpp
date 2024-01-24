@@ -1,3 +1,30 @@
+//Sol #4
+
+#include <stdio.h>
+
+int main(void){
+	
+	int x = 0;
+	int y = 0;
+	int day[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	char *week[7] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+	int tmp = 0;
+	
+	scanf("%d %d", &x, &y);
+	
+	for(int i = 0; i < (x - 1); i++){
+		tmp += day[i];
+	}
+	
+	tmp += y;
+	
+	tmp %= 7;
+	
+	printf("%s\n", week[tmp]);
+	
+	return 0;
+}
+
 //Sol #3
 
 #include <stdio.h>
