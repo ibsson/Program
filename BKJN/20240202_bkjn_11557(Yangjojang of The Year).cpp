@@ -44,6 +44,8 @@ int main(void) {
 		result = alchol(N);
 
 		printf("%s\n", univ[result].name);
+
+		//질문) 여기서 어떻게 구조체를 초기화 하나요?
 	}
 
 	return 0;
