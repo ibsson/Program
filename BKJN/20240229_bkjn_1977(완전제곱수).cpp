@@ -8,7 +8,13 @@ int main(void) {
 	scanf("%d", &N);
 
 	for (int i = M; i <= N; i++) {
-		for (int j = 1; j <= i; j++) {
+		if (i == 1) {
+			sum += i;
+			min = i;
+			cnt++;
+			continue;
+		}
+		for (int j = 2; j <= i; j++) {
 			if (i % j == 0 && i / j == j) {
 				sum += i;
 				if (cnt == 0) min = i;
