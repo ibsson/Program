@@ -9,34 +9,28 @@ int main() {
     int result = 0;
     int flag = 0;
 
-    // 한 자리 숫자는 조건에 충족하지 않음
     if (len == 1) {
         printf("NO\n");
         return 0;
     }
 
-    // 자릿수를 기준으로 계산
     for (int i = 1; i < len; i++) {
         int left = 1, right = 1;
 
-        // 왼쪽 부분을 계산
         for (int j = 0; j < i; j++) {
             left *= num[j] - '0';
         }
 
-        // 오른쪽 부분을 계산
         for (int j = i; j < len; j++) {
             right *= num[j] - '0';
         }
 
-        // 왼쪽과 오른쪽의 곱이 같으면 결과를 갱신
         if (left == right) {
             flag = 1;
             break;
         }
     }
 
-    // 결과 출력
     if (flag) {
         printf("YES\n");
     } else {
