@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-int num_1[1000] = { 0 };
-int num_2[1000] = { 0 };
+int num_1[500] = { 0 };
+int num_2[500] = { 0 };
 
 int main(void) {
 
