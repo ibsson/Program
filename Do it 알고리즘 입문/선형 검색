@@ -35,7 +35,9 @@ int main(void) {
 	if (check != -1) {
 		printf("%d는 str[%d]에 있습니다\n", A, check);
 	}
-	else printf("%d은(는) 없습니다\n");
+	else printf("%d은(는) 없습니다\n", A);
+
+	free(str);
 
 	return 0;
 }
