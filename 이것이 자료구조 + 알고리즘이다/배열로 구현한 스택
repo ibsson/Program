@@ -32,7 +32,8 @@ void AS_Push(ArrayStack* Stack, int data) {
 }
 
 int AS_Pop(ArrayStack* Stack) {
-	int Position = Stack->Top--;
+	int Position = Stack->Top;
+	(Stack->Top--);
 	return Stack->Nodes[Position].data;
 }
 
