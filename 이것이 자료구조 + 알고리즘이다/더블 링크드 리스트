@@ -49,17 +49,6 @@ void DLL_InsertAfter(Node* Current, Node* NewNode) {
 	}
 }
 
-void SLL_InsertNewHead(Node** Head, Node* NewHead) {
-
-	if (Head == NULL) {
-		(*Head) = NewHead;
-	}
-	else {
-		NewHead->NextNode = (*Head);
-		(*Head) = NewHead;
-	}
-}
-
 void DLL_RemoveNode(Node** Head, Node* Remove) {
 
 	if (*Head == Remove) {
