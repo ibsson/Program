@@ -15,7 +15,7 @@ int main(void) {
 
 	int N = 0;
 
-	scanf_s("%d", &N);
+	scanf("%d", &N);
 
 	printf("%ld\n", get_divisor_sum(N));
 
@@ -46,7 +46,7 @@ int main(void) {
 
 	int N = 0, tmp = 0, sum = 0;
 
-	scanf_s("%d", &N);
+	scanf("%d", &N);
 
 	for (int i = 1; i <= N; i++) {
 		tmp = get_divisor_sum(i);
@@ -82,7 +82,7 @@ int main(void) {
 
 	int N = 0, tmp = 0, sum = 0;
 
-	scanf_s("%d", &N);
+	scanf("%d", &N);
 
 	for (int i = 1; i <= N; i++) {
 		tmp = get_divisor_sum(i);
@@ -116,7 +116,7 @@ int main(void) {
 
 	int N = 0, tmp = 0, sum = 0;
 
-	scanf_s("%d", &N);
+	scanf("%d", &N);
 
 	for (int i = 1; i <= N; i++) {
 		tmp = get_divisor_sum(i);
