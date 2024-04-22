@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+	int data;
+	struct node* next;
+}Node;
+
+Node* Create_Node(int Data) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+
+	NewNode->data = Data;
+	NewNode->next = NULL;
+
+	return NewNode;
+}
+
+void Append_Node(Node** Head, Node* NewNode) {
+
+	if ((*Head) == NULL) {
+		*Head = NewNode;
+	}
+	else {
+		Node* Tail = (*Head);
+		while (Tail->next != NULL) {
+			Tail = Tail->next;
+		}
+		Tail->next = NewNode;
+	}
+}
+
+Node* Get_Location(Node* Head, int location) {
+
+	Node* Current = Head;
+
+	while (Current->next != NULL && location != 1) {
+		Current = Current->next;
+		
+		location--;
+	}
+
+	return Current;
+}
+
+int Count_Node(Node* Head) {
+
+	int cnt = 1;
+
+	while (Head->next != NULL) {
+		Head = Head->next;
+		cnt++;
+	}
+
+	return cnt;
+}
+
+void Insert_Node(Node* Current, Node* NewNode) {
+
+	NewNode->next = Current->next;
+	Current->next = NewNode;
+}
+
+void Remove_Node(Node** Head, Node* Remove) { //왜 이중포인터를 써야 하는지? 왜 이중포인터를 안쓰고 그냥 Head로 하면 1번을 삭제할때는 삭제가 안되고 나머지 뒤에를 삭제할땐 되는거지?
+
+	if (*Head == Remove) {
+		*Head = Remove->next;
+	}
+	else {
+		Node* Current = *Head;
+		while (Current != NULL) {
+			if (Current->next == Remove) {
+				Current->next = Remove->next;
+			}
+			else {
+				Current = Current->next;
+			}
+		}
+	}
+}
+
+int main(void) {
+
+	int N = 0, A = 0, B = 0, location = 0;
+
+	Node* List = NULL; //연결리스트 본체
+	Node* NewNode = NULL;
+
+	scanf_s("%d", &N);
+
+	for (int i = 0; i < N; i++) {
+		scanf_s("%d", &A);
+
+		NewNode = Create_Node(A);
+		Append_Node(&List, NewNode);
+	}
+
+	while (1) {
+		printf("1은 삽입, 2는 삭제, 3은 나가기: ");
+		scanf_s("%d", &B);
+
+		Node* Current_1 = NULL;
+
+		if (B == 1) {
+			printf("삽입하고 싶은 수와 위치를 입력하세요: ");
+			scanf_s("%d %d", &A, &location);
+
+			NewNode = Create_Node(A);
+			Current_1 = Get_Location(List, location);
+			Insert_Node(Current_1, NewNode);
+
+			int cnt = Count_Node(List);
+			Node* Current_2 = NULL;
+
+			for (int i = 1; i <= cnt; i++) {
+				Current_2 = Get_Location(List, i);
+				printf("%d ", Current_2->data);
+			}
+			printf("\n");
+
+		}
+		else if (B == 2) {
+			printf("삭제하고 싶은 위치를 입력하세요: ");
+			scanf_s("%d", &location);
+
+			Current_1 = Get_Location(List, location);
+			Remove_Node(&List, Current_1);
+			
+			int cnt = Count_Node(List);
+			Node* Current_2 = NULL;
+
+			for (int i = 1; i <= cnt; i++) {
+				Current_2 = Get_Location(List, i);
+				printf("%d ", Current_2->data);
+			}
+			printf("\n");
+
+		}
+		else if (B == 3) break;
+		else printf("다시 입력하세요\n");
+	}
+
+	int cnt = Count_Node(List);
+	Node* Current = NULL;
+
+	for (int i = 1; i <= cnt; i++) {
+		Current = Get_Location(List, i);
+		printf("%d ", Current->data);
+	}
+
+	return 0;
+}
+
+//한번 책을 안보고 링크드 리스트 코드를 만들어 보았다. 그런데 왜 이중포인터를 써야 하는지 이해가 안된다. 이해가 될때까지 코드를 계속 분석해봐야겠다.
