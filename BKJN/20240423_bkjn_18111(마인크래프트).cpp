@@ -104,3 +104,107 @@ int main(void) {
 판별해, 차례대로 검사할때 뒤에 나오는 수에서 제거를 해서 인벤토리에 넣어 B가 0보다 커질 수 있다는 사실을 간과했다는 것을 알아냈다. 이런 문제 풀때는 항상 여러번 생각을
 해 보고 코드를 짜야겠다.
 */
+
+//복습 코드
+
+#include <stdio.h>
+
+int ground[501][501];
+
+int Get_Highest(int N, int M) {
+
+	int max = -1;
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (max < ground[i][j]) {
+				max = ground[i][j];
+			}
+		}
+	}
+
+	return max;
+}
+
+int Get_Lowest(int N, int M) {
+
+	int min = 257;
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (min > ground[i][j]) {
+				min = ground[i][j];
+			}
+		}
+	}
+
+	return min;
+}
+
+int Get_Time(int N, int M, int B, int highest) {
+
+	int tmp = 0, time = 0;
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+
+			tmp = ground[i][j];
+
+			if (tmp < highest) {
+				while (tmp != highest) {
+					tmp++;
+					time++;
+					B--;
+				}
+			}
+			else if (tmp > highest) {
+				while (tmp != highest) {
+					tmp--;
+					time += 2;
+					B++;
+				}
+			}
+		}
+	}
+
+	if (B < 0) {
+		return 100000000;
+	}
+
+	return time;
+}
+
+int main(void) {
+
+	int N = 0, M = 0, B = 0, height = 0, time = 0, min = 100000000;
+
+	scanf("%d %d %d", &N, &M, &B);
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			scanf("%d", &ground[i][j]);
+		}
+	}
+
+	int highest = Get_Highest(N, M);
+	int lowest = Get_Lowest(N, M);
+
+	if (highest == lowest) {
+		printf("0 %d", highest);
+		return 0;
+	}
+	
+	for (int i = highest; i >= 0; i--) {
+
+		time = Get_Time(N, M, B, i);
+
+		if (min > time) {
+			min = time;
+			height = i;
+		}
+	}
+
+	printf("%d %d\n", min, height);
+
+	return 0;
+}
