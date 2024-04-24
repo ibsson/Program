@@ -58,3 +58,56 @@ int main(void) {
 
 이 방법으로 풀어냈다. 쉽지 않았지만 그래도 내 힘으로 풀어냈다는 것에 의의를 두고 싶다!
 */
+
+//복습 코드
+
+#include <stdio.h>
+
+typedef struct people {
+	int height;
+	int info;
+}People;
+
+int row[11];
+People people[11];
+
+void Get_Location(int N, int index) {
+
+	int cnt = 0;
+
+	for (int i = 0; i < N; i++) {
+		if (cnt == people[index].info) {
+			for (int j = i; j < N; j++) {
+				if (row[j] == 0) {
+					row[j] = people[index].height;
+					return;
+				}
+			}
+		}
+		if(row[i] == 0) cnt++;
+	}
+}
+
+int main(void) {
+
+	int N = 0;
+
+	scanf("%d", &N);
+
+	for (int i = 0; i < N; i++) {
+		scanf("%d", &people[i].info);
+		people[i].height = (i + 1);
+	}
+
+	for (int i = 0; i < N; i++) {
+		Get_Location(N, i);
+	}
+
+	for (int i = 0; i < N; i++) {
+		printf("%d", row[i]);
+		if (i + 1 == N) printf("\n");
+		else printf(" ");
+	}
+
+	return 0;
+}
