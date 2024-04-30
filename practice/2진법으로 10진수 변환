@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+int main() {
+
+    int N = 0, bin = 64, tmp = 0;
+
+    scanf("%d", &N);
+
+    while (1) {
+        if (bin == N) break;
+        else if (bin < N) {
+
+            tmp = bin;
+
+            printf("%d ", tmp);
+
+            while (1) {
+
+                tmp /= 2;
+
+                if (bin + tmp > N) continue;
+                else {
+                    bin += tmp;
+                    printf("%d ", tmp);
+                }
+
+                if (bin == N) {
+                    break;
+                }
+            }
+        }
+        else bin /= 2;
+    }
+
+    printf("\n다 더하면 %d\n", bin);
+
+    return 0;
+}
