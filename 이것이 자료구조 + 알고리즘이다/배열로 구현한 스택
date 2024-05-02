@@ -1,3 +1,85 @@
+//복습 코드 #1
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	int data;
+}Node;
+
+typedef struct Stack {
+	int capacity;
+	int top;
+	Node* Nodes;
+}ArrayStack;
+
+void Create_Node(ArrayStack** Stack, int Capacity) {
+
+	(*Stack) = (ArrayStack*)malloc(sizeof(ArrayStack));
+	(*Stack)->Nodes = (Node*)malloc(sizeof(ArrayStack) * Capacity);
+
+	(*Stack)->capacity = Capacity;
+	(*Stack)->top = -1;
+}
+
+void Push(ArrayStack* Stack, int Data) {
+
+	Stack->top++;
+	Stack->Nodes[Stack->top].data = Data;
+}
+
+int Pop(ArrayStack* Stack) {
+
+	int Position = Stack->top;
+	Stack->top--;
+
+	return Stack->Nodes[Position].data;
+}
+
+int Get_Size(ArrayStack* Stack) {
+
+	return Stack->top + 1;
+}
+
+int Top(ArrayStack* Stack) {
+
+	return Stack->Nodes[Stack->top].data;
+}
+
+int IsEmpty(ArrayStack* Stack) {
+	return Stack->top;
+}
+
+int main(void) {
+
+	ArrayStack* Stack = NULL;
+
+	Create_Node(&Stack, 10);
+
+	Push(Stack, 3);
+	Push(Stack, 37);
+	Push(Stack, 11);
+	Push(Stack, 12);
+
+	printf("Capacity: %d, Size: %d, Top: %d\n\n", Stack->capacity, Get_Size(Stack), Top(Stack));
+
+	for (int i = 0; i < 4; i++) {
+		printf("Popped: %d ", Pop(Stack));
+
+		if (IsEmpty(Stack) != -1) {
+			printf("Current Top: %d\n", Top(Stack));
+		}
+		else {
+			printf("Stack is Empty\n");
+			break;
+		}
+	}
+
+	return 0;
+}
+
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -75,3 +157,4 @@ int main(void) {
 
 	return 0;
 }
+*/
