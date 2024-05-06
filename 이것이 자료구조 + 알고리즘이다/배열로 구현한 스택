@@ -39,6 +39,12 @@ int Pop(ArrayStack* Stack) {
 	return tmp;
 }
 
+void Destroy_Stack(ArrayStack* Stack) {
+
+	free(Stack->Nodes);
+	free(Stack);
+}
+
 int Get_Top(ArrayStack* Stack) {
 
 	return Stack->Nodes[Stack->top].data;
@@ -66,6 +72,8 @@ int main(void) {
 			break;
 		}
 	}
+
+	Destroy_Stack(Stack);
 
 	return 0;
 }
