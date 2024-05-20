@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	struct Node* LeftChild;
+	struct Node* RightSibling;
+
+	int data;
+};
+
+Node* Create_Node(int NewData) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+	NewNode->LeftChild = NULL;
+	NewNode->RightSibling = NULL;
+	NewNode->data = NewData;
+
+	return NewNode;
+}
+
+void Destroy_Node(Node* Node) {
+	free(Node);
+}
+
+void Destroy_Tree(Node* Root) {
+	if (Root->RightSibling != NULL) Destroy_Tree(Root->RightSibling);
+
+	if (Root->LeftChild != NULL) Destroy_Tree(Root->LeftChild);
+
+	Root->LeftChild = NULL;
+	Root->RightSibling = NULL;
+
+	Destroy_Node(Root);
+}
+
+void Add_Child_Node(Node* Parent, Node* Child) {
+
+	if (Parent->LeftChild == NULL) Parent->LeftChild = Child;
+	else {
+		Node* TempNode = Parent->LeftChild;
+		while (TempNode->RightSibling != NULL) {
+			TempNode = TempNode->RightSibling;
+		}
+
+		TempNode->RightSibling = Child;
+	}
+}
+
+void Print_Tree(Node* Node, int Depth) {
+
+	for (int i = 0; i < Depth - 1; i++) {
+		printf("   ");
+	}
+
+	if (Depth > 0) printf("+--");
+
+	printf("%c\n", Node->data);
+
+	if (Node->LeftChild != NULL) Print_Tree(Node->LeftChild, Depth + 1);
+
+	if (Node->RightSibling != NULL) Print_Tree(Node->RightSibling, Depth);
+}
+
+int main(void) {
+
+	Node* Root = Create_Node('A');
+	Node* B = Create_Node('B');
+	Node* C = Create_Node('C');
+	Node* D = Create_Node('D');
+	Node* E = Create_Node('E');
+	Node* F = Create_Node('F');
+	Node* G = Create_Node('G');
+	Node* H = Create_Node('H');
+	Node* I = Create_Node('I');
+	Node* J = Create_Node('J');
+	Node* K = Create_Node('K');
+
+	Add_Child_Node(Root, B);
+	Add_Child_Node(B, C);
+	Add_Child_Node(B, D);
+	Add_Child_Node(D, E);
+	Add_Child_Node(D, F);
+
+	Add_Child_Node(Root, G);
+	Add_Child_Node(G, H);
+
+	Add_Child_Node(Root, I);
+	Add_Child_Node(I, J);
+	Add_Child_Node(J, K);
+
+	Print_Tree(Root, 0);
+	
+	Destroy_Tree(Root);
+
+	return 0;
+}
