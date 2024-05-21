@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+	struct Node* Left;
+	struct Node* Right;
+
+	char data;
+}Node;
+
+Node* Create_Node(char NewData) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+	NewNode->Left = NULL;
+	NewNode->Right = NULL;
+	NewNode->data = NewData;
+
+	return NewNode;
+}
+
+void Destroy_Node(Node* Node) {
+	free(Node);
+}
+
+//전위 순회
+void PreorderPrintTree(Node* Node) {
+
+	if (Node == NULL) return;
+
+	printf(" %c", Node->data);
+
+	PreorderPrintTree(Node->Left);
+
+	PreorderPrintTree(Node->Right);
+}
+
+//중위 순회
+void InorderPrintTree(Node* Node) {
+
+	if (Node == NULL) return;
+
+	printf("(");
+	InorderPrintTree(Node->Left);
+
+	printf("%c", Node->data);
+
+	InorderPrintTree(Node->Right);
+	printf(")");
+}
+
+//후위 순회
+void PostorderPrintTree(Node* Node) {
+
+	if (Node == NULL) return;
+
+	PostorderPrintTree(Node->Left);
+
+	PostorderPrintTree(Node->Right);
+
+	printf(" %c", Node->data);
+}
+
+void Destroy_Tree(Node* Node) {
+
+	if (Node == NULL) return;
+
+	Destroy_Tree(Node->Left);
+
+	Destroy_Tree(Node->Right);
+
+	Destroy_Node(Node);
+}
+
+void Build_Expression_Tree(char* PostfixExpression, Node** Node) {
+	
+	int len = strlen(PostfixExpression);
+	char Token = PostfixExpression[len - 1];
+	PostfixExpression[len - 1] = '\0';
+
+	switch (Token) {
+	
+	//연산자인 경우
+	case'+': case'-': case'*': case'/':
+		(*Node) = Create_Node(Token);
+		Build_Expression_Tree(PostfixExpression, &(*Node)->Right);
+		Build_Expression_Tree(PostfixExpression, &(*Node)->Left);
+		break;
+	//피연산자인 경우
+	default:
+		(*Node) = Create_Node(Token);
+		break;
+	}
+}
+
+double Evaluate(Node* Tree) {
+
+	char Temp[2];
+
+	double Left = 0;
+	double Right = 0;
+	double Result = 0;
+
+	if (Tree == NULL) return 0;
+
+	switch (Tree->data) {
+
+	case'+': case'-': case'*': case'/':
+		Left = Evaluate(Tree->Left);
+		Right = Evaluate(Tree->Right);
+
+		if (Tree->data == '+') Result = Left + Right;
+		else if (Tree->data == '-') Result = Left - Right;
+		else if (Tree->data == '*') Result = Left * Right;
+		else if (Tree->data == '/') Result = Left / Right;
+
+		break;
+
+	default:
+		memset(Temp, 0, sizeof(Temp));
+		Temp[0] = Tree->data;
+		Result = atof(Temp);
+		break;
+	}
+
+	return Result;
+}
+
+int main(void) {
+
+	Node* Root = NULL;
+
+	char PostfixExpression[20] = "71*52-/";
+	Build_Expression_Tree(PostfixExpression, &Root);
+
+	//트리 출력
+	printf("Preorder ... \n");
+	PreorderPrintTree(Root);
+	printf("\n\n");
+
+	printf("Inorder ... \n");
+	InorderPrintTree(Root);
+	printf("\n\n");
+
+	printf("Postorder ... \n");
+	PostorderPrintTree(Root);
+	printf("\n");
+
+	printf("Evaluation Result : %f \n", Evaluate(Root));
+
+	Destroy_Tree(Root);
+
+	return 0;
+}
