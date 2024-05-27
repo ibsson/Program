@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct DisjointSet {
+	struct DisjointSet* Parent;
+	void* data;
+}DisjointSet;
+
+DisjointSet* FindSet(DisjointSet* Set) {
+	while (Set->Parent != NULL) {
+		Set = Set->Parent;
+	}
+
+	return Set;
+}
+
+void UnionSet(DisjointSet* Set1, DisjointSet* Set2) {
+	Set2 = FindSet(Set2);
+	Set2->Parent = Set1;
+}
+
+DisjointSet* MakeSet(void* NewData) {
+	DisjointSet* NewNode = (DisjointSet*)malloc(sizeof(DisjointSet));
+	NewNode->data = NewData;
+	NewNode->Parent = NULL;
+
+	return NewNode;
+}
+
+void DestroySet(DisjointSet* Set) {
+	free(Set);
+}
+
+int main(void) {
+
+	int a = 1, b = 2, c = 3, d = 4;
+	DisjointSet* Set1 = MakeSet(&a);
+	DisjointSet* Set2 = MakeSet(&b);
+	DisjointSet* Set3 = MakeSet(&c);
+	DisjointSet* Set4 = MakeSet(&d);
+
+	printf("Set1 == Set2 : %d \n", FindSet(Set1) == FindSet(Set2));
+
+	UnionSet(Set1, Set3);
+	printf("Set1 == Set3 : %d \n", FindSet(Set1) == FindSet(Set3));
+
+	UnionSet(Set3, Set4);
+	printf("Set3 == Set4 : %d \n", FindSet(Set3) == FindSet(Set4));
+
+	return 0;
+}
