@@ -1,3 +1,5 @@
+//버블 정렬의 비교 횟수 = n(n-1)/2
+
 #include <stdio.h>
 
 void BubbleSort(int data[], int len) {
