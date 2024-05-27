@@ -7,6 +7,7 @@ typedef struct DisjointSet {
 }DisjointSet;
 
 DisjointSet* FindSet(DisjointSet* Set) {
+
 	while (Set->Parent != NULL) {
 		Set = Set->Parent;
 	}
@@ -15,11 +16,13 @@ DisjointSet* FindSet(DisjointSet* Set) {
 }
 
 void UnionSet(DisjointSet* Set1, DisjointSet* Set2) {
+
 	Set2 = FindSet(Set2);
 	Set2->Parent = Set1;
 }
 
 DisjointSet* MakeSet(void* NewData) {
+
 	DisjointSet* NewNode = (DisjointSet*)malloc(sizeof(DisjointSet));
 	NewNode->data = NewData;
 	NewNode->Parent = NULL;
