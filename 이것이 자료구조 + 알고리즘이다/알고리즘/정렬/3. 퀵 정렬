@@ -34,10 +34,10 @@ int Partition(int data[], int Left, int Right) {
 void QuickSort(int data[], int Left, int Right) {
 	
 	if (Left < Right) {
-		int Index = Partition(data, Left, Right);
+		int Index = Partition(data, Left, Right); //맨 첫번 째 실행은 처음 설정한 피봇(맨 앞 요소)을 밑 재귀 함수에서 왼쪽 오른쪽을 나뉘게 하는 기준으로 이동시킴
 
-		QuickSort(data, Left, (Index - 1));
-		QuickSort(data, (Index + 1), Right);
+		QuickSort(data, Left, (Index - 1)); //피봇 기준 왼쪽 정렬
+		QuickSort(data, (Index + 1), Right); //피봇 기준 오른쪽 정렬
 	}
 }
 
