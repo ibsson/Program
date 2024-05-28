@@ -12,14 +12,14 @@ int Partition(int data[], int Left, int Right) {
 	int First = Left;
 	int Pivot = data[First];
 
-	++Left;
+	Left++;
 
 	while (Left <= Right) {
 		while (data[Left] <= Pivot && Left < Right) {
-			++Left;
+			Left++;
 		}
 		while (data[Right] >= Pivot && Left <= Right) {
-			--Right;
+			Right--;
 		}
 
 		if (Left < Right) Swap(&data[Left], &data[Right]);
@@ -38,13 +38,12 @@ void QuickSort(int data[], int Left, int Right) {
 
 		QuickSort(data, Left, (Index - 1));
 		QuickSort(data, (Index + 1), Right);
-
 	}
 }
 
 int main(void) {
 
-	int data[] = { 6, 4, 2, 3, 1, 5 };
+	int data[] = { 5, 1, 6, 4, 8, 3, 7, 9, 2 };
 	int len = sizeof(data) / sizeof(data[0]);
 
 	QuickSort(data, 0, (len - 1));
