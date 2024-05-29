@@ -1,3 +1,67 @@
+//퀵 정렬 풀이
+
+#include <stdio.h>
+
+void Swap(int* A, int* B) {
+
+	int tmp = *A;
+	*A = *B;
+	*B = tmp;
+}
+
+int Partition(int data[], int Left, int Right) {
+
+	int First = Left;
+	int Pivot = data[First];
+
+	Left++;
+
+	while (Left <= Right) {
+		while (data[Left] <= Pivot && Left < Right) {
+			Left++;
+		}
+		while (data[Right] >= Pivot && Left <= Right) {
+			Right--;
+		}
+
+		if (Left < Right) Swap(&data[Left], &data[Right]);
+		else break;
+	}
+
+	Swap(&data[First], &data[Right]);
+
+	return Right;
+}
+
+void QuickSort(int data[], int Left, int Right) {
+
+	if (Left < Right) {
+		int Index = Partition(data, Left, Right);
+
+		QuickSort(data, Left, (Index - 1));
+		QuickSort(data, (Index + 1), Right);
+	}
+}
+
+int main(void) {
+
+	int num[3] = { 0 };
+
+	for (int i = 0; i < 3; i++) {
+		scanf("%d", &num[i]);
+	}
+
+	QuickSort(num, 0, 2);
+
+	for (int i = 0; i < 3; i++) {
+		printf("%d ", num[i]);
+	}
+
+	printf("\n");
+
+	return 0;
+}
+
 //삽입 정렬 풀이
 
 #include <stdio.h>
@@ -65,7 +129,7 @@ int main(void) {
 	int num[3] = { 0 };
 
 	for (int i = 0; i < 3; i++) {
-		scanf_s("%d", &num[i]);
+		scanf("%d", &num[i]);
 	}
 
 	BubbleSort(num, 3);
