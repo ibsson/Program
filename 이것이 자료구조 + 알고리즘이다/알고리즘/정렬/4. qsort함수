@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int ComparePoint(const void* _elem1, const void* _elem2) {
 	
