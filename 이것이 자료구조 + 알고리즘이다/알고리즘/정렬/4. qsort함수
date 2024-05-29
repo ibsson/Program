@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int ComparePoint(const void* _elem1, const void* _elem2) {
+int Compare(const void* _elem1, const void* _elem2) {
 	
 	int* elem1 = (int*)_elem1;
 	int* elem2 = (int*)_elem2;
@@ -18,7 +18,7 @@ int main(void) {
 	int data[] = { 6, 4, 2, 3, 1, 5 };
 	int len = sizeof(data) / sizeof(data[0]);
 
-	qsort((void*)data, len, sizeof(int), ComparePoint);
+	qsort((void*)data, len, sizeof(int), Compare);
 
 	for (int i = 0; i < len; i++) {
 		printf("%d ", data[i]);
@@ -34,7 +34,7 @@ int main(void) {
 #include <stdio.h>
 #include <stdlib.h>
 
-int ComparePoint(const void* _elem1, const void* _elem2) {
+int Compare(const void* _elem1, const void* _elem2) {
 	
 	int* elem1 = (int*)_elem1;
 	int* elem2 = (int*)_elem2;
@@ -49,7 +49,7 @@ int main(void) {
 	int data[] = { 6, 4, 2, 3, 1, 5 };
 	int len = sizeof(data) / sizeof(data[0]);
 
-	qsort((void*)data, len, sizeof(int), ComparePoint);
+	qsort((void*)data, len, sizeof(int), Compare);
 
 	for (int i = 0; i < len; i++) {
 		printf("%d ", data[i]);
