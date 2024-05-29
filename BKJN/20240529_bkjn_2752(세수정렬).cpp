@@ -1,3 +1,37 @@
+//qsort 풀이
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int ComparePoint(const void* _elem1, const void* _elem2) {
+
+	int* elem1 = (int*)_elem1;
+	int* elem2 = (int*)_elem2;
+
+	if (*elem1 > *elem2) return 1;
+	else if (*elem1 < *elem2) return -1;
+	else return 0;
+}
+
+int main(void) {
+
+	int num[3] = { 0 };
+
+	for (int i = 0; i < 3; i++) {
+		scanf("%d", &num[i]);
+	}
+
+	qsort((void*)num, 3, sizeof(int), ComparePoint);
+
+	for (int i = 0; i < 3; i++) {
+		printf("%d ", num[i]);
+	}
+
+	printf("\n");
+
+	return 0;
+}
+
 //퀵 정렬 풀이
 
 #include <stdio.h>
