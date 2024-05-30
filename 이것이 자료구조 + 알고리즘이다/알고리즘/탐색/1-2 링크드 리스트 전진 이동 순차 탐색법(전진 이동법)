@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+	int Data;
+	struct node* Next;
+}Node;
+
+Node* Create_Node(int NewData) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+
+	NewNode->Data = NewData;
+	NewNode->Next = NULL;
+
+	return NewNode;
+}
+
+void Append_Node(Node** Head, Node* NewNode) {
+
+	if ((*Head) == NULL) {
+		*Head = NewNode;
+		return;
+	}
+	else {
+		Node* Tail = (*Head);
+		while (Tail->Next != NULL) {
+			Tail = Tail->Next;
+		}
+
+		Tail->Next = NewNode;
+	}
+}
+
+Node* MoveToFront(Node** Head, int Target) {
+
+	Node* Current = (*Head);
+	Node* Previous = NULL;
+	Node* Match = NULL;
+
+	while (Current != NULL) {
+		if (Current->Data == Target) {
+			Match = Current;
+			if (Previous != NULL) {
+				Previous->Next = Current->Next;
+
+				Current->Next = (*Head);
+				(*Head) = Current;
+			}
+			break;
+		}
+		else {
+			Previous = Current;
+			Current = Current->Next;
+		}
+	}
+
+	return Match;
+}
+
+int Get_Node_Data(Node* Head, int current) {
+
+	Node* Current = Head;
+
+	for (int i = 0; i < current; i++) {
+		Current = Current->Next;
+	}
+
+	return Current->Data;
+}
+
+void Destroy_Node(Node* Node) {
+
+	free(Node);
+}
+
+int main(void) {
+
+	int N = 0, tmp = 0, target = 0;
+
+	scanf_s("%d", &N);
+
+	Node* List = NULL;
+	Node* NewNode = NULL;
+	Node* Target_Node = NULL;
+
+	for (int i = 0; i < N; i++) {
+		scanf_s("%d", &tmp);
+
+		NewNode = Create_Node(tmp);
+		Append_Node(&List, NewNode);
+	}
+
+	scanf_s("%d", &target);
+
+	Target_Node = MoveToFront(&List, target);
+
+	for (int i = 0; i < N; i++) {
+		printf("%d ", Get_Node_Data(List, i));
+	}
+
+	printf("\n");
+
+	Destroy_Node(List);
+
+	return 0;
+}
