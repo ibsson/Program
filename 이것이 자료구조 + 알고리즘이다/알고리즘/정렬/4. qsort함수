@@ -8,7 +8,7 @@ int Compare(const void* _elem1, const void* _elem2) {
 	int* elem1 = (int*)_elem1;
 	int* elem2 = (int*)_elem2;
 
-	if (*elem1 > *elem2) return 1;
+	if (*elem1 > *elem2) return 1; //return 값이 양수면 두 수를 바꾸고 음수면 안바꾼다.
 	else if (*elem1 < *elem2) return -1;
 	else return 0;
 }
