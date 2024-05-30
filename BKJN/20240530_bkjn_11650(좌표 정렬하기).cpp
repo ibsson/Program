@@ -25,12 +25,12 @@ int main(void) {
 
 	int N = 0;
 
-	scanf("%d", &N);
+	scanf_s("%d", &N);
 
 	point* A = (point*)malloc(sizeof(point) * N);
 
 	for (int i = 0; i < N; i++) {
-		scanf("%d %d", &A[i].X, &A[i].Y);
+		scanf_s("%d %d", &A[i].X, &A[i].Y); //이건 왜 A[i]->X가 안되는건지?
 	}
 
 	qsort(A, N, sizeof(point), Compare);
