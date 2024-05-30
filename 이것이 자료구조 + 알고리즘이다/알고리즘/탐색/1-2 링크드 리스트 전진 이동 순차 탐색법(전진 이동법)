@@ -60,13 +60,11 @@ Node* MoveToFront(Node** Head, int Target) {
 
 int Get_Node_Data(Node* Head, int current) {
 
-	Node* Current = Head;
-
 	for (int i = 0; i < current; i++) {
-		Current = Current->Next;
+		Head = Head->Next;
 	}
 
-	return Current->Data;
+	return Head->Data;
 }
 
 void Destroy_Node(Node* Node) {
@@ -94,6 +92,8 @@ int main(void) {
 	scanf_s("%d", &target);
 
 	Target_Node = MoveToFront(&List, target);
+
+	printf("Target = %d\n", Target_Node->Data);
 
 	for (int i = 0; i < N; i++) {
 		printf("%d ", Get_Node_Data(List, i));
