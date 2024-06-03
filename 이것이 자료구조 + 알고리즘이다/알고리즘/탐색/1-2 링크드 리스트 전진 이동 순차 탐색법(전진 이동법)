@@ -20,7 +20,6 @@ void Append_Node(Node** Head, Node* NewNode) {
 
 	if ((*Head) == NULL) {
 		*Head = NewNode;
-		return;
 	}
 	else {
 		Node* Tail = (*Head);
