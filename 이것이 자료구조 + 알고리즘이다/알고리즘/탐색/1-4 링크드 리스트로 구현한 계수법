@@ -1,3 +1,137 @@
+//계수가 같을때 최근에 호출한 값이 뒤로 가는 코드
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	int Data;
+	struct Node* Next;
+	int Frequency;
+}Node;
+
+Node* Create_Node(int data) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+
+	NewNode->Data = data;
+	NewNode->Next = NULL;
+	NewNode->Frequency = 0;
+
+	return NewNode;
+}
+
+void Append_Node(Node** Head, Node* NewNode) {
+
+	if ((*Head) == NULL) {
+		(*Head) = NewNode;
+	}
+	else {
+		Node* Tail = (*Head);
+
+		while (Tail->Next != NULL) {
+			Tail = Tail->Next;
+		}
+
+		Tail->Next = NewNode;
+	}
+}
+
+void Check_Frequency(Node** Head, Node* Target, Node* Target_Previous) {
+
+	if (Target_Previous == NULL) return;
+
+	Node* Current = *Head;
+	Node* Previous = NULL;
+	Node* PPrevious = NULL;
+
+	while (Current->Frequency >= Target->Frequency) {
+
+		if (Current->Data == Target->Data) return;
+
+		if (Previous != NULL) PPrevious = Previous;
+
+		Previous = Current;
+		Current = Current->Next;
+	}
+
+	if (Previous == NULL) {
+		Target_Previous->Next = Target->Next;
+		Target->Next = Current;
+		(*Head) = Target;
+	}
+	else if (Previous != NULL) {
+		Target_Previous->Next = Target->Next;
+		Target->Next = Current;
+		Previous->Next = Target;
+	}
+}
+
+void FrequencyCount(Node** Head, int Target) {
+
+	Node* Current = (*Head);
+	Node* Previous = NULL;
+
+	while (Current != NULL) {
+		if (Current->Data == Target) {
+			Current->Frequency++;
+
+			Check_Frequency(Head, Current, Previous);
+			break;
+		}
+		else {
+			Previous = Current;
+			Current = Current->Next;
+		}
+	}
+}
+
+void Print_Node(Node* Head) {
+
+	while (Head != NULL) {
+
+		printf("%d ", Head->Data);
+
+		Head = Head->Next;
+	}
+
+	printf("\n");
+}
+
+void Destroy_Node(Node* Head) {
+
+	free(Head);
+}
+
+int main(void) {
+
+	int N = 0, tmp = 0, target = 0;
+
+	scanf_s("%d", &N);
+
+	Node* List = NULL;
+	Node* NewNode = NULL;
+
+	for (int i = 0; i < N; i++) {
+		scanf_s("%d", &tmp);
+
+		NewNode = Create_Node(tmp);
+		Append_Node(&List, NewNode);
+	}
+
+	while (target != -1) {
+		printf("target을 입력하세요 (종료하고 싶으면 -1): ");
+		scanf_s("%d", &target);
+
+		FrequencyCount(&List, target);
+
+		Print_Node(List);
+	}
+
+	Destroy_Node(List);
+
+	return 0;
+}
+
 //계수가 같을때 최근에 호출한 값이 먼저 오는 코드
 
 #include <stdio.h>
