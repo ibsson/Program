@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	int Data;
+	struct Node* Next;
+	int Index;
+}Node;
+
+Node* Create_Node(int data) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+
+	NewNode->Data = data;
+	NewNode->Next = NULL;
+
+	return NewNode;
+}
+
+void Append_Node(Node** Head, Node* NewNode) {
+
+	if ((*Head) == NULL) {
+		(*Head) = NewNode;
+	}
+	else {
+		Node* Tail = (*Head);
+
+		while (Tail->Next != NULL) {
+			Tail = Tail->Next;
+		}
+
+		Tail->Next = NewNode;
+	}
+}
+
+Node* Transpose(Node** Head, int Target) {
+
+	Node* Current = (*Head);
+	Node* PPrevious = NULL; //이전 노드의 이전 노드
+	Node* Previous = NULL;
+	Node* Match = NULL;
+
+	while (Current != NULL) {
+		if (Current->Data == Target) {
+			Match = Current;
+
+			if (Previous != NULL) {
+				if (PPrevious != NULL) PPrevious->Next = Current;
+				else (*Head) = Current;
+
+				Previous->Next = Current->Next;
+				Current->Next = Previous;
+			}
+			break;
+		}
+		else {
+			if (Previous != NULL) PPrevious = Previous;
+
+			Previous = Current;
+			Current = Current->Next;
+		}
+	}
+
+	return Match;
+}
+
+void Print_Node(Node* Head) {
+
+	while (Head != NULL) {
+
+		printf("%d ", Head->Data);
+
+		Head = Head->Next;
+	}
+
+	printf("\n");
+}
+
+void Destroy_Node(Node* Head) {
+
+	free(Head);
+}
+
+int main(void) {
+
+	int N = 0, tmp = 0, target = 0;
+
+	scanf_s("%d", &N);
+
+	Node* List = NULL;
+	Node* NewNode = NULL;
+	Node* Target_Node = NULL;
+
+	for (int i = 0; i < N; i++) {
+		scanf_s("%d", &tmp);
+
+		NewNode = Create_Node(tmp);
+		Append_Node(&List, NewNode);
+	}
+
+	while (target != -1) {
+		printf("target을 입력하세요 (종료하고 싶으면 -1): ");
+		scanf_s("%d", &target);
+
+		Target_Node = Transpose(&List, target);
+
+		Print_Node(List);
+	}
+
+	Destroy_Node(List);
+
+	return 0;
+}
