@@ -34,7 +34,7 @@ int main(void) {
 int compare(const book* a, const book* b) {
 	return strcmp(a->word, b->word);
 }
-로 만들면 된다. 
+로 만들면 된다. (여기서 book은 구조체이다)
 strcmp는 문자열이 같으면 0, 다르면 1 or -1을 반환한다. 1은 앞 문자열의 첫글자가 뒤 문자열의 첫글자의 아스키 코드보다 클때
 -1은 앞 문자열의 첫글자가 뒤 문자열의 첫글자의 아스키 코드보다 작을때 반환한다.
 */
