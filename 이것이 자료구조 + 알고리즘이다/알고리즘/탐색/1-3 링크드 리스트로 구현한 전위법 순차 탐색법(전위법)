@@ -4,7 +4,6 @@
 typedef struct Node {
 	int Data;
 	struct Node* Next;
-	int Index;
 }Node;
 
 Node* Create_Node(int data) {
