@@ -31,7 +31,7 @@ int main(void) {
 
 /*
 문자열을 정렬하고 싶을때는 비교함수를
-int compare(const book* a, const book* b) {
+int Compare(const book* a, const book* b) {
 	return strcmp(a->word, b->word);
 }
 로 만들면 된다. (여기서 book은 구조체이다, 그냥 자료형(char등)으로 해도 된다)
