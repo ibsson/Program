@@ -115,9 +115,11 @@ void PrintSearchResult(int SearchTarget, Node* Result) {
 
 int main(void) {
 
+	//노드 생성
 	Node* Tree = CreateNode(123);
 	Node* Node = NULL;
 
+	//트리에 노드 추가
 	InsertNode(Tree, CreateNode(22));
 	InsertNode(Tree, CreateNode(9918));
 	InsertNode(Tree, CreateNode(424));
@@ -139,9 +141,11 @@ int main(void) {
 	Node = SearchNode(Tree, SearchTarget);
 	PrintSearchResult(SearchTarget, Node);
 
+	//트리 출력
 	InorderPrintTree(Tree);
 	printf("\n");
 
+	//특정 노드 삭제
 	printf("Removing 98...\n");
 
 	Node = RemoveNode(Tree, NULL, 98);
@@ -150,12 +154,14 @@ int main(void) {
 	InorderPrintTree(Tree);
 	printf("\n");
 
+	//새 노드 삽입
 	printf("Inserting 111...\n");
 
 	InsertNode(Tree, CreateNode(111));
 	InorderPrintTree(Tree);
 	printf("\n");
 
+	//트리 소멸
 	DestroyTree(Tree);
 
 	return 0;
