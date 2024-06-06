@@ -1,99 +1,103 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
+typedef struct tagNode {
 	int data;
 }Node;
 
-typedef struct CircularQueue {
-	int capacity;
-	int front;
-	int rear;
-
+typedef struct tagCircularQueue {
+	int Capacity;
+	int Front;
+	int Rear;
 	Node* Nodes;
 }CircularQueue;
 
-void Create_Queue(CircularQueue** Queue, int Capacity) {
+void CQ_CreateQueue(CircularQueue** Queue, int Capacity) {
+
 	(*Queue) = (CircularQueue*)malloc(sizeof(CircularQueue));
 	(*Queue)->Nodes = (Node*)malloc(sizeof(Node) * (Capacity + 1));
-
-	(*Queue)->capacity = Capacity;
-	(*Queue)->front = 0;
-	(*Queue)->rear = 0;
+	(*Queue)->Capacity = Capacity;
+	(*Queue)->Front = 0;
+	(*Queue)->Rear = 0;
 }
 
-void Destroy_Queue(CircularQueue* Queue) {
+void CQ_DestroyQueue(CircularQueue* Queue) {
 
 	free(Queue->Nodes);
 	free(Queue);
 }
 
-void Enqueue(CircularQueue* Queue, int Data) {
-	int position = 0;
+void CQ_Enqueue(CircularQueue* Queue, int data) {
 
-	if (Queue->rear == Queue->capacity) {
-		position = Queue->rear;
-		Queue->rear = 0;
+	int Position = 0;
+
+	if (Queue->Rear == Queue->Capacity) {
+		Position = Queue->Rear;
+		Queue->Rear = 0;
 	}
-	else position = Queue->rear++;
+	else Position = Queue->Rear++;
 
-	Queue->Nodes[position].data = Data;
+	Queue->Nodes[Position].data = data;
 }
 
-int Dequeue(CircularQueue* Queue) {
-	int position = Queue->front;
+int CQ_Dequeue(CircularQueue* Queue) {
+	
+	int Position = Queue->Front;
 
-	if (Queue->front == Queue->capacity) Queue->front = 0;
-	else Queue->front++;
+	if (Queue->Front == Queue->Capacity) {
+		Queue->Front = 0;
+	}
+	else Queue->Front++;
 
-	return Queue->Nodes[position].data;
+	return Queue->Nodes[Position].data;
 }
 
-int Get_Size(CircularQueue* Queue) {
-
-	if (Queue->front <= Queue->rear) return Queue->rear - Queue->front;
-	else return Queue->rear + (Queue->capacity - Queue->front) + 1;
+int CQ_GetSize(CircularQueue* Queue) {
+	if (Queue->Front <= Queue->Rear) return Queue->Rear - Queue->Front;
+	else return Queue->Rear + (Queue->Capacity - Queue->Front) + 1;
 }
 
-int Is_Empty(CircularQueue* Queue) {
-	return (Queue->front == Queue->rear);
+int CQ_IsEmpty(CircularQueue* Queue) {
+	
+	return (Queue->Front == Queue->Rear);
 }
 
-int Is_Full(CircularQueue* Queue) {
+int CQ_IsFull(CircularQueue* Queue) {
 
-	if (Queue->front < Queue->rear) return (Queue->rear - Queue->front) == Queue->capacity;
-	else return (Queue->rear + 1) == Queue->front;
+	if (Queue->Front < Queue->Rear) return (Queue->Rear - Queue->Front) == Queue->Capacity;
+	else return (Queue->Rear + 1) == Queue->Front;
 }
 
 int main(void) {
 
+	int i = 0;
 	CircularQueue* Queue;
 
-	Create_Queue(&Queue, 10);
-	Enqueue(Queue, 1);
-	Enqueue(Queue, 2);
-	Enqueue(Queue, 3);
-	Enqueue(Queue, 4);
+	CQ_CreateQueue(&Queue, 10);
+
+	CQ_Enqueue(Queue, 1);
+	CQ_Enqueue(Queue, 2);
+	CQ_Enqueue(Queue, 3);
+	CQ_Enqueue(Queue, 4);
 
 	for (int i = 0; i < 3; i++) {
-		printf("Dequeue: %d, ", Dequeue(Queue));
-		printf("Front:%d, Rear:%d\n", Queue->front, Queue->rear);
+		printf("Dequeue: %d, ", CQ_Dequeue(Queue));
+		printf("Front:%d, Rear:%d\n", Queue->Front, Queue->Rear);
 	}
 
-	int i = 100;
-
-	while (Is_Full(Queue) == 0) {
-		Enqueue(Queue, i++);
+	i = 100;
+	while (CQ_IsFull(Queue) == 0) {
+		CQ_Enqueue(Queue, i++);
 	}
 
-	printf("Capacity: %d, Size: %d\n\n", Queue->capacity, Get_Size(Queue));
+	printf("Capacity: %d, Size: %d\n\n", Queue->Capacity, CQ_GetSize(Queue));
 
-	while (Is_Empty(Queue) == 0) {
-		printf("Dequeue: %d, ", Dequeue(Queue));
-		printf("Front:%d, Rear:%d\n", Queue->front, Queue->rear);
+	while (CQ_IsEmpty(Queue) == 0) {
+		printf("Dequeue: %d, ", CQ_Dequeue(Queue));
+		printf("Front:%d, Rear:%d\n", Queue->Front, Queue->Rear);
 	}
 
-	Destroy_Queue(Queue);
+	CQ_DestroyQueue(Queue);
 
 	return 0;
 }
