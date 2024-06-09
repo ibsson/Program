@@ -21,7 +21,7 @@ void PQ_Dequeue(PriorityQueue* PQ, PQNode* Root);
 int PQ_GetParent(int Index);
 int PQ_GetLeftChild(int Index);
 int PQ_IsEmpty(PriorityQueue* PQ);
-void PQ_PrintNodes(PQNode* Node);
+void PrintNodes(PQNode* Node);
 
 int main(void) {
 
@@ -44,11 +44,11 @@ int main(void) {
 	PQ_Enqueue(PQ, Nodes[4]);
 	PQ_Enqueue(PQ, Nodes[5]);
 
-	printf("큐에 남아 있는 작업의 수 : %d", PQ->UsedSize);
+	printf("큐에 남아 있는 작업의 수 : %d\n", PQ->UsedSize);
 
 	while (!PQ_IsEmpty(PQ)) {
 		PQ_Dequeue(PQ, &Popped);
-		PQ_PrintNodes(&Popped);
+		PrintNodes(&Popped);
 	}
 
 	return 0;
@@ -90,7 +90,7 @@ void PQ_Enqueue(PriorityQueue* PQ, PQNode NewNode) {
 		ParentPosition = PQ_GetParent(CurrentPosition);
 	}
 
-	PQ->UsedSize;
+	PQ->UsedSize++;
 }
 
 void PQ_SwapNodes(PriorityQueue* PQ, int Index1, int Index2) {
@@ -157,7 +157,7 @@ int PQ_IsEmpty(PriorityQueue* PQ) {
 	return (PQ->UsedSize == 0);
 }
 
-void PQ_PrintNodes(PQNode* Node) {
+void PrintNodes(PQNode* Node) {
 
 	printf("작업명 : %s (우선순위:%d)\n", Node->Data, Node->Priority);
 }
