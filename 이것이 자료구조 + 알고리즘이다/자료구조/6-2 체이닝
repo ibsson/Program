@@ -1,0 +1,165 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef char* KeyType;
+typedef char* ValueType;
+
+typedef struct Node {
+	KeyType Key;
+	ValueType Value;
+
+	struct Node* Next;
+}Node;
+
+typedef Node* List;
+
+typedef struct HashTable {
+	int TableSize;
+	List* Table;
+}HashTable;
+
+HashTable* CreateHashTable(int TableSize);
+void DestroyHashTable(HashTable* HT);
+
+Node* CreateNode(KeyType Key, ValueType Value);
+void DestroyNode(Node* TheNode);
+
+void _Set(HashTable* HT, KeyType Key, ValueType Value);
+ValueType _Get(HashTable* HT, KeyType Key);
+int _Hash(KeyType Key, int KeyLength, int TableSize);
+
+int main(void) {
+
+	HashTable* HT = CreateHashTable(12289);
+
+	_Set(HT, "MSFT", "Microsoft Corporation");
+	_Set(HT, "JAVA", "Sun Microsystems");
+	_Set(HT, "REDH", "Red Hat Linux");
+	_Set(HT, "APAC", "Apache Org");
+	_Set(HT, "ZYMZZ", "Unisys Ops Check");
+	_Set(HT, "IBM", "IBM Ltd");
+	_Set(HT, "ORCL", "Oracle Corporation");
+	_Set(HT, "CSCO", "Cisco Systems, Inc.");
+	_Set(HT, "GOOG", "Google Inc.");
+	_Set(HT, "YHOO", "Yahoo! Inc.");
+	_Set(HT, "NOVL", "Novell, Inc.");
+
+	printf("\n");
+
+	printf("Key: %s, Value: %s\n", "MSFT", _Get(HT, "MSFT"));
+	printf("Key: %s, Value: %s\n", "REDH", _Get(HT, "REDH"));
+	printf("Key: %s, Value: %s\n", "APAC", _Get(HT, "APAC"));
+	printf("Key: %s, Value: %s\n", "ZYMZZ", _Get(HT, "ZYMZZ"));
+	printf("Key: %s, Value: %s\n", "JAVA", _Get(HT, "JAVA"));
+	printf("Key: %s, Value: %s\n", "IBM", _Get(HT, "IBM"));
+	printf("Key: %s, Value: %s\n", "ORCL", _Get(HT, "ORCL"));
+	printf("Key: %s, Value: %s\n", "CSCO", _Get(HT, "CSCO"));
+	printf("Key: %s, Value: %s\n", "GOOG", _Get(HT, "GOOG"));
+	printf("Key: %s, Value: %s\n", "YHOO", _Get(HT, "YHOO"));
+	printf("Key: %s, Value: %s\n", "NOVL", _Get(HT, "NOVL"));
+
+	DestroyHashTable(HT);
+
+	return 0;
+}
+
+HashTable* CreateHashTable(int TableSize) {
+
+	HashTable* HT = (HashTable*)malloc(sizeof(HashTable));
+	HT->Table = (List*)malloc(sizeof(List) * TableSize);
+
+	memset(HT->Table, 0, sizeof(List) * TableSize);
+
+	HT->TableSize = TableSize;
+
+	return HT;
+}
+
+Node* CreateNode(KeyType Key, ValueType Value) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+	NewNode->Key = (char*)malloc(sizeof(char) * (strlen(Key) + 1));
+	strcpy(NewNode->Key, Key);
+
+	NewNode->Value = (char*)malloc(sizeof(char) * (strlen(Value) + 1));
+	strcpy(NewNode->Value, Value);
+	NewNode->Next = NULL;
+
+	return NewNode;
+}
+
+void DestroyNode(Node* TheNode) {
+	free(TheNode->Key);
+	free(TheNode->Value);
+	free(TheNode);
+}
+
+void _Set(HashTable* HT, KeyType Key, ValueType Value) {
+
+	int Address = _Hash(Key, strlen(Key), HT->TableSize);
+	Node* NewNode = CreateNode(Key, Value);
+
+	if (HT->Table[Address] == NULL) HT->Table[Address] = NewNode;
+	else {
+		List L = HT->Table[Address];
+		HT->Table[Address] = NewNode;
+
+		printf("Collision occured : Key(%s), Address(%d)\n", Key, Address);
+	}
+}
+
+ValueType _Get(HashTable* HT, KeyType Key) {
+
+	int Address = _Hash(Key, strlen(Key), HT->TableSize);
+
+	List TheList = HT->Table[Address];
+	List Target = NULL;
+
+	if (TheList == NULL) return NULL;
+
+	while (1) {
+		if (strcmp(TheList->Key, Key) == 0) {
+			Target = TheList;
+			break;
+		}
+
+		if (TheList->Next == NULL) break;
+		else TheList = TheList->Next;
+	}
+
+	return Target->Value;
+}
+
+void DestroyList(List L) {
+
+	if (L == NULL) return;
+
+	if (L->Next != NULL) DestroyList(L->Next);
+
+	DestroyNode(L);
+}
+
+void DestroyHashTable(HashTable* HT) {
+
+	for (int i = 0; i < HT->TableSize; i++) {
+		List L = HT->Table[i];
+		DestroyList(L);
+	}
+
+	free(HT->Table);
+	free(HT);
+}
+
+int _Hash(KeyType Key, int KeyLength, int TableSize) {
+
+	int HashValue = 0;
+
+	for (int i = 0; i < KeyLength; i++) {
+		HashValue = (HashValue << 3) + Key[i];
+	}
+
+	HashValue = HashValue % TableSize;
+
+	return HashValue;
+}
