@@ -110,7 +110,7 @@ void _Set(HashTable** HT, KeyType Key, ValueType Value) {
 
 	(*HT)->OccupiedCount++;
 
-	printf("Key(%s) ebtered at address(%d)\n", Key, Address);
+	printf("Key(%s) entered at address(%d)\n", Key, Address);
 }
 
 ValueType _Get(HashTable* HT, KeyType Key) {
