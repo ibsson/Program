@@ -179,12 +179,16 @@ void PrintGraph(Graph* G) {
 	Vertex* V = NULL;
 	Edge* E = NULL;
 
-	if ((V = G->Vertices) == NULL) return;
+	V = G->Vertices;
+
+	if (V == NULL) return;
 
 	while (V != NULL) {
 		printf("%c : ", V->Data);
 
-		if ((E = V->AdjacencyList) == NULL) {
+		E = V->AdjacencyList;
+
+		if (E == NULL) {
 			V = V->Next;
 			printf("\n");
 			continue;
