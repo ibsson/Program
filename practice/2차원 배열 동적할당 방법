@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main(void) {
+
+	int height = 0;
+
+	scanf_s("%d", &height);
+
+	char** word = (char**)malloc(sizeof(char*) * height);
+
+	for (int i = 0; i < height; i++) {
+		word[i] = (char*)malloc(sizeof(char) * 101);
+	}
+
+	for (int i = 0; i < height; i++) {
+		scanf_s("%s", word[i], 101);
+	}
+
+	for (int i = 0; i < height; i++) {
+		printf("%s\n", word[i]);
+	}
+
+	for (int i = 0; i < height; i++) {
+		free(word[i]);
+	}
+	free(word);
+
+	return 0;
+}
