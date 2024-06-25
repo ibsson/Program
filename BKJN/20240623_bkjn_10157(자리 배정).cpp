@@ -14,7 +14,7 @@ void Get_Result(int** seat, int C, int R, int K) {
     while (1) {
         if (direction == 1) {
             for (int j = i; j < R; j++) {
-                seat[i][j] = num;
+                seat[j][i] = num;
 
                 if (num == K) {
                     printf("%d %d\n", i + 1, j + 1);
@@ -26,10 +26,10 @@ void Get_Result(int** seat, int C, int R, int K) {
         }
         else if (direction == 2) {
             for (int j = i + 1; j < C; j++) {
-                seat[j][R - 1] = num;
+                seat[R - 1][j] = num;
 
                 if (num == K) {
-                    printf("%d %d\n", j + 1, R);
+                    printf("%d %d\n", (j + 1), R);
                     return;
                 }
                 num++;
@@ -38,10 +38,10 @@ void Get_Result(int** seat, int C, int R, int K) {
         }
         else if (direction == 3) {
             for (int j = R - 2; j >= i; j--) {
-                seat[C - 1][j] = num;
+                seat[j][C - 1] = num;
 
                 if (num == K) {
-                    printf("%d %d\n", C, j + 1);
+                    printf("%d %d\n", C, (j + 1));
                     return;
                 }
                 num++;
@@ -50,7 +50,7 @@ void Get_Result(int** seat, int C, int R, int K) {
         }
         else if (direction == 4) {
             for (int j = C - 2; j > i; j--) {
-                seat[j][i] = num;
+                seat[i][j] = num;
 
                 if (num == K) {
                     printf("%d %d\n", j + 1, i + 1);
@@ -72,14 +72,14 @@ int main(void) {
     scanf("%d %d", &C, &R);
     scanf("%d", &K);
 
-    int** seat = (int**)malloc(sizeof(int*) * C);
-    for (int i = 0; i < C; i++) {
-        seat[i] = (int*)malloc(sizeof(int) * R);
+    int** seat = (int**)malloc(sizeof(int*) * R);
+    for (int i = 0; i < R; i++) {
+        seat[i] = (int*)malloc(sizeof(int) * C);
     }
 
     Get_Result(seat, C, R, K);
 
-    for (int i = 0; i < C; i++) {
+    for (int i = 0; i < R; i++) {
         free(seat[i]);
     }
     free(seat);
