@@ -79,7 +79,7 @@ int main(void) {
 
     Get_Result(seat, C, R, K);
 
-    for (int i = 0; i < C; i++) {
+    for (int i = 0; i < R; i++) {
         free(seat[i]);
     }
     free(seat);
