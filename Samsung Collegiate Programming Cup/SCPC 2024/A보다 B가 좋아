@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+int main() {
+    int T;
+    cin >> T;
+
+	for (int t = 1; t <= T; ++t) {
+		int N;
+		cin >> N;
+		string s;
+		cin >> s;
+
+		int additional_B = 0;
+
+		for (int i = 0; i < (N - 1); i++) {
+			if (s[i] == 'A' && s[i + 1] == 'A') {
+				additional_B += 2;
+			}
+		}
+
+        for (int i = 0; i < N - 2; i++) {
+            if (s[i] == 'A' && s[i + 1] == 'B' && s[i + 2] == 'A') {
+                additional_B++;
+            }
+        }
+
+		cout << "Case #" << t << '\n';
+		cout << additional_B << endl;
+    }
+
+    return 0;
+}
