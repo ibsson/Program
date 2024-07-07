@@ -1,0 +1,204 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	struct Vertex* V;
+	struct Node* Next;
+}Node;
+
+typedef struct Vertex {
+	int Data;
+	int Visited;
+
+	struct Vertex* Next;
+	struct Edge* AdjacentList;
+}Vertex;
+
+typedef struct Edge {
+	Vertex* From;
+	Vertex* Target;
+	struct Edge* Next;
+	int Weight;
+}Edge;
+
+typedef struct Graph {
+	Vertex* Vertices;
+}Graph;
+
+Node* Create_Node(Vertex* V) {
+
+	Node* NewNode = (Node*)malloc(sizeof(Node));
+
+	NewNode->V = V;
+	NewNode->Next = NULL;
+
+	return NewNode;
+}
+
+Graph* Create_Graph() {
+
+	Graph* G = (Graph*)malloc(sizeof(Graph));
+
+	G->Vertices = NULL;
+
+	return G;
+}
+
+Vertex* Create_Vertex(int data) {
+
+	Vertex* V = (Vertex*)malloc(sizeof(Vertex));
+
+	V->Data = data;
+	V->Visited = 0;
+	V->Next = NULL;
+	V->AdjacentList = NULL;
+
+	return V;
+}
+
+void Add_Vertex(Graph* G, Vertex* V) {
+
+	if (G->Vertices == NULL) {
+		G->Vertices = V;
+	}
+	else {
+		Vertex* tmp = G->Vertices;
+		while (tmp->Next != NULL) {
+			tmp = tmp->Next;
+		}
+		tmp->Next = V;
+	}
+}
+
+Edge* Create_Edge(Vertex* from,Vertex* target, int weight) {
+
+	Edge* E = (Edge*)malloc(sizeof(Edge));
+
+	E->From = from;
+	E->Target = target;
+	E->Next = NULL;
+	E->Weight = weight;
+
+	return E;
+}
+
+void Add_Edge(Vertex* V, Edge* E) {
+
+	if (V->AdjacentList == NULL) {
+		V->AdjacentList = E;
+	}
+	else {
+		Edge* tmp = V->AdjacentList;
+		while (tmp->Next != NULL) {
+			tmp = tmp->Next;
+		}
+		tmp->Next = E;
+	}
+}
+
+void Insert_New_Head(Node** Head, Node* NewHead) {
+
+	if (Head == NULL) {
+		(*Head) = NewHead;
+	}
+	else {
+		NewHead->Next = (*Head);
+		(*Head) = NewHead;
+	}
+}
+
+void DFS(Vertex* V, Node** List) {
+
+	Node* NewHead = NULL;
+	Edge* E = NULL;
+
+	V->Visited = 1;
+
+	E = V->AdjacentList;
+
+	while (E != NULL) {
+		if (E->Target != NULL && E->Target->Visited == 0) {
+			DFS(E->Target, List);
+		}
+
+		E = E->Next;
+	}
+
+	printf("%d\n", V->Data);
+
+	NewHead = Create_Node(V);
+	Insert_New_Head(List, NewHead);
+}
+
+void TopologicalSort(Vertex* V, Node** List) {
+
+	while (V != NULL && V->Visited == 0) {
+		DFS(V, List);
+
+		V = V->Next;
+	}
+}
+
+void Destroy_Graph(Graph* G) {
+
+	free(G);
+}
+
+int main(void) {
+
+	Node* SortedList = NULL;
+	Node* CurrentNode = NULL;
+
+	Graph* graph = Create_Graph();
+
+	Vertex* V1 = Create_Vertex(1);
+	Vertex* V2 = Create_Vertex(2);
+	Vertex* V3 = Create_Vertex(3);
+	Vertex* V4 = Create_Vertex(4);
+	Vertex* V5 = Create_Vertex(5);
+	Vertex* V6 = Create_Vertex(6);
+	Vertex* V7 = Create_Vertex(7);
+	Vertex* V8 = Create_Vertex(8);
+
+	Add_Vertex(graph, V1);
+	Add_Vertex(graph, V2);
+	Add_Vertex(graph, V3);
+	Add_Vertex(graph, V4);
+	Add_Vertex(graph, V5);
+	Add_Vertex(graph, V6);
+	Add_Vertex(graph, V7);
+	Add_Vertex(graph, V8);
+
+	Add_Edge(V1, Create_Edge(V1, V3, 0));
+	Add_Edge(V1, Create_Edge(V1, V4, 0));
+
+	Add_Edge(V2, Create_Edge(V2, V3, 0));
+	Add_Edge(V2, Create_Edge(V2, V5, 0));
+
+	Add_Edge(V3, Create_Edge(V3, V6, 0));
+
+	Add_Edge(V4, Create_Edge(V4, V6, 0));
+	Add_Edge(V4, Create_Edge(V4, V7, 0));
+
+	Add_Edge(V5, Create_Edge(V5, V7, 0));
+
+	Add_Edge(V6, Create_Edge(V6, V8, 0));
+
+	Add_Edge(V7, Create_Edge(V7, V8, 0));
+
+	TopologicalSort(graph->Vertices, &SortedList);
+
+	printf("Topological Sort Result : ");
+
+	CurrentNode = SortedList;
+
+	while (CurrentNode != NULL) {
+		printf("%d ", CurrentNode->V->Data);
+		CurrentNode = CurrentNode->Next;
+	}
+	printf("\n");
+
+	Destroy_Graph(graph);
+
+	return 0;
+}
