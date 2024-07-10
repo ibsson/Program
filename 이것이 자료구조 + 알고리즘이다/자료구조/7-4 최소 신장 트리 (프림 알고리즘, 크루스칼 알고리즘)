@@ -99,7 +99,7 @@ int main(void) {
 	Add_Vertex(graph, V7);
 	Add_Vertex(graph, V8);
 	Add_Vertex(graph, V9);
-	
+
 	Add_Edge(V1, Create_Edge(V1, V2, 35));
 	Add_Edge(V1, Create_Edge(V1, V5, 247));
 
@@ -435,7 +435,7 @@ void Prim(Graph* G, Vertex* StartVertex, Graph* MST) {
 
 		Fringes[i] = NULL;
 		Precedences[i] = NULL;
-		MSTVertices[i] = NewVertex;
+		MSTVertices[i] = NewVertex; //NewVertex의 주소를 복사한다. 그래서 MSTVertices의 값이 변하면 NewVertex의 값도 변해서 MST그래프의 NewVertex의 값도 변한다.
 		Weights[i] = MAX_WEIGHT;
 		CurrentVertex = CurrentVertex->Next;
 		i++;
@@ -476,9 +476,9 @@ void Prim(Graph* G, Vertex* StartVertex, Graph* MST) {
 		FromIndex = Precedences[i]->Index;
 		ToIndex = i;
 
-		Add_Edge(MSTVertices[FromIndex], Create_Edge(MSTVertices[FromIndex], MSTVertices[ToIndex], Weights[i]));
+		Add_Edge(MSTVertices[FromIndex], Create_Edge(MSTVertices[FromIndex], MSTVertices[ToIndex], Weights[i])); //최소신장트리에 간선 추가
 
-		Add_Edge(MSTVertices[ToIndex], Create_Edge(MSTVertices[ToIndex], MSTVertices[FromIndex], Weights[i]));
+		Add_Edge(MSTVertices[ToIndex], Create_Edge(MSTVertices[ToIndex], MSTVertices[FromIndex], Weights[i])); //최소신장트리에 간선 추가
 	}
 
 	free(Fringes);
