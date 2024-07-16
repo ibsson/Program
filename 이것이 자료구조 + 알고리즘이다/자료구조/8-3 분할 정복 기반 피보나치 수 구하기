@@ -24,7 +24,7 @@ Matrix2x2 Matrix2x2_Power(Matrix2x2 A, int n) {
 		A = Matrix2x2_Power(A, n / 2);
 		A = Matrix2x2_Multiply(A, A);
 
-		if (n & 1) {
+		if (n & 1) { //홀수 짝수 구분
 			Matrix2x2 B;
 			B.Data[0][0] = 1; B.Data[0][1] = 1;
 			B.Data[1][0] = 1; B.Data[1][1] = 0;
