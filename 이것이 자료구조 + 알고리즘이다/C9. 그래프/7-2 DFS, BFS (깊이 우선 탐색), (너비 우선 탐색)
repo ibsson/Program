@@ -13,7 +13,7 @@ typedef struct Node {
 typedef struct LinkedQueue {
 	Node* Front;
 	Node* Rear;
-};
+}LinkedQueue;
 
 typedef struct Vertex {
 	VElementType Data;
