@@ -16,7 +16,6 @@ int fib(int n) {
 int main(void) {
 
     int n = 0;
-    int arr[2] = { 0 };
 
     scanf("%d", &n);
 
