@@ -27,6 +27,8 @@ int main(void) {
 		cout << basket[l] << " ";
 	}
 
+	delete[] basket;
+
 	return 0;
 }
 
