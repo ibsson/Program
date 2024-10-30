@@ -5,6 +5,30 @@ using namespace std;
 int main(void) {
 
 	string S;
+	int cnt = 0;
+	
+	getline(cin, S);
+
+	for (int i = 0; i < S.length() - 1; i++) {
+		if (S[i] != S[i + 1]) {
+			cnt++;
+		}
+	}
+
+	if (cnt % 2 == 0) cout << cnt / 2 << endl;
+	else cout << (cnt / 2) + 1 << endl;
+
+	return 0;
+}
+
+/*
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(void) {
+
+	string S;
 	int cnt_zero = 0, check = 0;
 
 	getline(cin, S);
@@ -33,3 +57,4 @@ int main(void) {
 
 	return 0;
 }
+*/
