@@ -2,6 +2,76 @@
 #include <string>
 using namespace std;
 
+int get_word_len(string str, int j, int len) {
+
+	int word_len = 0;
+
+	for (int k = j; k < len; k++) {
+		if (str[k] == ' ') break;
+
+		word_len++;
+	}
+
+	return word_len;
+}
+
+void change_word(string *str, int j, int word_len) {
+
+	char tmp = 0;
+	int a = j + word_len - 1, b = 0;
+
+	for (int k = j; k < j + (word_len / 2); k++) {
+		tmp = (*str)[k];
+		(*str)[k] = (*str)[a - b];
+		(*str)[a - b] = tmp;
+
+		b++;
+	}
+}
+
+int main(void) {
+
+	int T = 0;
+
+	cin >> T;
+	cin.ignore();
+
+	string str;
+
+	for (int i = 0; i < T; i++) {
+		getline(cin, str);
+
+		int len = str.length();
+
+		for (int j = 0; j < len; j++) {
+			if (str[j] != ' ') {
+				int word_len = get_word_len(str, j, len);
+
+				change_word(&str, j, word_len);
+
+				j += word_len - 1;
+			}
+		}
+
+		cout << str << endl;
+
+		str.clear();
+	}
+
+	return 0;
+}
+
+/*
+이전 코드에서 가독성이 좀 더 좋게 함수를 이용해서 만들었다.
+포인터를 이용해서 다른 함수에서 str의 요소의 순서가 바뀌어도 main함수의 str의 요소도 한번에 바뀌게 만들었다.
+*/
+
+
+/*
+#include <iostream>
+#include <string>
+using namespace std;
+
 int main(void) {
 
 	int T = 0;
@@ -48,6 +118,7 @@ int main(void) {
 
 	return 0;
 }
+*/
 
 /*
 string을 이용해서 풀었는데 중요한 점은
