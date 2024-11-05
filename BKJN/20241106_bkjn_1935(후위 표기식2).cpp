@@ -18,11 +18,15 @@ public:
     }
 
     void Push(double data) {
-        Nodes[++top].Data = data;
+        top++;
+        Nodes[top].Data = data;
     }
 
     double Pop() {
-        return Nodes[top--].Data;
+        double tmp = Nodes[top].Data;
+        top--;
+
+        return tmp;
     }
 };
 
