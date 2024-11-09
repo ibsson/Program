@@ -1,0 +1,26 @@
+#include <windows.h>
+#include <iostream>
+using namespace std;
+
+class My_Circle {
+public:
+	int left, right, top, bottom;
+
+	My_Circle(int l, int t, int r, int b) :left(l), top(t), right(r), bottom(b)
+	{
+	}
+
+	void do_draw() {
+		HDC hdc = GetWindowDC(GetForegroundWindow());
+		Ellipse(hdc, left, top, right, bottom);
+	}
+};
+
+int main(void) {
+
+	My_Circle c1(100, 100, 180, 180);
+
+	c1.do_draw();
+
+	return 0;
+}
