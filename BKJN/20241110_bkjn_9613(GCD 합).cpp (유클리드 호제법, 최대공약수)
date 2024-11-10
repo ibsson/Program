@@ -1,0 +1,64 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int gcd_euclid(int, int);
+
+bool Compare(int a, int b){ //내림차순 정렬
+	return a > b;
+}
+
+int main(void) {
+
+	int t = 0, n = 0;
+	int num[101] = { 0 };
+
+	cin >> t;
+
+	long long int sum = 0;
+
+	for (int i = 0; i < t; i++) {
+		cin >> n;
+
+		for (int j = 0; j < n; j++) {
+			cin >> num[j];
+		}
+
+		sort(num, num + n, Compare);
+
+		int tmp = 0;
+
+		for (int j = 0; j < (n - 1); j++) {
+			for (int k = (j + 1); k < n; k++) {
+				if (num[j] < num[k]) {
+					tmp = num[j];
+					num[j] = num[k];
+					num[k] = tmp;
+				}
+
+				sum += gcd_euclid(num[j], num[k]);
+			}
+		}
+
+		cout << sum << "\n";
+
+		sum = 0;
+	}
+	
+	return 0;
+}
+
+int gcd_euclid(int num1, int num2) {
+
+	if (num2 == 0) {
+		return num1;
+	}
+	return gcd_euclid(num2, num1 % num2);
+}
+
+/*
+유클리드 호제법을 한번 구현해본 적이 있어서 그걸 기반으로 풀었다.
+유클리드 호제법을 이용하니 쉽게 풀 수 있었다.
+그리고 sort함수도 처음 사용해봤다. 내림차순으로 정렬하는 방법도 알 수 있었다.
+얻어가는게 많은 문제였던 것 같다.
+*/
