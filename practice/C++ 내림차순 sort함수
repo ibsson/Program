@@ -2,7 +2,7 @@
 #include <algorithm>
 using namespace std;
 
-bool Compare(int a, int b){ //내림차순 정렬
+bool Compare(int a, int b){ //내림차순 정렬. 오름차순은 이거 안적고 그냥 sort만 써도 됨
 	return a > b;
 }
 
