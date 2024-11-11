@@ -11,7 +11,7 @@ int main(void) {
 
 	cin >> N;
 
-	int tmp = Get_Result(N);
+	Get_Result(N);
 
 	cout << sum << endl;
 
