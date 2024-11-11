@@ -1,6 +1,33 @@
 #include <iostream>
 using namespace std;
 
+int main(void) {
+
+	int N = 0;
+	int dp[11] = { 0 };
+
+	cin >> N;
+	dp[1] = 0, dp[2] = 1;
+
+	for (int i = 3; i <= N; i++) {
+		dp[i] = dp[i - 1] + (i - 1);
+	}
+
+	cout << dp[N] << endl;
+
+	return 0;
+}
+
+/*
+더 좋은 방법이 있어서 만들었다.
+확실히 규칙을 알아내고 점화식을 만들어내니 굉장히 쉽게 풀린다.
+점화식을 만드는 연습을 정말 많이 해봐야겠다.
+*/
+
+/*
+#include <iostream>
+using namespace std;
+
 int sum = 0;
 
 int Get_Result(int);
@@ -37,6 +64,7 @@ int Get_Result(int num) {
 
 	return tmp_1 + tmp_2;
 }
+*/
 
 /*
 이 문제는 dp로 풀었다. 문제를 보고 top-down 풀이방식이 생각이 나서 재귀함수로 풀어내었다.
