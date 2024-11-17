@@ -23,7 +23,7 @@ int main(void) {
 		if (min > num[i]) min = num[i];
 	}
 
-	long long int cnt = 0;
+	int cnt = 0;
 
 	if (min == n) {
 		for (int i = 1; i <= n; i++) {
