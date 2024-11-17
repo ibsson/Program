@@ -1,0 +1,68 @@
+#include <iostream>
+#include <deque>
+using namespace std;
+
+int main(void) {
+
+	int N = 0, M = 0;
+	deque<int> dq;
+	int num[51] = { 0 };
+
+	cin >> N >> M;
+
+	for (int i = 0; i < M; i++) {
+		cin >> num[i];
+	}
+
+	for (int i = 1; i <= N; i++) {
+		dq.push_back(i);
+	}
+
+	int k = 0, idx = 0, cnt = 0;
+
+	while (k < M) {
+		for (int i = 0; i < dq.size(); i++) {
+			if (dq[i] == num[k]) {
+				idx = i;
+				break;
+			}
+		}
+
+		if (idx <= dq.size() / 2) {
+			while (1) {
+				if (dq.front() == num[k]) {
+					dq.pop_front();
+					break;
+				}
+
+				dq.push_back(dq.front());
+				dq.pop_front();
+				cnt++;
+			}
+		}
+		else {
+			while (1) {
+				if (dq.front() == num[k]) {
+					dq.pop_front();
+					break;
+				}
+
+				dq.push_front(dq.back());
+				dq.pop_back();
+				cnt++;
+			}
+		}
+
+		k++;
+	}
+
+	cout << cnt << endl;
+
+	return 0;
+}
+
+/*
+이 문제를 풀면서 Queue와 Deque의 STL 사용 방법을 알게되었다.
+이 문제는 STL을 사용하니 너무 편하게 문제를 풀 수 있었다.
+매번 자료구조를 구현하기 너무 힘들었는데 이런 방법을 알게 되어서 앞으로 문제 풀기가 더 좋을 것 같고 더 재밌을 것 같다.
+*/
