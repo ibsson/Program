@@ -3,7 +3,7 @@ using namespace std;
 
 int main(void) {
 
-	double X = 0, Y = 0;
+	long long int X = 0, Y = 0;
 
 	cin >> X >> Y;
 
@@ -19,7 +19,7 @@ int main(void) {
 
 	while (left <= right) {
 		int mid = (left + right) / 2;
-		int tmp = ((Y + mid) * 100) / (X + mid);
+		long long int tmp = ((Y + mid) * 100) / (X + mid);
 
 		if (tmp > ori) {
 			result = mid;
@@ -34,8 +34,3 @@ int main(void) {
 
 	return 0;
 }
-
-/*
-계속해서 실수형 계산과 정수형 계산 때문에 문제가 발생해서
-실수형 계산과 정수형 계산을 잘 구분해서 해야겠다는 생각이 든 문제였다.
-*/
