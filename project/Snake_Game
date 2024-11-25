@@ -66,7 +66,7 @@ int main(void) {
 	while (true) {
 		int t = clock() - start;
 
-		if (t > 400) {
+		if (t > 200) { //움직임 속도 조정
 			Move();
 			Draw_Map();
 
