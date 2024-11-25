@@ -1,0 +1,332 @@
+#include <iostream>
+#include <windows.h>
+#include <conio.h>
+#include <time.h>
+using namespace std;
+
+#define EMPTY 0
+#define WALL 10
+#define BODY 1 // 뱀 몸통
+#define HEAD 2 //뱀 머리
+#define FOOD 3
+#define UP 72
+#define LEFT 75
+#define RIGHT 77
+#define DOWN 80
+#define DIRECTION_KEY 224
+#define ESC 27
+
+char Map[17][22];
+int Snake[100][2] = {
+	{8, 7}, {8, 6}, {8, 5}, {8, 4}, {8, 3}
+};
+int length; //뱀 길이
+int hdirection; //뱀이 바라보는 방향
+int fx, fy; //먹이 좌표
+int start;
+int score;
+
+void CursorView();
+void Goto_XY(int x, int y);
+void Draw_Map();
+void Make_Food();
+void Check_Key();
+bool Check_Crush(int y, int x);
+void Move();
+
+int main(void) {
+
+    CursorView();
+
+	srand(unsigned int(time(NULL))); //난수를 부여할때 현재 시간을 부여
+
+	for (int i = 0; i < 22; i++)
+		Map[0][i] = Map[16][i] = WALL;
+
+	for (int i = 1; i < 16; i++)
+		Map[i][0] = Map[i][21] = WALL;
+
+	for (int i = 1; i <= 15; i++)
+		for (int j = 1; j <= 20; j++)
+			Map[i][j] = EMPTY;
+
+	hdirection = RIGHT;
+	length = 5;
+
+	Map[Snake[0][0]][Snake[0][1]] = HEAD;
+
+	for (int i = 1; i < length; i++) {
+		Map[Snake[i][0]][Snake[i][1]] = BODY;
+	}
+
+	Make_Food();
+
+	start = clock();
+
+	while (true) {
+		int t = clock() - start;
+
+		if (t > 400) {
+			Move();
+			Draw_Map();
+
+			start = clock();
+		}
+
+		Check_Key();
+	}
+
+	return 0;
+}
+
+void CursorView()
+{
+    CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+    cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
+    cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
+
+void Goto_XY(int x, int y)
+{
+	COORD Pos;
+	Pos.X = x * 2;
+	Pos.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+}
+
+void Draw_Map()
+{
+	for (int row = 0; row < 17; row++) {
+		for (int col = 0; col < 22; col++) {
+			switch (Map[row][col]) {
+			case EMPTY:
+				Goto_XY(col, row);
+				printf("  ");
+				break;
+			case WALL:
+				Goto_XY(col, row);
+				printf("■");
+				break;
+			case HEAD:
+				Goto_XY(col, row);
+				printf("●");
+				break;
+			case BODY:
+				Goto_XY(col, row);
+				printf("○");
+				break;
+			case FOOD:
+				Goto_XY(col, row);
+				printf("♧");
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	Goto_XY(25, 10);
+	printf("♧ score: %d", score);
+}
+
+void Make_Food() {
+
+	while (true) {
+		fy = rand() % 15 + 1;
+		fx = rand() % 20 + 1;
+
+		bool chk = true;
+
+		for (int i = 0; i < length; i++) { //뱀이 있는 위치에 생기지 않게 하기 위한 코드
+			if (Snake[i][0] == fy && Snake[i][1] == fx) {
+				chk = false;
+				break;
+			}
+		}
+
+		if (chk) {
+			Map[fy][fx] = FOOD;
+			break;
+		}
+	}
+}
+
+void Check_Key() {
+
+	if (_kbhit()) {
+		int key = _getch();
+
+		switch (key) {
+		case DIRECTION_KEY: //방향키
+			key = _getch();
+
+			switch (key) {
+			case UP:
+				if (hdirection != DOWN) {
+					hdirection = UP;
+				}
+				break;
+			case LEFT:
+				if (hdirection != RIGHT) {
+					hdirection = LEFT;
+				}
+				break;
+			case RIGHT:
+				if (hdirection != LEFT) {
+					hdirection = RIGHT;
+				}
+				break;
+			case DOWN:
+				if (hdirection != UP) {
+					hdirection = DOWN;
+				}
+				break;
+			}
+
+			break;
+
+		case ESC:
+			Goto_XY(8, 7);
+			printf("게임 종료");
+			exit(0);
+			break;
+		}
+	}
+}
+
+bool Check_Crush(int y, int x) {
+
+	if (Map[y][x] == WALL || Map[y][x] == BODY) {
+		Goto_XY(10, 7);
+		cout << "부딪혔습니다!";
+		exit(0);
+	}
+
+	return false;
+}
+
+void Move() {
+
+	switch (hdirection) {
+	case UP:
+		if (!Check_Crush(Snake[0][0] - 1, Snake[0][1])) {
+			if (fy == (Snake[0][0] - 1) && fx == Snake[0][1]) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][0]--;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	case LEFT:
+		if (!Check_Crush(Snake[0][0], Snake[0][1] - 1)) {
+			if (fy == Snake[0][0] && fx == (Snake[0][1] - 1)) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][1]--;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	case RIGHT:
+		if (!Check_Crush(Snake[0][0], Snake[0][1] + 1)) {
+			if (fy == Snake[0][0] && fx == (Snake[0][1] + 1)) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][1]++;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	case DOWN:
+		if (!Check_Crush(Snake[0][0] + 1, Snake[0][1])) {
+			if (fy == (Snake[0][0] + 1) && fx == Snake[0][1]) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][0]++;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	default:
+		break;
+	}
+
+}
