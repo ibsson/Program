@@ -548,6 +548,7 @@ int e_direction;
 int fx, fy; //먹이 좌표
 int start;
 int score;
+int e_score;
 
 void CursorView();
 void Goto_XY(int x, int y);
@@ -670,6 +671,8 @@ void Draw_Map()
 
 	Goto_XY(25, 10);
 	cout << "♧ score: " << score;
+	Goto_XY(25, 11);
+	cout << "Enemy ♧ score: " << e_score;
 }
 
 void Make_Food() {
@@ -874,10 +877,23 @@ void Move() {
 
 bool Check_Enemy_Crush(int y, int x) {
 
-	if (Map[y][x] == WALL || Map[y][x] == BODY || Map[y][x] == HEAD || Map[y][x] == ENEMYBODY || Map[y][x] == ENEMYHEAD) { //스스로 움직이는 애가 자기 방향의 반대방향으로 움직여도 부딪힌걸로 인식되는듯 진행방향의 반대로는 못가게 만들어야 할듯
-		Goto_XY(10, 7);
-		cout << "부딪혔습니다!";
-		exit(0);
+	if (Map[y][x] == WALL || Map[y][x] == BODY || Map[y][x] == HEAD || Map[y][x] == ENEMYBODY) { //스스로 움직이는 애가 자기 방향의 반대방향으로 움직여도 부딪힌걸로 인식되는듯 진행방향의 반대로는 못가게 만들어야 할듯
+		if (e_direction == UP) {
+			e_direction = LEFT;
+			Enemy_Move();
+		}
+		else if (e_direction == LEFT) {
+			e_direction = DOWN;
+			Enemy_Move();
+		}
+		else if (e_direction == DOWN) {
+			e_direction = RIGHT;
+			Enemy_Move();
+		}
+		else if (e_direction == RIGHT) {
+			e_direction = UP;
+			Enemy_Move();
+		}
 	}
 
 	return false;
@@ -889,23 +905,27 @@ void Enemy_Move() {
 	e_direction = rand() % 4;
 
 	if (e_direction == 1) {
-		if(pre_direction != DOWN) e_direction = UP;
+		if (pre_direction != DOWN) e_direction = UP;
+		else e_direction = pre_direction;
 	}
 	else if (e_direction == 2) {
 		if(pre_direction != RIGHT) e_direction = LEFT;
+		else e_direction = pre_direction;
 	}
 	else if (e_direction == 3) {
 		if(pre_direction != LEFT) e_direction = RIGHT;
+		else e_direction = pre_direction;
 	}
 	else {
 		if(pre_direction != UP) e_direction = DOWN;
+		else e_direction = pre_direction;
 	}
 
 	switch (e_direction) {
 	case UP:
 		if (!Check_Enemy_Crush(Enemy[0][0] - 1, Enemy[0][1])) {
 			if (fy == (Enemy[0][0] - 1) && fx == Enemy[0][1]) {
-				score++;
+				e_score++;
 				Enemy[e_length][0] = Enemy[e_length - 1][0];
 				Enemy[e_length][1] = Enemy[e_length - 1][1];
 				e_length++;
@@ -934,7 +954,7 @@ void Enemy_Move() {
 	case LEFT:
 		if (!Check_Enemy_Crush(Enemy[0][0], Enemy[0][1] - 1)) {
 			if (fy == Enemy[0][0] && fx == (Enemy[0][1] - 1)) {
-				score++;
+				e_score++;
 				Snake[e_length][0] = Snake[e_length - 1][0];
 				Snake[e_length][1] = Snake[e_length - 1][1];
 				e_length++;
@@ -963,7 +983,7 @@ void Enemy_Move() {
 	case RIGHT:
 		if (!Check_Enemy_Crush(Enemy[0][0], Enemy[0][1] + 1)) {
 			if (fy == Enemy[0][0] && fx == (Enemy[0][1] + 1)) {
-				score++;
+				e_score++;
 				Enemy[e_length][0] = Enemy[e_length - 1][0];
 				Enemy[e_length][1] = Enemy[e_length - 1][1];
 				e_length++;
@@ -992,7 +1012,7 @@ void Enemy_Move() {
 	case DOWN:
 		if (!Check_Enemy_Crush(Enemy[0][0] + 1, Enemy[0][1])) {
 			if (fy == (Enemy[0][0] + 1) && fx == Enemy[0][1]) {
-				score++;
+				e_score++;
 				Enemy[e_length][0] = Enemy[e_length - 1][0];
 				Enemy[e_length][1] = Enemy[e_length - 1][1];
 				e_length++;
