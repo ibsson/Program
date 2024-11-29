@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
@@ -23,10 +24,11 @@ int Snake[100][2] = {
 	{8, 7}, {8, 6}, {8, 5}, {8, 4}, {8, 3}
 };
 int Enemy[100][2] = {
-	{7, 7}, {7, 6}, {7, 5}, {7, 4}, {7, 3}
+	{6, 7}, {6, 6}, {6, 5}, {6, 4}, {6, 3}
 };
 int length; //뱀 길이
 int e_length;
+int e_direction;
 int hdirection; //뱀이 바라보는 방향
 int F_Pos[15][2]; //먹이 좌표 [0]은 x좌표, [1]은 y좌표
 int start;
@@ -66,6 +68,15 @@ int main(void) {
 		Map[Snake[i][0]][Snake[i][1]] = BODY;
 	}
 
+	e_length = 5;
+	e_direction = RIGHT;
+
+	Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
+
+	for (int i = 1; i < e_length; i++) {
+		Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
+	}
+
 	Make_Food();
 
 	start = clock();
@@ -73,7 +84,7 @@ int main(void) {
 	while (true) {
 		int t = clock() - start;
 
-		if (t > 200) { //움직임 속도 조정
+		if (t > 400) { //움직임 속도 조정
 			Move();
 			Enemy_Move();
 			Draw_Map();
@@ -230,7 +241,7 @@ void Check_Key() {
 
 bool Check_Crush(int y, int x) {
 
-	if (Map[y][x] == WALL || Map[y][x] == BODY) {
+	if (Map[y][x] == WALL || Map[y][x] == BODY || Map[y][x] == HEAD || Map[y][x] == ENEMYBODY || Map[y][x] == ENEMYHEAD) {
 		Goto_XY(10, 7);
 		cout << "부딪혔습니다!";
 		exit(0);
@@ -369,7 +380,7 @@ void Move() {
 
 void Enemy_Move() {
 
-	int e_direction = rand() % 4;
+	e_direction = rand() % 4;
 
 	if (e_direction == 0) e_direction = UP;
 	else if (e_direction == 1) e_direction = LEFT;
@@ -382,23 +393,23 @@ void Enemy_Move() {
 			for (int i = 0; i < 15; i++) {
 				if (F_Pos[i][1] == (Enemy[0][0] - 1) && F_Pos[i][0] == Enemy[0][1]) {
 					score++;
-					Enemy[length][0] = Enemy[length - 1][0];
-					Enemy[length][1] = Enemy[length - 1][1];
+					Enemy[e_length][0] = Enemy[e_length - 1][0];
+					Enemy[e_length][1] = Enemy[e_length - 1][1];
 					e_length++;
 				}
 				else {
-					Map[Enemy[length - 1][0]][Enemy[length - 1][1]] = EMPTY;
+					Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
 				}
 			}
 
-			for (int i = (length - 1); i > 0; i--) {
+			for (int i = (e_length - 1); i > 0; i--) {
 				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
 
 				Enemy[i][0] = Enemy[i - 1][0];
 				Enemy[i][1] = Enemy[i - 1][1];
 			}
 
-			for (int i = 1; i < length; i++) {
+			for (int i = 1; i < e_length; i++) {
 				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
 			}
 
@@ -412,23 +423,23 @@ void Enemy_Move() {
 			for (int i = 0; i < 15; i++) {
 				if (F_Pos[i][1] == Snake[0][0] && F_Pos[i][0] == (Snake[0][1] - 1)) {
 					score++;
-					Enemy[length][0] = Enemy[length - 1][0];
-					Enemy[length][1] = Enemy[length - 1][1];
+					Enemy[e_length][0] = Enemy[e_length - 1][0];
+					Enemy[e_length][1] = Enemy[e_length - 1][1];
 					e_length++;
 				}
 				else {
-					Map[Enemy[length - 1][0]][Enemy[length - 1][1]] = EMPTY;
+					Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
 				}
 			}
 
-			for (int i = (length - 1); i > 0; i--) {
+			for (int i = (e_length - 1); i > 0; i--) {
 				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
 
 				Enemy[i][0] = Enemy[i - 1][0];
 				Enemy[i][1] = Enemy[i - 1][1];
 			}
 
-			for (int i = 1; i < length; i++) {
+			for (int i = 1; i < e_length; i++) {
 				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
 			}
 
@@ -440,25 +451,25 @@ void Enemy_Move() {
 	case RIGHT:
 		if (!Check_Crush(Enemy[0][0], Enemy[0][1] + 1)) {
 			for (int i = 0; i < 15; i++) {
-				if (F_Pos[i][1] == Snake[0][0] && F_Pos[i][0] == (Snake[0][1] + 1)) {
+				if (F_Pos[i][1] == Enemy[0][0] && F_Pos[i][0] == (Enemy[0][1] + 1)) {
 					score++;
-					Enemy[length][0] = Enemy[length - 1][0];
-					Enemy[length][1] = Enemy[length - 1][1];
+					Enemy[e_length][0] = Enemy[e_length - 1][0];
+					Enemy[e_length][1] = Enemy[e_length - 1][1];
 					e_length++;
 				}
 				else {
-					Map[Enemy[length - 1][0]][Enemy[length - 1][1]] = EMPTY;
+					Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
 				}
 			}
 
-			for (int i = (length - 1); i > 0; i--) {
+			for (int i = (e_length - 1); i > 0; i--) {
 				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
 
 				Enemy[i][0] = Enemy[i - 1][0];
 				Enemy[i][1] = Enemy[i - 1][1];
 			}
 
-			for (int i = 1; i < length; i++) {
+			for (int i = 1; i < e_length; i++) {
 				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
 			}
 
@@ -472,28 +483,538 @@ void Enemy_Move() {
 			for (int i = 0; i < 15; i++) {
 				if (F_Pos[i][1] == (Enemy[0][0] + 1) && F_Pos[i][0] == Enemy[0][1]) {
 					score++;
-					Enemy[length][0] = Enemy[length - 1][0];
-					Enemy[length][1] = Enemy[length - 1][1];
+					Enemy[e_length][0] = Enemy[e_length - 1][0];
+					Enemy[e_length][1] = Enemy[e_length - 1][1];
 					e_length++;
 				}
 				else {
-					Map[Enemy[length - 1][0]][Enemy[length - 1][1]] = EMPTY;
+					Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
 				}
 			}
 
-			for (int i = (length - 1); i > 0; i--) {
+			for (int i = (e_length - 1); i > 0; i--) {
 				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
 
 				Enemy[i][0] = Enemy[i - 1][0];
 				Enemy[i][1] = Enemy[i - 1][1];
 			}
 
-			for (int i = 1; i < length; i++) {
-				Map[Enemy[i][0]][Enemy[i][1]] = BODY;
+			for (int i = 1; i < e_length; i++) {
+				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
 			}
 
 			Enemy[0][0]++;
-			Map[Enemy[0][0]][Enemy[0][1]] = HEAD;
+			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
+		}
+
+		break;
+	default:
+		break;
+	}
+}
+*/
+
+#include <iostream>
+#include <windows.h>
+#include <conio.h>
+#include <time.h>
+using namespace std;
+
+#define EMPTY 0
+#define WALL 10
+#define BODY 1 // 뱀 몸통
+#define HEAD 2 //뱀 머리
+#define FOOD 3
+#define UP 72
+#define LEFT 75
+#define RIGHT 77
+#define DOWN 80
+#define DIRECTION_KEY 224
+#define ESC 27
+#define ENEMYHEAD 11
+#define ENEMYBODY 12
+
+char Map[17][22];
+int Snake[100][2] = {
+	{8, 7}, {8, 6}, {8, 5}, {8, 4}, {8, 3}
+};
+int Enemy[100][2] = {
+	{6, 7}, {6, 6}, {6, 5}, {6, 4}, {6, 3}
+};
+int length; //뱀 길이
+int hdirection; //뱀이 바라보는 방향
+int e_length;
+int e_direction;
+int fx, fy; //먹이 좌표
+int start;
+int score;
+
+void CursorView();
+void Goto_XY(int x, int y);
+void Draw_Map();
+void Make_Food();
+void Check_Key();
+bool Check_Crush(int y, int x);
+void Move();
+void Enemy_Move();
+
+int main(void) {
+
+	CursorView();
+
+	srand(unsigned int(time(NULL))); //난수를 부여할때 현재 시간을 부여
+
+	for (int i = 0; i < 22; i++)
+		Map[0][i] = Map[16][i] = WALL;
+
+	for (int i = 1; i < 16; i++)
+		Map[i][0] = Map[i][21] = WALL;
+
+	for (int i = 1; i <= 15; i++)
+		for (int j = 1; j <= 20; j++)
+			Map[i][j] = EMPTY;
+
+	hdirection = RIGHT;
+	length = 5;
+
+	Map[Snake[0][0]][Snake[0][1]] = HEAD;
+
+	for (int i = 1; i < length; i++) {
+		Map[Snake[i][0]][Snake[i][1]] = BODY;
+	}
+
+	e_direction = RIGHT;
+	e_length = 5;
+
+	Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
+
+	for (int i = 1; i < e_length; i++) {
+		Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
+	}
+
+	Make_Food();
+
+	start = clock();
+
+	while (true) {
+		int t = clock() - start;
+
+		if (t > 400) { //움직임 속도 조정
+			Move();
+			Enemy_Move();
+			Draw_Map();
+
+			start = clock();
+		}
+
+		Check_Key();
+	}
+
+	return 0;
+}
+
+void CursorView()
+{
+	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+	cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
+	cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
+
+void Goto_XY(int x, int y)
+{
+	COORD Pos;
+	Pos.X = x * 2;
+	Pos.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+}
+
+void Draw_Map()
+{
+	for (int row = 0; row < 17; row++) {
+		for (int col = 0; col < 22; col++) {
+			switch (Map[row][col]) {
+			case EMPTY:
+				Goto_XY(col, row);
+				cout <<"  ";
+				break;
+			case WALL:
+				Goto_XY(col, row);
+				cout << "■";
+				break;
+			case HEAD:
+				Goto_XY(col, row);
+				cout << "●";
+				break;
+			case BODY:
+				Goto_XY(col, row);
+				cout << "○";
+				break;
+			case FOOD:
+				Goto_XY(col, row);
+				cout << "♧";
+				break;
+			case ENEMYHEAD:
+				Goto_XY(col, row);
+				cout << "★";
+				break;
+			case ENEMYBODY:
+				Goto_XY(col, row);
+				cout << "☆";
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	Goto_XY(25, 10);
+	cout << "♧ score: " << score;
+}
+
+void Make_Food() {
+
+	while (true) {
+		fy = rand() % 15 + 1;
+		fx = rand() % 20 + 1;
+
+		bool chk = true;
+
+		for (int i = 0; i < length; i++) { //뱀이 있는 위치에 생기지 않게 하기 위한 코드
+			if (Snake[i][0] == fy && Snake[i][1] == fx) {
+				chk = false;
+				break;
+			}
+		}
+
+		if (chk) {
+			Map[fy][fx] = FOOD;
+			break;
+		}
+	}
+}
+
+void Check_Key() {
+
+	if (_kbhit()) {
+		int key = _getch();
+
+		switch (key) {
+		case DIRECTION_KEY: //방향키
+			key = _getch();
+
+			switch (key) {
+			case UP:
+				if (hdirection != DOWN) {
+					hdirection = UP;
+				}
+				break;
+			case LEFT:
+				if (hdirection != RIGHT) {
+					hdirection = LEFT;
+				}
+				break;
+			case RIGHT:
+				if (hdirection != LEFT) {
+					hdirection = RIGHT;
+				}
+				break;
+			case DOWN:
+				if (hdirection != UP) {
+					hdirection = DOWN;
+				}
+				break;
+			}
+
+			break;
+
+		case ESC:
+			Goto_XY(8, 7);
+			cout << "게임 종료";
+			exit(0);
+			break;
+		}
+	}
+}
+
+bool Check_Crush(int y, int x) {
+
+	if (Map[y][x] == WALL || Map[y][x] == BODY) {
+		Goto_XY(10, 7);
+		cout << "부딪혔습니다!";
+		exit(0);
+	}
+
+	return false;
+}
+
+void Move() {
+
+	switch (hdirection) {
+	case UP:
+		if (!Check_Crush(Snake[0][0] - 1, Snake[0][1])) {
+			if (fy == (Snake[0][0] - 1) && fx == Snake[0][1]) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][0]--;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	case LEFT:
+		if (!Check_Crush(Snake[0][0], Snake[0][1] - 1)) {
+			if (fy == Snake[0][0] && fx == (Snake[0][1] - 1)) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][1]--;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	case RIGHT:
+		if (!Check_Crush(Snake[0][0], Snake[0][1] + 1)) {
+			if (fy == Snake[0][0] && fx == (Snake[0][1] + 1)) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][1]++;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	case DOWN:
+		if (!Check_Crush(Snake[0][0] + 1, Snake[0][1])) {
+			if (fy == (Snake[0][0] + 1) && fx == Snake[0][1]) {
+				score++;
+				Snake[length][0] = Snake[length - 1][0];
+				Snake[length][1] = Snake[length - 1][1];
+				length++;
+				Make_Food();
+			}
+			else {
+				Map[Snake[length - 1][0]][Snake[length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (length - 1); i > 0; i--) {
+				Map[Snake[i][0]][Snake[i][1]] = EMPTY;
+
+				Snake[i][0] = Snake[i - 1][0];
+				Snake[i][1] = Snake[i - 1][1];
+			}
+
+			for (int i = 1; i < length; i++) {
+				Map[Snake[i][0]][Snake[i][1]] = BODY;
+			}
+
+			Snake[0][0]++;
+			Map[Snake[0][0]][Snake[0][1]] = HEAD;
+		}
+
+		break;
+	default:
+		break;
+	}
+}
+
+bool Check_Enemy_Crush(int y, int x) {
+
+	if (Map[y][x] == WALL || Map[y][x] == BODY || Map[y][x] == HEAD || Map[y][x] == ENEMYBODY || Map[y][x] == ENEMYHEAD) { //스스로 움직이는 애가 자기 방향의 반대방향으로 움직여도 부딪힌걸로 인식되는듯 진행방향의 반대로는 못가게 만들어야 할듯
+		Goto_XY(10, 7);
+		cout << "부딪혔습니다!";
+		exit(0);
+	}
+
+	return false;
+}
+
+void Enemy_Move() {
+
+	int pre_direction = e_direction;
+	e_direction = rand() % 4;
+
+	if (e_direction == 1) {
+		if(pre_direction != DOWN) e_direction = UP;
+	}
+	else if (e_direction == 2) {
+		if(pre_direction != RIGHT) e_direction = LEFT;
+	}
+	else if (e_direction == 3) {
+		if(pre_direction != LEFT) e_direction = RIGHT;
+	}
+	else {
+		if(pre_direction != UP) e_direction = DOWN;
+	}
+
+	switch (e_direction) {
+	case UP:
+		if (!Check_Enemy_Crush(Enemy[0][0] - 1, Enemy[0][1])) {
+			if (fy == (Enemy[0][0] - 1) && fx == Enemy[0][1]) {
+				score++;
+				Enemy[e_length][0] = Enemy[e_length - 1][0];
+				Enemy[e_length][1] = Enemy[e_length - 1][1];
+				e_length++;
+				Make_Food();
+			}
+			else {
+				Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (e_length - 1); i > 0; i--) {
+				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
+
+				Enemy[i][0] = Enemy[i - 1][0];
+				Enemy[i][1] = Enemy[i - 1][1];
+			}
+
+			for (int i = 1; i < e_length; i++) {
+				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
+			}
+
+			Enemy[0][0]--;
+			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
+		}
+
+		break;
+	case LEFT:
+		if (!Check_Enemy_Crush(Enemy[0][0], Enemy[0][1] - 1)) {
+			if (fy == Enemy[0][0] && fx == (Enemy[0][1] - 1)) {
+				score++;
+				Snake[e_length][0] = Snake[e_length - 1][0];
+				Snake[e_length][1] = Snake[e_length - 1][1];
+				e_length++;
+				Make_Food();
+			}
+			else {
+				Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (e_length - 1); i > 0; i--) {
+				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
+
+				Enemy[i][0] = Enemy[i - 1][0];
+				Enemy[i][1] = Enemy[i - 1][1];
+			}
+
+			for (int i = 1; i < e_length; i++) {
+				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
+			}
+
+			Enemy[0][1]--;
+			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
+		}
+
+		break;
+	case RIGHT:
+		if (!Check_Enemy_Crush(Enemy[0][0], Enemy[0][1] + 1)) {
+			if (fy == Enemy[0][0] && fx == (Enemy[0][1] + 1)) {
+				score++;
+				Enemy[e_length][0] = Enemy[e_length - 1][0];
+				Enemy[e_length][1] = Enemy[e_length - 1][1];
+				e_length++;
+				Make_Food();
+			}
+			else {
+				Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (e_length - 1); i > 0; i--) {
+				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
+
+				Enemy[i][0] = Enemy[i - 1][0];
+				Enemy[i][1] = Enemy[i - 1][1];
+			}
+
+			for (int i = 1; i < e_length; i++) {
+				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
+			}
+
+			Enemy[0][1]++;
+			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
+		}
+
+		break;
+	case DOWN:
+		if (!Check_Enemy_Crush(Enemy[0][0] + 1, Enemy[0][1])) {
+			if (fy == (Enemy[0][0] + 1) && fx == Enemy[0][1]) {
+				score++;
+				Enemy[e_length][0] = Enemy[e_length - 1][0];
+				Enemy[e_length][1] = Enemy[e_length - 1][1];
+				e_length++;
+				Make_Food();
+			}
+			else {
+				Map[Enemy[e_length - 1][0]][Enemy[e_length - 1][1]] = EMPTY;
+			}
+
+			for (int i = (e_length - 1); i > 0; i--) {
+				Map[Enemy[i][0]][Enemy[i][1]] = EMPTY;
+
+				Enemy[i][0] = Enemy[i - 1][0];
+				Enemy[i][1] = Enemy[i - 1][1];
+			}
+
+			for (int i = 1; i < e_length; i++) {
+				Map[Enemy[i][0]][Enemy[i][1]] = ENEMYBODY;
+			}
+
+			Enemy[0][0]++;
+			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
 		}
 
 		break;
