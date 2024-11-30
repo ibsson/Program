@@ -154,9 +154,9 @@ void Draw_Map()
 	}
 
 	Goto_XY(25, 10);
-	cout << "♧ score: " << score;
+	cout << "My score: " << score;
 	Goto_XY(25, 11);
-	cout << "Enemy ♧ score: " << e_score;
+	cout << "Enemy score: " << e_score;
 }
 
 void Make_Food() {
