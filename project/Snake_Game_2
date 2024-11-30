@@ -84,7 +84,7 @@ int main(void) {
 	while (true) {
 		int t = clock() - start;
 
-		if (t > 400) { //움직임 속도 조정
+		if (t > 100) { //움직임 속도 조정
 			Move();
 			Enemy_Move();
 			Draw_Map();
@@ -367,28 +367,32 @@ bool Check_Enemy_Crush(int y, int x) {
 
 			if (tmp == 0) e_direction = LEFT;
 			else e_direction = RIGHT;
-			Enemy_Move();
+
+			return true;
 		}
 		else if (e_direction == LEFT) {
 			int tmp = rand() % 2;
 
 			if (tmp == 0) e_direction = DOWN;
 			else e_direction = UP;
-			Enemy_Move();
+
+			return true;
 		}
 		else if (e_direction == DOWN) {
 			int tmp = rand() % 2;
 
 			if (tmp == 0) e_direction = RIGHT;
 			else e_direction = LEFT;
-			Enemy_Move();
+
+			return true;
 		}
 		else if (e_direction == RIGHT) {
 			int tmp = rand() % 2;
 
 			if (tmp == 0) e_direction = UP;
 			else e_direction = DOWN;
-			Enemy_Move();
+
+			return true;
 		}
 	}
 
@@ -445,6 +449,7 @@ void Enemy_Move() {
 			Enemy[0][0]--;
 			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
 		}
+		else Enemy_Move();
 
 		break;
 	case LEFT:
@@ -474,6 +479,7 @@ void Enemy_Move() {
 			Enemy[0][1]--;
 			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
 		}
+		else Enemy_Move();
 
 		break;
 	case RIGHT:
@@ -503,6 +509,7 @@ void Enemy_Move() {
 			Enemy[0][1]++;
 			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
 		}
+		else Enemy_Move();
 
 		break;
 	case DOWN:
@@ -532,6 +539,7 @@ void Enemy_Move() {
 			Enemy[0][0]++;
 			Map[Enemy[0][0]][Enemy[0][1]] = ENEMYHEAD;
 		}
+		else Enemy_Move();
 
 		break;
 	default:
