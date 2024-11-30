@@ -121,7 +121,7 @@ void Draw_Map()
 			switch (Map[row][col]) {
 			case EMPTY:
 				Goto_XY(col, row);
-				cout <<"  ";
+				cout << "  ";
 				break;
 			case WALL:
 				Goto_XY(col, row);
@@ -169,6 +169,13 @@ void Make_Food() {
 
 		for (int i = 0; i < length; i++) { //뱀이 있는 위치에 생기지 않게 하기 위한 코드
 			if (Snake[i][0] == fy && Snake[i][1] == fx) {
+				chk = false;
+				break;
+			}
+		}
+
+		for (int i = 0; i < e_length; i++) {
+			if (Enemy[i][0] == fy && Enemy[i][1] == fx) {
 				chk = false;
 				break;
 			}
@@ -409,15 +416,15 @@ void Enemy_Move() {
 		else e_direction = pre_direction;
 	}
 	else if (e_direction == 2) {
-		if(pre_direction != RIGHT) e_direction = LEFT;
+		if (pre_direction != RIGHT) e_direction = LEFT;
 		else e_direction = pre_direction;
 	}
 	else if (e_direction == 3) {
-		if(pre_direction != LEFT) e_direction = RIGHT;
+		if (pre_direction != LEFT) e_direction = RIGHT;
 		else e_direction = pre_direction;
 	}
 	else {
-		if(pre_direction != UP) e_direction = DOWN;
+		if (pre_direction != UP) e_direction = DOWN;
 		else e_direction = pre_direction;
 	}
 
@@ -456,8 +463,8 @@ void Enemy_Move() {
 		if (!Check_Enemy_Crush(Enemy[0][0], Enemy[0][1] - 1)) {
 			if (fy == Enemy[0][0] && fx == (Enemy[0][1] - 1)) {
 				e_score++;
-				Snake[e_length][0] = Snake[e_length - 1][0];
-				Snake[e_length][1] = Snake[e_length - 1][1];
+				Enemy[e_length][0] = Enemy[e_length - 1][0];
+				Enemy[e_length][1] = Enemy[e_length - 1][1];
 				e_length++;
 				Make_Food();
 			}
