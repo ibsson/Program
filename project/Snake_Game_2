@@ -235,7 +235,10 @@ bool Check_Crush(int y, int x) {
 
 	if (Map[y][x] == WALL || Map[y][x] == BODY || Map[y][x] == ENEMYBODY || Map[y][x] == ENEMYHEAD) {
 		Goto_XY(10, 7);
-		cout << "부딪혔습니다!";
+		if (score > e_score) cout << "승리!";
+		else if (score < e_score) cout << "패배 ㅠㅜ";
+		else cout << "무승부!";
+
 		exit(0);
 	}
 
