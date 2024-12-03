@@ -1,0 +1,208 @@
+#include <iostream>
+#include <windows.h>
+#include <time.h>
+#include <conio.h>
+using namespace std;
+
+#define EMPTY 0
+#define WALL 10
+#define UP 72
+#define LEFT 75
+#define RIGHT 77
+#define DOWN 80
+#define MAIN_X 11
+#define MAIN_Y 23
+#define ACTIVE_BLOCK 40
+#define DIRECTION_KEY 224
+
+int Map[MAIN_Y][MAIN_X];
+int blocks[7][4][4][4] = {
+{{0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},{0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0}, //네모
+ {0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},{0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0}},
+{{0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},{0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0}, //직선 
+ {0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0},{0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0}},
+{{0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0},{0,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0}, //지렁이 모양
+ {0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0},{0,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0}},
+{{0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0},{0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0}, //반대 지렁이 모양
+ {0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0},{0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,0}},
+{{0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,0},{0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0}, //반대 ㄴ모양
+ {0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,0},{0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0}},
+{{0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0},{0,0,0,0,0,1,0,0,0,1,0,0,1,1,0,0}, //ㄴ모양
+ {0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,0},{0,0,0,0,0,1,1,0,0,1,0,0,0,1,0,0}},
+{{0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0},{0,0,0,0,0,1,0,0,0,1,1,0,0,1,0,0}, //산모양
+ {0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0},{0,0,0,0,0,1,0,0,1,1,0,0,0,1,0,0}}
+}; //블록모양 저장 4*4공간에 블록을 표현, 배열의 맨 뒤 [4][4]에 블록을 표현한거임
+int b_type;
+int b_rotation;
+int by, bx;
+int key;
+
+void CursorView();
+void Goto_XY(int x, int y);
+void Draw_Map();
+void New_Block();
+void Draw_Board();
+void Drop_Block();
+void Check_Key();
+void Move_Block(int dir);
+bool Check_Crush(int x, int y);
+
+int main(void) {
+
+	srand(unsigned int(time(NULL)));
+
+	CursorView();
+	
+	Draw_Map();
+
+	bool chk = true;
+
+	while (chk) {
+		New_Block();
+		Draw_Board();
+
+		Check_Key();
+
+		Drop_Block();
+	}
+
+	return 0;
+}
+
+void CursorView()
+{
+	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+	cursorInfo.dwSize = 1; //커서 굵기 (1 ~ 100)
+	cursorInfo.bVisible = FALSE; //커서 Visible TRUE(보임) FALSE(숨김)
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+}
+
+void Goto_XY(int x, int y)
+{
+	COORD Pos;
+	Pos.X = x * 2;
+	Pos.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+}
+
+void Draw_Map() {
+
+	for (int i = 0; i < 11; i++)
+		Map[22][i] = WALL;
+
+	for (int i = 1; i < 22; i++)
+		Map[i][0] = Map[i][10] = WALL;
+
+	for (int i = 1; i <= 20; i++)
+		for (int j = 1; j <= 9; j++)
+			Map[i][j] = EMPTY;
+}
+
+void New_Block() {
+
+	b_type = rand() % 7;
+	b_rotation = 0;
+
+	bx = (MAIN_X / 2) - 1; //블록 생성 위치x좌표(게임판의 가운데) 
+	by = 0;  //블록 생성위치 y좌표(제일 위)
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = ACTIVE_BLOCK;
+		}
+	}
+
+}
+
+void Draw_Board() {
+
+	for (int row = 0; row < 23; row++) {
+		for (int col = 0; col < 11; col++) {
+			switch (Map[row][col]) {
+			case EMPTY:
+				Goto_XY(col, row);
+				cout << "  ";
+				break;
+			case WALL:
+				Goto_XY(col, row);
+				cout << "■";
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void Check_Key() {
+
+	key = 0;
+	if (_kbhit()) {
+		key = _getch();
+		switch (key) {
+		case DIRECTION_KEY:
+			key = _getch();
+			switch (key) {
+			case UP:
+				if (b_rotation != 3) b_rotation++;
+				else b_rotation = 0;
+				break;
+			case LEFT:
+				if (Check_Crush(bx - 1, by)) {
+					Move_Block(LEFT);
+				}
+				break;
+			case RIGHT:
+				if (Check_Crush(bx - 1, by)) {
+					Move_Block(RIGHT);
+				}
+				break;
+			case DOWN:
+				break;
+			}
+		}
+	}
+}
+
+void Move_Block(int dir) {
+
+	switch (dir) {
+	case(LEFT):
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = EMPTY;
+			}
+		}
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j - 1] = ACTIVE_BLOCK;
+			}
+		}
+		break;
+	case(RIGHT):
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = EMPTY;
+			}
+		}
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j + 1] = ACTIVE_BLOCK;
+			}
+		}
+		break;
+	}
+}
+
+bool Check_Crush(int x, int y) {
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (blocks[b_type][b_rotation][i][j] == 1 && Map[y + i][x + j] != EMPTY) return false;
+		}
+	}
+
+	return true;
+}
