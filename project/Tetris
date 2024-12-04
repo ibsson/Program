@@ -5,7 +5,9 @@
 using namespace std;
 
 #define EMPTY 0
+#define FLOOR 9
 #define WALL 10
+#define CEILING 11
 #define UP 72
 #define LEFT 75
 #define RIGHT 77
@@ -13,6 +15,7 @@ using namespace std;
 #define MAIN_X 11
 #define MAIN_Y 23
 #define ACTIVE_BLOCK 40
+#define FIXED_BLOCK 50
 #define DIRECTION_KEY 224
 
 int Map[MAIN_Y][MAIN_X];
@@ -36,34 +39,40 @@ int b_type;
 int b_rotation;
 int by, bx;
 int key;
+bool chk_fixed;
+int block_pos[2][4]; //0행이 x, 1행이 y 좌표
 
 void CursorView();
 void Goto_XY(int x, int y);
+void Make_Map();
 void Draw_Map();
+void Get_Block_Pos();
 void New_Block();
-void Draw_Board();
 void Drop_Block();
+bool Check_Floor();
+void Fix_Block();
 void Check_Key();
-void Move_Block(int dir);
-bool Check_Crush(int x, int y);
+bool Check_Crash(int direction);
+void Move_Block(int direction);
 
 int main(void) {
 
 	srand(unsigned int(time(NULL)));
 
 	CursorView();
-	
-	Draw_Map();
+	Make_Map();
 
-	bool chk = true;
-
-	while (chk) {
+	while (true) {
 		New_Block();
-		Draw_Board();
 
-		Check_Key();
+		while (!chk_fixed) {
+			Draw_Map();
+			Check_Key();
+			Drop_Block();
+			Sleep(500);
+		}
 
-		Drop_Block();
+		chk_fixed = false;
 	}
 
 	return 0;
@@ -85,36 +94,28 @@ void Goto_XY(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
 
-void Draw_Map() {
+void Make_Map() {
 
-	for (int i = 0; i < 11; i++)
-		Map[22][i] = WALL;
+	for (int i = 0; i < 11; i++) {
+		Map[22][i] = FLOOR;
+	}
 
-	for (int i = 1; i < 22; i++)
+	for (int i = 1; i < 22; i++) {
 		Map[i][0] = Map[i][10] = WALL;
+	}
 
-	for (int i = 1; i <= 20; i++)
-		for (int j = 1; j <= 9; j++)
+	for (int i = 1; i <= 20; i++) {
+		for (int j = 1; j <= 9; j++) {
 			Map[i][j] = EMPTY;
-}
-
-void New_Block() {
-
-	b_type = rand() % 7;
-	b_rotation = 0;
-
-	bx = (MAIN_X / 2) - 1; //블록 생성 위치x좌표(게임판의 가운데) 
-	by = 0;  //블록 생성위치 y좌표(제일 위)
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = ACTIVE_BLOCK;
 		}
 	}
 
+	for (int i = 1; i < 10; i++) {
+		Map[3][i] = CEILING;
+	}
 }
 
-void Draw_Board() {
+void Draw_Map() {
 
 	for (int row = 0; row < 23; row++) {
 		for (int col = 0; col < 11; col++) {
@@ -125,7 +126,19 @@ void Draw_Board() {
 				break;
 			case WALL:
 				Goto_XY(col, row);
+				cout << "▩";
+				break;
+			case FLOOR:
+				Goto_XY(col, row);
+				cout << "▩";
+				break;
+			case ACTIVE_BLOCK:
+				Goto_XY(col, row);
 				cout << "■";
+				break;
+			case FIXED_BLOCK:
+				Goto_XY(col, row);
+				cout << "□";
 				break;
 			default:
 				break;
@@ -134,75 +147,201 @@ void Draw_Board() {
 	}
 }
 
+void Get_Block_Pos() {
+	int tmp = 0;
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (blocks[b_type][b_rotation][i][j] == 1) {
+				block_pos[0][tmp] = j;
+				block_pos[1][tmp] = i;
+				tmp++;
+			}
+		}
+	}
+} //UP을 누르며 회전할때도 이 함수 사용해서 좌표 받아와야함
+
+void New_Block() {
+
+	bx = (MAIN_X / 2) - 1;
+	by = 0;
+	b_type = rand() % 7;
+	b_rotation = 0;
+
+	Get_Block_Pos();
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = ACTIVE_BLOCK;
+		}
+	}
+}
+
+void Drop_Block() {
+
+	if (Check_Floor()) {
+		Fix_Block();
+		chk_fixed = true;
+	}
+	else {
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
+		}
+
+		by++;
+
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+		}
+	}
+}
+
+bool Check_Floor() {
+
+	for (int i = 0; i < 4; i++) {
+		if (Map[by + 1 + block_pos[1][i]][bx + block_pos[0][i]] == FLOOR || Map[by + 1 + block_pos[1][i]][bx + block_pos[0][i]] == FIXED_BLOCK) return true;
+	}
+
+	return false;
+}
+
+void Fix_Block() {
+
+	for (int i = 0; i < 4; i++) {
+		if (Map[by + block_pos[1][i]][bx + block_pos[0][i]] == ACTIVE_BLOCK) Map[by + block_pos[1][i]][bx + block_pos[0][i]] = FIXED_BLOCK;
+	}
+}
+
 void Check_Key() {
 
 	key = 0;
-	if (_kbhit()) {
+
+	if(_kbhit()) {
 		key = _getch();
+
 		switch (key) {
 		case DIRECTION_KEY:
 			key = _getch();
+			
 			switch (key) {
 			case UP:
-				if (b_rotation != 3) b_rotation++;
-				else b_rotation = 0;
+				if (Check_Crash(UP)) {
+					Move_Block(UP);
+				}
 				break;
 			case LEFT:
-				if (Check_Crush(bx - 1, by)) {
+				if (Check_Crash(LEFT)) {
 					Move_Block(LEFT);
 				}
 				break;
 			case RIGHT:
-				if (Check_Crush(bx - 1, by)) {
+				if (Check_Crash(RIGHT)) {
 					Move_Block(RIGHT);
 				}
 				break;
 			case DOWN:
+				if (Check_Crash(DOWN)) {
+
+				}
 				break;
 			}
+
+			break;
 		}
 	}
 }
 
-void Move_Block(int dir) {
+bool Check_Crash(int direction) {
 
-	switch (dir) {
-	case(LEFT):
+	switch (direction) {
+	case UP:
+		if (b_rotation == 3) b_rotation = 0;
+		else b_rotation++;
+
+		Get_Block_Pos();
+
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = EMPTY;
+			if (Map[by + block_pos[1][i]][bx + block_pos[0][i]] == WALL || Map[by + block_pos[1][i]][bx + block_pos[0][i]] == FLOOR || Map[by + block_pos[1][i]][bx + block_pos[0][i]] == FIXED_BLOCK) {
+				if (b_rotation == 0) b_rotation = 3;
+				else b_rotation--;
+
+				return 0;
 			}
 		}
+		if (b_rotation == 0) b_rotation = 3;
+		else b_rotation--;
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j - 1] = ACTIVE_BLOCK;
-			}
-		}
+		Get_Block_Pos();
+
+		return 1;
+
 		break;
-	case(RIGHT):
+	case LEFT:
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = EMPTY;
+			if (Map[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == WALL || Map[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == FLOOR || Map[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == FIXED_BLOCK) {
+				return 0;
 			}
 		}
+		return 1;
 
+		break;
+	case RIGHT:
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j + 1] = ACTIVE_BLOCK;
+			if (Map[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == WALL || Map[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == FLOOR || Map[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == FIXED_BLOCK) {
+				return 0;
 			}
 		}
+		return 1;
+
+		break;
+	case DOWN:
 		break;
 	}
 }
 
-bool Check_Crush(int x, int y) {
+void Move_Block(int direction) {
 
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			if (blocks[b_type][b_rotation][i][j] == 1 && Map[y + i][x + j] != EMPTY) return false;
+	switch (direction) {
+	case UP:
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
 		}
-	}
 
-	return true;
+		if (b_rotation == 3) b_rotation = 0;
+		else b_rotation++;
+
+		Get_Block_Pos();
+
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+		}
+
+		break;
+	case LEFT:
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
+		}
+
+		bx--;
+
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+		}
+
+		break;
+	case RIGHT:
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
+		}
+
+		bx++;
+
+		for (int i = 0; i < 4; i++) {
+			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+		}
+
+		break;
+	case DOWN:
+		break;
+	}
 }
