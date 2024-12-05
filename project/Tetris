@@ -41,6 +41,8 @@ int by, bx;
 int key;
 bool chk_fixed;
 int block_pos[2][4]; //0행이 x, 1행이 y 좌표
+int score;
+int chk_line;
 
 void CursorView();
 void Goto_XY(int x, int y);
@@ -51,9 +53,11 @@ void New_Block();
 void Drop_Block();
 bool Check_Floor();
 void Fix_Block();
+
 void Check_Key();
 bool Check_Crash(int direction);
 void Move_Block(int direction);
+void Check_Line();
 
 int main(void) {
 
@@ -69,7 +73,7 @@ int main(void) {
 			Draw_Map();
 			Check_Key();
 			Drop_Block();
-			Sleep(500);
+			Sleep(300);
 		}
 
 		chk_fixed = false;
@@ -145,6 +149,9 @@ void Draw_Map() {
 			}
 		}
 	}
+
+	Goto_XY(25, 10);
+	cout << "score: " << score;
 }
 
 void Get_Block_Pos() {
@@ -194,6 +201,8 @@ void Drop_Block() {
 			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
 		}
 	}
+
+	Check_Line();
 }
 
 bool Check_Floor() {
@@ -216,13 +225,13 @@ void Check_Key() {
 
 	key = 0;
 
-	if(_kbhit()) {
+	if (_kbhit()) {
 		key = _getch();
 
 		switch (key) {
 		case DIRECTION_KEY:
 			key = _getch();
-			
+
 			switch (key) {
 			case UP:
 				if (Check_Crash(UP)) {
@@ -343,5 +352,36 @@ void Move_Block(int direction) {
 		break;
 	case DOWN:
 		break;
+	}
+}
+
+void Check_Line() {
+
+	for (int i = 1; i < (MAIN_Y - 1); i++) {
+		for (int j = 1; j < (MAIN_X - 1); j++) {
+			if (Map[i][j] == FIXED_BLOCK) chk_line++;
+			else {
+				chk_line = 0;
+				break;
+			}
+		}
+
+		if (chk_line == (MAIN_X - 2)) {
+			for (int k = 1; k < (MAIN_X - 1); k++) {
+				Map[i][k] = EMPTY;
+			}
+			score++;
+
+			for (int l = (i - 1); l >= 0; l--) {
+				for (int m = 1; m < (MAIN_X - 1); m++) {
+					if (Map[l][m] == FIXED_BLOCK) {
+						Map[l + 1][m] = FIXED_BLOCK;
+						Map[l][m] = EMPTY;
+					}
+				}
+			}
+		}
+
+		chk_line = 0;
 	}
 }
