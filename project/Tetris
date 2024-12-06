@@ -12,13 +12,13 @@ using namespace std;
 #define LEFT 75
 #define RIGHT 77
 #define DOWN 80
+#define SPACE 32
 #define MAIN_X 11
 #define MAIN_Y 23
 #define ACTIVE_BLOCK 40
 #define FIXED_BLOCK 50
 #define DIRECTION_KEY 224
 
-int Map[MAIN_Y][MAIN_X];
 int blocks[7][4][4][4] = {
 {{0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},{0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0}, //네모
  {0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},{0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0}},
@@ -36,6 +36,9 @@ int blocks[7][4][4][4] = {
  {0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0},{0,0,0,0,0,1,0,0,1,1,0,0,0,1,0,0}}
 }; //블록모양 저장 4*4공간에 블록을 표현, 배열의 맨 뒤 [4][4]에 블록을 표현한거임
 
+
+int Map_Org[MAIN_Y][MAIN_X]; //게임판의 정보를 저장하는 배열 모니터에 표시후에 Main_cpy로 복사됨
+int Map_Cpy[MAIN_Y][MAIN_X]; //게임판이 모니터에 표시되기 전의 정보를 가지고 있음
 int b_type;
 int b_rotation;
 int by, bx;
@@ -72,10 +75,13 @@ int main(void) {
 		New_Block();
 
 		while (!chk_fixed) {
-			Draw_Map();
-			Check_Key();
+
+			for (int i = 0; i < 5; i++) { //블록이 한칸 떨어지는 동안 5번 입력받을 수 있다
+				Check_Key();
+				Draw_Map();
+				Sleep(50);
+			}
 			Drop_Block();
-			Sleep(300);
 		}
 
 		chk_fixed = false;
@@ -102,57 +108,76 @@ void Goto_XY(int x, int y)
 
 void Make_Map() {
 
-	for (int i = 0; i < 11; i++) {
-		Map[22][i] = FLOOR;
-	}
-
-	for (int i = 1; i < 22; i++) {
-		Map[i][0] = Map[i][10] = WALL;
-	}
-
-	for (int i = 1; i <= 20; i++) {
-		for (int j = 1; j <= 9; j++) {
-			Map[i][j] = EMPTY;
+	for (int i = 0; i < MAIN_Y; i++) {
+		for (int j = 0; j < MAIN_X; j++) {
+			Map_Org[i][j] = 0;
+			Map_Org[i][j] = 100;
 		}
 	}
 
-	for (int i = 1; i < 10; i++) {
-		Map[3][i] = CEILING;
+	for (int i = 0; i < MAIN_X; i++) {
+		Map_Org[22][i] = FLOOR;
+	}
+
+	for (int i = 1; i < (MAIN_Y - 1); i++) {
+		Map_Org[i][0] = Map_Org[i][10] = WALL;
+	}
+
+	for (int i = 1; i < (MAIN_Y - 2); i++) {
+		for (int j = 1; j <= 9; j++) {
+			Map_Org[i][j] = EMPTY;
+		}
+	}
+
+	for (int i = 1; i < (MAIN_X - 1); i++) {
+		Map_Org[3][i] = CEILING;
 	}
 }
 
 void Draw_Map() {
 
-	for (int row = 0; row < 23; row++) {
-		for (int col = 0; col < 11; col++) {
-			switch (Map[row][col]) {
-			case EMPTY:
-				Goto_XY(col, row);
-				cout << "  ";
-				break;
-			case WALL:
-				Goto_XY(col, row);
-				cout << "▩";
-				break;
-			case FLOOR:
-				Goto_XY(col, row);
-				cout << "▩";
-				break;
-			case CEILING:
-				Goto_XY(col, row);
-				cout << ".";
-				break;
-			case ACTIVE_BLOCK:
-				Goto_XY(col, row);
-				cout << "■";
-				break;
-			case FIXED_BLOCK:
-				Goto_XY(col, row);
-				cout << "□";
-				break;
-			default:
-				break;
+	for (int i = 1; i < MAIN_X - 1; i++) {
+		if (Map_Org[3][i] == EMPTY) Map_Org[3][i] = CEILING;
+	}
+
+	for (int i = 0; i < MAIN_Y; i++) {
+		for (int j = 0; j < MAIN_X; j++) {
+			if (Map_Org[i][j] != Map_Cpy[i][j]) {
+				switch (Map_Org[i][j]) {
+				case EMPTY:
+					Goto_XY(j, i);
+					cout << "  ";
+					break;
+				case WALL:
+					Goto_XY(j, i);
+					cout << "▩";
+					break;
+				case FLOOR:
+					Goto_XY(j, i);
+					cout << "▩";
+					break;
+				case CEILING:
+					Goto_XY(j, i);
+					cout << ".";
+					break;
+				case ACTIVE_BLOCK:
+					Goto_XY(j, i);
+					cout << "■";
+					break;
+				case FIXED_BLOCK:
+					Goto_XY(j, i);
+					cout << "□";
+					break;
+				default:
+					break;
+				}
 			}
+		}
+	}
+
+	for (int i = 0; i < MAIN_Y; i++) {
+		for (int j = 0; j < MAIN_X; j++) {
+			Map_Cpy[i][j] = Map_Org[i][j];
 		}
 	}
 
@@ -185,7 +210,7 @@ void New_Block() {
 
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
-			if (blocks[b_type][b_rotation][i][j] == 1) Map[by + i][bx + j] = ACTIVE_BLOCK;
+			if (blocks[b_type][b_rotation][i][j] == 1) Map_Org[by + i][bx + j] = ACTIVE_BLOCK;
 		}
 	}
 }
@@ -198,18 +223,13 @@ void Drop_Block() {
 	}
 	else {
 		for (int i = 0; i < 4; i++) {
-			if (by + block_pos[1][i] == 3 && Map[by + block_pos[1][i]][bx + block_pos[0][i]] == ACTIVE_BLOCK) {
-				Map[by + block_pos[1][i]][bx + block_pos[0][i]] = CEILING; // CEILING 복원
-			}
-			else {
-				Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
-			}
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
 		}
 
 		by++;
 
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
 		}
 	}
 
@@ -220,7 +240,7 @@ void Drop_Block() {
 bool Check_Floor() {
 
 	for (int i = 0; i < 4; i++) {
-		if (Map[by + 1 + block_pos[1][i]][bx + block_pos[0][i]] == FLOOR || Map[by + 1 + block_pos[1][i]][bx + block_pos[0][i]] == FIXED_BLOCK) return true;
+		if (Map_Org[by + 1 + block_pos[1][i]][bx + block_pos[0][i]] == FLOOR || Map_Org[by + 1 + block_pos[1][i]][bx + block_pos[0][i]] == FIXED_BLOCK) return true;
 	}
 
 	return false;
@@ -229,7 +249,7 @@ bool Check_Floor() {
 void Fix_Block() {
 
 	for (int i = 0; i < 4; i++) {
-		if (Map[by + block_pos[1][i]][bx + block_pos[0][i]] == ACTIVE_BLOCK) Map[by + block_pos[1][i]][bx + block_pos[0][i]] = FIXED_BLOCK;
+		if (Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] == ACTIVE_BLOCK) Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = FIXED_BLOCK;
 	}
 }
 
@@ -262,11 +282,15 @@ void Check_Key() {
 				break;
 			case DOWN:
 				if (Check_Crash(DOWN)) {
-
+					Drop_Block();
 				}
 				break;
 			}
-
+			break;
+		case SPACE:
+			while (!chk_fixed) {
+				Drop_Block();
+			}
 			break;
 		}
 	}
@@ -282,7 +306,7 @@ bool Check_Crash(int direction) {
 		Get_Block_Pos();
 
 		for (int i = 0; i < 4; i++) {
-			if (Map[by + block_pos[1][i]][bx + block_pos[0][i]] == WALL || Map[by + block_pos[1][i]][bx + block_pos[0][i]] == FLOOR || Map[by + block_pos[1][i]][bx + block_pos[0][i]] == FIXED_BLOCK) {
+			if (Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] == WALL || Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] == FLOOR || Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] == FIXED_BLOCK) {
 				if (b_rotation == 0) b_rotation = 3;
 				else b_rotation--;
 
@@ -299,7 +323,7 @@ bool Check_Crash(int direction) {
 		break;
 	case LEFT:
 		for (int i = 0; i < 4; i++) {
-			if (Map[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == WALL || Map[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == FLOOR || Map[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == FIXED_BLOCK) {
+			if (Map_Org[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == WALL || Map_Org[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == FLOOR || Map_Org[by + block_pos[1][i]][bx - 1 + block_pos[0][i]] == FIXED_BLOCK) {
 				return 0;
 			}
 		}
@@ -308,7 +332,7 @@ bool Check_Crash(int direction) {
 		break;
 	case RIGHT:
 		for (int i = 0; i < 4; i++) {
-			if (Map[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == WALL || Map[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == FLOOR || Map[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == FIXED_BLOCK) {
+			if (Map_Org[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == WALL || Map_Org[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == FLOOR || Map_Org[by + block_pos[1][i]][bx + 1 + block_pos[0][i]] == FIXED_BLOCK) {
 				return 0;
 			}
 		}
@@ -325,7 +349,7 @@ void Move_Block(int direction) {
 	switch (direction) {
 	case UP:
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
 		}
 
 		if (b_rotation == 3) b_rotation = 0;
@@ -334,31 +358,31 @@ void Move_Block(int direction) {
 		Get_Block_Pos();
 
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
 		}
 
 		break;
 	case LEFT:
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
 		}
 
 		bx--;
 
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
 		}
 
 		break;
 	case RIGHT:
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = EMPTY;
 		}
 
 		bx++;
 
 		for (int i = 0; i < 4; i++) {
-			Map[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
+			Map_Org[by + block_pos[1][i]][bx + block_pos[0][i]] = ACTIVE_BLOCK;
 		}
 
 		break;
@@ -371,7 +395,7 @@ void Check_Line() {
 
 	for (int i = 1; i < (MAIN_Y - 1); i++) {
 		for (int j = 1; j < (MAIN_X - 1); j++) {
-			if (Map[i][j] == FIXED_BLOCK) chk_line++;
+			if (Map_Org[i][j] == FIXED_BLOCK) chk_line++;
 			else {
 				chk_line = 0;
 				break;
@@ -380,15 +404,15 @@ void Check_Line() {
 
 		if (chk_line == (MAIN_X - 2)) {
 			for (int k = 1; k < (MAIN_X - 1); k++) {
-				Map[i][k] = EMPTY;
+				Map_Org[i][k] = EMPTY;
 			}
 			score++;
 
 			for (int l = (i - 1); l >= 0; l--) {
 				for (int m = 1; m < (MAIN_X - 1); m++) {
-					if (Map[l][m] == FIXED_BLOCK) {
-						Map[l + 1][m] = FIXED_BLOCK;
-						Map[l][m] = EMPTY;
+					if (Map_Org[l][m] == FIXED_BLOCK) {
+						Map_Org[l + 1][m] = FIXED_BLOCK;
+						Map_Org[l][m] = EMPTY;
 					}
 				}
 			}
@@ -402,7 +426,7 @@ void Check_Finish() {
 
 	for (int i = 3; i >= 0; i--) {
 		for (int j = 1; j < (MAIN_X - 1); j++) {
-			if (Map[i][j] == FIXED_BLOCK) {
+			if (Map_Org[i][j] == FIXED_BLOCK) {
 				Goto_XY(5, 10);
 				cout << "Game Over";
 				exit(0);
