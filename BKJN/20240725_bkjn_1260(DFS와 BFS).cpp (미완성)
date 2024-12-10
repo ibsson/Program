@@ -1,3 +1,74 @@
+#include <iostream>
+#include <queue>
+#include <string.h>
+using namespace std;
+
+int graph[1001][1001];
+int visited[1001];
+
+int N, M, V;
+
+void DFS(int v);
+void BFS();
+
+int main(void) {
+
+	cin >> N >> M >> V;
+
+	int x = 0, y = 0;
+
+	for (int i = 0; i < M; i++) {
+		cin >> x >> y;
+		graph[x][y] = 1;
+		graph[y][x] = 1;
+	}
+
+	DFS(V);
+	cout << "\n";
+	memset(visited, 0, sizeof(visited));
+
+	BFS();
+
+	return 0;
+}
+
+void DFS(int v) {
+	visited[v] = 1;
+	cout << v << " ";
+
+	for (int i = 1; i <= N; i++) {
+		if (graph[v][i] == 1 && visited[i] == 0) {
+			DFS(i);
+		}
+		if (i == N) return;
+	}
+
+}
+
+void BFS() {
+	queue <int> q;
+	q.push(V);
+
+	while (!q.empty()) {
+		int next = q.front();
+		next = q.front();
+		visited[next] = 1;
+		cout << next << " ";
+		q.pop();
+
+		for (int i = 1; i <= N; i++) {
+			if (graph[next][i] == 1 && visited[i] == 0) {
+				q.push(i);
+				visited[i] = 1;
+			}
+		}
+	}
+
+	cout << "\n";
+}
+
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -295,3 +366,4 @@ void BFS(Vertex* V, LinkedQueue* Queue) {
 		}
 	}
 }
+*/
