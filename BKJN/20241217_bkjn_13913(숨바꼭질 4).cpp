@@ -93,3 +93,7 @@ int main(void) {
 
 	return 0;
 }
+
+/*
+BFS와 stack을 이용해서 구현했다.
+*/
