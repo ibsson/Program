@@ -1,0 +1,59 @@
+#include <iostream>
+using namespace std;
+
+#define INF 1000000000
+
+int num = 6;
+int a[6][6] = {
+	{0, 2, 5, 1, INF, INF},
+	{2, 0, 3, 2, INF, INF},
+	{5, 3, 0, 3, 1, 5},
+	{1, 2, 3, 0, 1, INF},
+	{INF, INF, 1, 1, 0, 2},
+	{INF, INF, 5, INF, 2, 0}
+};
+bool Visited[6]; //방문한 노드
+int d[6]; //최단거리
+
+int Get_Small_Index() {
+	int Min = INF;
+	int idx = 0;
+
+	for (int i = 0; i < 6; i++) {
+		if (d[i] < Min && !Visited[i]) {
+			Min = d[i];
+			idx = i;
+		}
+	}
+
+	return idx;
+}
+void Dijkstra(int start) {
+	for (int i = 0; i < num; i++) {
+		d[i] = a[start][i];
+	}
+	Visited[start] = true;
+
+	for (int i = 0; i < num - 2; i++) {
+		int cur = Get_Small_Index();
+		Visited[cur] = true;
+		for (int j = 0; j < 6; j++) {
+			if (!Visited[j]) {
+				if (d[cur] + a[cur][j] < d[j]) {
+					d[j] = d[cur] + a[cur][j];
+				}
+			}
+		}
+	}
+}
+
+int main(void) {
+
+	Dijkstra(0);
+
+	for (int i = 0; i < num; i++) {
+		cout << d[i] << " ";
+	}
+
+	return 0;
+}
