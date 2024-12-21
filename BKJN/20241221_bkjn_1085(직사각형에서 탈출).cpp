@@ -10,4 +10,6 @@ int main(void) {
     tmp1 = min(x,y);
     tmp2 = min(w-x,h-y);
     cout << min(tmp1,tmp2);
+
+    return 0;
 }
