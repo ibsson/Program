@@ -70,4 +70,3 @@ int main(void) {
 
 priority_queue STL을 사용할때 greater<>를 사용하면 가장 작은 값이 우선순위를 갖게 되어 최소 힙으로 동작한다.
 */
-*/
