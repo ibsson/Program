@@ -40,7 +40,7 @@ public:
     Binary_Tree() : root(NULL) {}
 
     void Insert(int val) {
-        root = Insert_Node(root, val);
+        root = Insert_Node(root, val); //재귀의 특성을 고려하지 못하고 cur == NULL일때 return 해주면 root는 계속 갱신되는거 아닌가? 하고 생각했었다. 재귀 호출로 들어갈수록 각 호출은 자신의 하위 서브트리에만 영향을 주기 때문에 root는 새로 갱신되지 않고 최상단 노드 그대로이다.
     }
 
     void Print_PostOrder() {
