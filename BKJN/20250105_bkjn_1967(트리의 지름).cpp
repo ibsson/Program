@@ -1,63 +1,52 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <string.h>
 using namespace std;
 
-#define MAX 10010
+#define MAX 100001
 
-int n, ans;
-vector<pair<int, int>> tree[MAX];
+int n, farthestNode;
+int maxDist = 0;
 bool visited[MAX];
+vector <pair<int, int>> tree[MAX];
 
-int dfs(int x) {
-    visited[x] = true;
+void dfs(int node, int dist) {
+    visited[node] = true;
 
-    int len1 = 0, len2 = 0;
-    for (auto& edge : tree[x]) {
-        int next = edge.first, weight = edge.second;
-
-        if (!visited[next]) {
-            int dist = dfs(next) + weight;
-
-            if (dist > len1) {
-                len2 = len1;
-                len1 = dist;
-            }
-            else if (dist > len2) {
-                len2 = dist;
-            }
-        }
+    if (dist > maxDist) {
+        maxDist = dist;
+        farthestNode = node;
     }
 
-    ans = max(ans, len1 + len2);
-    return len1;
+    for (int i = 0; i < tree[node].size(); i++) {
+        int nextNode = tree[node][i].first;
+        int nw = tree[node][i].second;
+
+        if (!visited[nextNode]) {
+            dfs(nextNode, (dist + nw));
+        }
+    }
 }
 
-int main() {
+int main(void) {
+
     cin >> n;
 
-    for (int i = 0; i < n - 1; i++) {
-        int p, c, w;
-        cin >> p >> c >> w;
+    int from = 0, to = 0, w = 0;
 
-        tree[p].push_back({ c, w });
-        tree[c].push_back({ p, w });
+    for (int i = 0; i < (n - 1); i++) {
+        cin >> from >> to >> w;
+
+        tree[from].push_back({ to, w });
+        tree[to].push_back({ from, w });
     }
 
-    fill(visited, visited + (n + 1), false);
-    dfs(1);
-    fill(visited, visited + (n + 1), false);
+    dfs(1, 0);
 
-    int farthest = 1;
-    for (int i = 1; i <= n; i++) {
-        if (visited[i] && dfs(i) > ans) {
-            farthest = i;
-        }
-    }
+    memset(visited, false, sizeof(visited));
+    dfs(farthestNode, 0);
 
-    fill(visited, visited + (n + 1), false);
-    dfs(farthest);
+    cout << maxDist << "\n";
 
-    cout << ans << "\n";
     return 0;
 }
