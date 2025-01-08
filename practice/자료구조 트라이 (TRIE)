@@ -6,7 +6,7 @@ using namespace std;
 
 struct TrieNode {
     bool isEndOfWord;
-    TrieNode* children[10]; // 전화번호는 숫자로만 구성됨 (0-9)
+    TrieNode* children[10];
 
     TrieNode() {
         isEndOfWord = false;
@@ -37,7 +37,6 @@ public:
         delete node;
     }
 
-    // 전화번호를 Trie에 삽입
     bool insert(string number) {
         TrieNode* node = root;
 
@@ -48,13 +47,14 @@ public:
                 node->children[idx] = new TrieNode();
             }
             node = node->children[idx];
-            // 현재 노드가 다른 번호의 끝이면 접두어 충돌 발생
+            
             if (node->isEndOfWord) return false;
         }
-        // 현재 번호를 삽입했는데 하위에 다른 번호가 있으면 접두어 충돌 발생
+        
         for (int i = 0; i < 10; i++) {
             if (node->children[i]) return false;
         }
+        
         node->isEndOfWord = true;
 
         return true;
@@ -66,11 +66,11 @@ bool isConsistent(vector<string> phoneNumbers) {
 
     for (string number : phoneNumbers) {
         if (!trie.insert(number)) {
-            return false; // 접두어 충돌 발생
+            return false;
         }
     }
 
-    return true; // 모든 번호가 일관됨
+    return true;
 }
 
 int main() {
