@@ -1,0 +1,101 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct TrieNode {
+    bool isEndOfWord;
+    TrieNode* children[10]; // 전화번호는 숫자로만 구성됨 (0-9)
+
+    TrieNode() {
+        isEndOfWord = false;
+        for (int i = 0; i < 10; i++) {
+            children[i] = nullptr;
+        }
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    ~Trie() {
+        clear(root);
+    }
+
+    void clear(TrieNode* node) {
+        for (int i = 0; i < 10; i++) {
+            if (node->children[i]) {
+                clear(node->children[i]);
+            }
+        }
+        delete node;
+    }
+
+    // 전화번호를 Trie에 삽입
+    bool insert(string number) {
+        TrieNode* node = root;
+
+        for (char ch : number) {
+            int idx = ch - '0';
+
+            if (!node->children[idx]) {
+                node->children[idx] = new TrieNode();
+            }
+            node = node->children[idx];
+            // 현재 노드가 다른 번호의 끝이면 접두어 충돌 발생
+            if (node->isEndOfWord) return false;
+        }
+        // 현재 번호를 삽입했는데 하위에 다른 번호가 있으면 접두어 충돌 발생
+        for (int i = 0; i < 10; i++) {
+            if (node->children[i]) return false;
+        }
+        node->isEndOfWord = true;
+
+        return true;
+    }
+};
+
+bool isConsistent(vector<string> phoneNumbers) {
+    Trie trie;
+
+    for (string number : phoneNumbers) {
+        if (!trie.insert(number)) {
+            return false; // 접두어 충돌 발생
+        }
+    }
+
+    return true; // 모든 번호가 일관됨
+}
+
+int main() {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<string> phoneNumbers(n);
+
+        for (int i = 0; i < n; i++) {
+            cin >> phoneNumbers[i];
+        }
+
+        sort(phoneNumbers.begin(), phoneNumbers.end());
+
+        if (isConsistent(phoneNumbers)) {
+            cout << "YES\n";
+        }
+        else {
+            cout << "NO\n";
+        }
+    }
+
+    return 0;
+}
