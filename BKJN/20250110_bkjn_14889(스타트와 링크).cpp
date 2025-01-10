@@ -7,7 +7,7 @@ using namespace std;
 
 int N;
 int status[MAX][MAX];
-int visited[MAX];
+bool visited[MAX];
 int start, link, minResult = INT_MAX;
 vector <int> rest;
 
