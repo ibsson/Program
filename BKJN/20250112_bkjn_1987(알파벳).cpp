@@ -40,3 +40,10 @@ int main(void) {
 
 	return 0;
 }
+
+/*
+작은 크기의 입출력에서는 
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+를 추가해주는게 성능손실이 일어날수도 있다는것을 알게되었다.
+*/
