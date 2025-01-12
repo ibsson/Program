@@ -9,6 +9,8 @@ bool visited[27];
 int dir[4][2] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
 
 void dfs(int row, int col, int cnt) {
+	max_result = max(max_result, cnt);
+
 	for (int i = 0; i < 4; i++) {
 		int n_row = row + dir[i][0];
 		int n_col = col + dir[i][1];
@@ -19,10 +21,6 @@ void dfs(int row, int col, int cnt) {
 				dfs(n_row, n_col, cnt + 1);
 				visited[board[n_row][n_col] - 'A'] = false;
 			}
-		}
-
-		if (i == 3) {
-			max_result = max(max_result, cnt);
 		}
 	}
 }
