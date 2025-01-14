@@ -9,7 +9,6 @@ int N, M, result = INT_MAX;
 int map[MAX][MAX];
 int dir[4][2] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
 int dis[2][MAX][MAX];
-bool visited[MAX][MAX];
 
 int bfs() {
 	queue <pair<pair<int, int>, int>> q;
@@ -29,8 +28,7 @@ int bfs() {
 			int n_col = col + dir[i][1];
 
 			if (n_row >= 1 && n_row <= N && n_col >= 1 && n_col <= M) {
-				if (!visited[n_row][n_col]) {
-					if (map[n_row][n_col] == 1 && status == 0 && dis[1][n_row][n_col] > (dis[status][row][col] + 1)) {
+				if (map[n_row][n_col] == 1 && status == 0 && dis[1][n_row][n_col] > (dis[status][row][col] + 1)) {
 						q.push({ { n_row, n_col }, 1 });
 						dis[1][n_row][n_col] = dis[status][row][col] + 1;
 					}
@@ -38,7 +36,6 @@ int bfs() {
 						q.push({ { n_row, n_col }, status });
 						dis[status][n_row][n_col] = dis[status][row][col] + 1;
 					}
-				}
 			}
 		}
 	}
