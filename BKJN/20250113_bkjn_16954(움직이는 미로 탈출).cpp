@@ -1,4 +1,5 @@
 #include <iostream> 
+#include <string.h>
 #include <queue>
 
 using namespace std;
@@ -7,13 +8,10 @@ char mat[9][9];
 int isVisited[9][9];
 int dir[9][2] = { {0,0}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1},{1,-1} };
 
-
 bool isValid(int y, int x) {
     return (y >= 1 && y <= 8) && (x >= 1 && x <= 8);
 }
 
-
-// 벽 내리기  
 void down_walls() {
     for (int i = 7; i >= 0; i--) {
         for (int j = 1; j <= 8; j++) {
@@ -75,6 +73,8 @@ int main(void) {
 
     if (bfs()) cout << 1 << endl;
     else cout << 0 << endl;
+
+    return 0;
 }
 
 /*
