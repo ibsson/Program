@@ -28,7 +28,7 @@ int bfs() {
 			int n_col = col + dir[i][1];
 
 			if (n_row >= 1 && n_row <= N && n_col >= 1 && n_col <= M) {
-				if (map[n_row][n_col] == 1 && dis[status + 1][n_row][n_col] > (dis[status][row][col] + 1)) {
+				if (map[n_row][n_col] == 1 && status < K && dis[status + 1][n_row][n_col] > (dis[status][row][col] + 1)) {
 					q.push({ { n_row, n_col }, status + 1 });
 					dis[status + 1][n_row][n_col] = dis[status][row][col] + 1;
 				}
