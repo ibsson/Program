@@ -12,12 +12,12 @@ int getResult() {
 	
 	int max_result = 0;
 
-	for (int i = 1; i < 100; i++) {
-		for (int j = 1; j <= N; j++) {
-			if (L[j] > i) dp[i][j] = dp[i][j - 1];
-			else if (L[j] <= i) dp[i][j] = max(dp[i][j - 1], J[j] + dp[i - L[j]][j - 1]);
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j < 100; j++) {
+			if (L[i] > j) dp[j][i] = dp[j][i - 1];
+			else if (L[i] <= j) dp[j][i] = max(dp[j][i - 1], J[i] + dp[j - L[i]][i - 1]);
 
-			max_result = max(max_result, dp[i][j]);
+			max_result = max(max_result, dp[j][i]);
 		}
 	}
 
