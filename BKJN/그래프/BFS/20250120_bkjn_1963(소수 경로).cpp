@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <string.h>
+#include <string>
 using namespace std;
 
 #define MAX 10000
@@ -49,6 +50,8 @@ int bfs(int s, int f) {
 }
 
 int main(void) {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
 
 	makeEratos();
 
