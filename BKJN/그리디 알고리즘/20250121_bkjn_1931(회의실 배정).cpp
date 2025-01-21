@@ -25,12 +25,12 @@ int main(void) {
 
 	sort(v.begin(), v.end(), Compare);
 
-	int a = v[0].first, b = v[0].second;
+	int b = v[0].second;
 	int cnt = 1;
 
 	for (int i = 1; i < v.size(); i++) {
 		if (v[i].first >= b) {
-			a = v[i].first, b = v[i].second;
+			b = v[i].second;
 			cnt++;
 		}
 	}
