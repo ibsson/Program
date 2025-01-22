@@ -1,0 +1,47 @@
+#include <iostream>
+#include <map>
+#include <vector>
+using namespace std;
+
+#define MAX 300001
+
+int T, N;
+map <int, int> m;
+vector <int> v;
+
+int main(void) {
+
+	cin >> T;
+	
+	for (int t = 1; t <= T; t++) {
+		cin >> N;
+
+		int x = 0;
+
+		for (int i = 0; i < N; i++) {
+			cin >> x;
+
+			m[x]++;
+		}
+
+		for (auto it = m.begin(); it != m.end(); it++) {
+			if ((it->second) % 2 != 0) {
+				v.push_back(it->first);
+			}
+		}
+
+		int result = v[0];
+
+		for (int i = 1; i < v.size(); i++) {
+			result ^= v[i];
+		}
+
+		cout << "Case #" << t << "\n";
+		cout << result << "\n";
+
+		m.clear();
+		v.clear();
+	}
+
+	return 0;
+}
