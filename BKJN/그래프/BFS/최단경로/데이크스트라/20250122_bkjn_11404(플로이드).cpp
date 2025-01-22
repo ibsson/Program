@@ -1,4 +1,59 @@
 #include <iostream>
+using namespace std;
+
+#define MAX 102
+#define INF 1000000000
+
+int dist[MAX][MAX];
+
+void floydFunction(int n, int m) {
+
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (i == j) dist[i][j] = 0;
+			else dist[i][j] = INF;
+		}
+	}
+
+	int from = 0, to = 0, w = 0;
+
+	for (int i = 0; i < m; i++) {
+		cin >> from >> to >> w;
+
+		dist[from][to] = min(dist[from][to], w);
+	}
+
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			for (int k = 1; k <= n; k++) {
+				dist[j][k] = min(dist[j][k], dist[j][i] + dist[i][k]);
+			}
+		}
+	}
+
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (dist[i][j] == INF) cout << 0 << ' ';
+			else cout << dist[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+}
+
+int main(void) {
+
+	int n = 0, m = 0;
+
+	cin >> n;
+	cin >> m;
+
+	floydFunction(n, m);
+
+	return 0;
+}
+
+/*
+#include <iostream>
 #include <queue>
 #include <vector>
 #include <climits>
@@ -63,3 +118,4 @@ int main(void) {
 
 	return 0;
 }
+*/
