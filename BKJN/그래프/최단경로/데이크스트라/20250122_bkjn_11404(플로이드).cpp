@@ -23,10 +23,10 @@ void floydFunction(int n, int m) {
 		dist[from][to] = min(dist[from][to], w);
 	}
 
-	for (int i = 1; i <= n; i++) {
-		for (int j = 1; j <= n; j++) {
-			for (int k = 1; k <= n; k++) {
-				dist[j][k] = min(dist[j][k], dist[j][i] + dist[i][k]);
+	for (int k = 1; k <= n; k++) {
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
 			}
 		}
 	}
