@@ -39,7 +39,7 @@ int main(void) {
 	tmp_2[0] == '0' ? tmp_2[0] = '1' : tmp_2[0] = '0';
 	tmp_2[1] == '0' ? tmp_2[1] = '1' : tmp_2[1] = '0';
 
-	for (int i = 1; i < tmp_2.length(); i++) { //0번 스위치를 안눌렀을때.
+	for (int i = 1; i < tmp_2.length(); i++) { //0번 스위치를 눌렀을때.
 		if (tmp_2[i - 1] != b[i - 1]) {
 			if (i == tmp_2.length() - 1) {
 				for (int j = i - 1; j <= i; j++) {
