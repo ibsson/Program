@@ -13,4 +13,6 @@ int main(void) {
 
 	cout << r * r * PI << "\n";
 	cout << 2 * r * r << "\n";
+
+	return 0;
 }
