@@ -1,0 +1,58 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+#define PI 3.141592
+
+int score[20] = { 6, 13, 4, 18, 1, 20, 5, 12, 9, 14, 11, 8, 16, 7, 19, 3, 17, 2, 15, 10};
+int T, N;
+int A, B, C, D, E;
+
+double getDist(int x, int y) {
+	return sqrt(x * x + y * y);
+}
+
+double getDegree(int x, int y) {
+	double degree = atan2(y, x) * 180 / PI;
+
+	if (degree < 0) degree += 360;
+	degree += 9; //기준점을 이동시켜서 첫번째 영역 351~9도가 아닌 0~18도로 맞춤
+	if (degree >= 360) degree -= 360;
+
+	return degree;
+}
+
+int main(void) {
+
+	cin >> T;
+
+	for (int t = 1; t <= T; t++) {
+		int result = 0;
+
+		cin >> A >> B >> C >> D >> E;
+
+		cin >> N;
+
+		int x = 0, y = 0;
+
+		for (int i = 0; i < N; i++) {
+			cin >> x >> y;
+
+			double dist = getDist(x, y);
+			double degree = getDegree(x, y);
+
+			int s = degree / 18;
+
+			if (dist <= A) result += 50;
+			else if (dist >= A && dist <= B) result += score[s];
+			else if (dist >= B && dist <= C) result += score[s] * 3;
+			else if (dist >= C && dist <= D) result += score[s];
+			else if (dist >= D && dist <= E) result += score[s] * 2;
+		}
+
+		cout << "Case #" << t << "\n";
+		cout << result << "\n";
+	}
+
+	return 0;
+}
