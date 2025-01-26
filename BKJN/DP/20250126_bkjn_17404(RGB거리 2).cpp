@@ -1,7 +1,4 @@
 #include<iostream>
-#include<algorithm>
-#include<vector>
-#include<queue>
 using namespace std;
 
 #define MAX 1000000
@@ -10,18 +7,18 @@ int color[1001][3];
 int dp[1001][3];
 int ans = MAX;
 
-int main()
-{
+int main() {
 	ios_base::sync_with_stdio(0);
 	cin.tie(0);
 
 	cin >> N;
 
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++) {
 		cin >> color[i][0] >> color[i][1] >> color[i][2];
+	}
 
-	for (int RGB = 0; RGB <= 2; RGB++) {
-		for (int i = 0; i <= 2; i++) {
+	for (int RGB = 0; RGB < 3; RGB++) {
+		for (int i = 0; i < 3; i++) {
 			if (i == RGB) dp[0][i] = color[0][i];
 			else dp[0][i] = MAX;
 		}
@@ -32,13 +29,13 @@ int main()
 			dp[i][2] = color[i][2] + min(dp[i - 1][0], dp[i - 1][1]);
 		}
 
-		for (int i = 0; i <= 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			if (i == RGB) continue;
 			else ans = min(ans, dp[N - 1][i]);
 		}
 	}
 
-	cout << ans;
+	cout << ans << "\n";
 
 	return 0;
 }
