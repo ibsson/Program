@@ -6,7 +6,7 @@ using namespace std;
 int N, cnt_p, cnt_m;
 int arr[51];
 
-int main(void) {
+int main() {
 
 	cin >> N;
 
