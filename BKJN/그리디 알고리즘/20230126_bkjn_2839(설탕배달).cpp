@@ -1,3 +1,34 @@
+//복습
+#include <iostream>
+using namespace std;
+
+#define MAX 10000
+
+int main() {
+
+	int N = 0;
+
+	cin >> N;
+
+	int cnt_5 = N / 5, ans = MAX;
+
+	for (int i = 0; i <= cnt_5; i++) {
+		int tmp = N - (5 * i), cnt = 0;
+
+		cnt += i;
+		cnt += tmp / 3;
+		tmp %= 3;
+
+		if (tmp == 0) ans = min(ans, cnt);
+	}
+
+	if (ans == MAX) cout << "-1\n";
+	else cout << ans << "\n";
+
+	return 0;
+}
+
+/*
 #include <stdio.h>
 
 int main() {
@@ -29,3 +60,4 @@ int main() {
 
 	return 0;
 }
+*/
