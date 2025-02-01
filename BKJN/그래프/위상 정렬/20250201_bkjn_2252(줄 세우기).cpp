@@ -8,6 +8,7 @@ using namespace std;
 int N, M;
 int indegree[MAX];
 vector <int> graph[MAX];
+vector <int> result;
 
 void topologySort() {
 	queue <int> q;
@@ -18,7 +19,7 @@ void topologySort() {
 
 	for (int i = 0; i < N; i++) {
 		int from = q.front();
-		cout << from << " ";
+		result.push_back(from);
 		q.pop();
 
 		for (int j = 0; j < graph[from].size(); j++) {
@@ -43,6 +44,11 @@ int main() {
 	}
 
 	topologySort();
+
+	for (int i = 0; i < N; i++) {
+		cout << result[i] << " ";
+	}
+	cout << "\n";
 
 	return 0;
 }
