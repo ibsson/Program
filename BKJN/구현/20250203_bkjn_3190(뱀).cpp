@@ -111,7 +111,7 @@ int playGame() {
 	}
 }
 
-int main(void) {
+int main() {
 
 	cin >> N;
 	cin >> K;
