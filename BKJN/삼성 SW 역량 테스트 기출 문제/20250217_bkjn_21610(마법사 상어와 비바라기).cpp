@@ -12,7 +12,7 @@ int dr[8] = { 0, -1, -1, -1, 0, 1, 1, 1 };
 int dc[8] = { -1, -1, 0, 1, 1, 1, 0, -1 };
 vector <pair<int, int>> cloud;
 
-void moving(int dir, int dis) {
+void arrangeGrid(int dir, int dis) {
 	int len = cloud.size();
 
 	for (int i = 0; i < len; i++) {
@@ -75,7 +75,7 @@ int main() {
 	for (int i = 0; i < M; i++) {
 		cin >> d >> s;
 
-		moving(d, s);
+		arrangeGrid(d, s);
 	}
 
 	for (int i = 0; i < N; i++) {
