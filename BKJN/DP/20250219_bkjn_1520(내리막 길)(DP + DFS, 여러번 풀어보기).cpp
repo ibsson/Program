@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-#define MAX 502
+#define MAX 501
 
 int M, N;
 int grid[MAX][MAX];
