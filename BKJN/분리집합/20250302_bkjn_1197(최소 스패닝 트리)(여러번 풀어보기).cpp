@@ -52,7 +52,7 @@ int main() {
 		int a = findParent(x);
 		int b = findParent(y);
 
-		if (findParent(x) == findParent(y)) continue;
+		if (a == b) continue;
 
 		merge(a, b);
 		ans += w;
