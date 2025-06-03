@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct treeNode {
+	int data;
+	struct treeNode* left;
+	struct treeNode* right;
+}treeNode;
+
+treeNode* makeNode(int data, treeNode* leftNode, treeNode* rightNode);
+void preorder(treeNode* root);
+void inorder(treeNode* root);
+void postorder(treeNode* root);
+
+treeNode* makeNode(int data, treeNode* leftNode, treeNode* rightNode) {
+	treeNode* root = (treeNode*)malloc(sizeof(treeNode));
+	root->data = data;
+	root->left = leftNode;
+	root->right = rightNode;
+	return root;
+}
+
+void preorder(treeNode* root) {
+	if (root) {
+		printf("%c", root->data);
+		preorder(root->left);
+		preorder(root->right);
+	}
+}
+
+void inorder(treeNode* root) {
+	if (root) {
+		inorder(root->left);
+		printf("%c", root->data);
+		inorder(root->right);
+	}
+}
+
+void postorder(treeNode* root) {
+	if (root) {
+		postorder(root->left);
+		postorder(root->right);
+		printf("%c", root->data);
+	}
+}
+
+int main() {
+
+	treeNode* n7 = makeNode('D', NULL, NULL);
+	treeNode* n6 = makeNode('C', NULL, NULL);
+	treeNode* n5 = makeNode('B', NULL, NULL);
+	treeNode* n4 = makeNode('A', NULL, NULL);
+	treeNode* n3 = makeNode('/', n6, n7);
+	treeNode* n2 = makeNode('*', n4, n5);
+	treeNode* n1 = makeNode('-', n2, n3);
+
+	printf("preorder: ");
+	preorder(n1);
+
+	printf("\ninorder: ");
+	inorder(n1);
+
+	printf("\npostorder: ");
+	postorder(n1);
+
+	return 0;
+}
