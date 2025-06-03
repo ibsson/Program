@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct treeNode {
+	char data;
+	struct treeNode* left;
+	struct treeNode* right;
+	int isThreadRight;
+}treeNode;
+
+treeNode* makeNode(char data, treeNode* rightNode, treeNode* leftNode, int isRight);
+treeNode* findThreadSuccessor(treeNode* p); //후속자 노드 반환
+void threadInorder(treeNode* root); //스레드 이진트리의 중위순회
+
+treeNode* makeNode(char data, treeNode* leftNode, treeNode* rightNode, int isRight) {
+	treeNode* root = (treeNode*)malloc(sizeof(treeNode));
+	root->data = data;
+	root->left = leftNode;
+	root->right = rightNode;
+	root->isThreadRight = isRight;
+
+	return root;
+}
+
+/*
+treeNode* findThreadSuccessor(treeNode* p) {
+	treeNode* tmp = p->right;
+
+	if (tmp == NULL) return tmp; //마지막 노드인 경우
+	if (p->isThreadRight == 1) return tmp; //이미 중위 순회상의 다음 노드를 가리키고 있음
+
+	while (tmp->left) { //실제 오른쪽 자식이므로 가장 왼쪽에 있는 노드가 중위순회할 노드임
+		tmp = tmp->left;
+	}
+
+	return tmp;
+}
+*/
+
+treeNode* findThreadSuccessor(treeNode* p) {
+	treeNode* tmp = p->right;
+
+	if (tmp == NULL) return tmp;
+	if (p->isThreadRight == 1) return tmp;
+
+	while (tmp->left) {
+		tmp = tmp->left;
+	}
+
+	return tmp;
+}
+
+void threadInorder(treeNode* root) {
+	treeNode* tmp = root;
+
+	while (tmp->left) {
+		tmp = tmp->left;
+	}
+
+	do {
+		printf("%3c", tmp->data);
+		tmp = findThreadSuccessor(tmp);
+	} while (tmp);
+}
+
+int main() {
+
+	treeNode* n7 = makeNode('D', NULL, NULL, 0);
+	treeNode* n6 = makeNode('C', NULL, NULL, 1);
+	treeNode* n5 = makeNode('B', NULL, NULL, 1);
+	treeNode* n4 = makeNode('A', NULL, NULL, 1);
+	treeNode* n3 = makeNode('/', n6, n7, 0);
+	treeNode* n2 = makeNode('*', n4, n5, 0);
+	treeNode* n1 = makeNode('-', n2, n3, 0);
+
+	n4->right = n2;
+	n5->right = n1;
+	n6->right = n3;
+
+	printf("\n 스레드 이진트리의 중위순회: ");
+	threadInorder(n1);
+
+	return 0;
+}
