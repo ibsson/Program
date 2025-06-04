@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+
+void selectSort(int a[], int size) {
+	int min, tmp;
+	for (int i = 0; i < size - 1; i++) {
+		min = i;
+		for (int j = i + 1; j < size; j++) {
+			if (a[j] < a[min]) min = j;
+		}
+		tmp = a[i];
+		a[i] = a[min];
+		a[min] = tmp;
+		
+		printf("\n%d단계 : ", i + 1);
+		for (int t = 0; t < size; t++) {
+			printf("%3d ", a[t]);
+		}
+	}
+}
+
+int main() {
+
+	int i, list[8] = { 69, 10, 30, 2, 16, 8, 31, 22 };
+	int size = sizeof(list) / sizeof(list[0]);
+	printf("\n정렬할 원소 : ");
+
+	for (int i = 0; i < size; i++) {
+		printf("%3d ", list[i]);
+	}
+
+	printf("선택정렬 수행\n");
+	selectSort(list, size);
+
+	return 0;
+}
