@@ -1,0 +1,328 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+typedef struct Node{
+        int coef;
+        int exp;
+        struct Node* next;
+}Node;
+
+typedef struct Poly{
+        Node** head;
+        struct Poly* next;
+}Poly;
+
+char var[10];
+char opList[50];
+int priority[50];
+int opcnt = 0;
+int chk = 0;
+
+Node* createNode(int c, int e){
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        newNode->coef = c;
+        newNode->exp = e;
+        newNode->next = NULL;
+
+        return newNode;
+}
+
+
+Poly* createPoly(){
+        Poly* newPoly = (Poly*)malloc(sizeof(Poly));
+        newPoly->head = (Node**)malloc(sizeof(Node*));
+        *(newPoly->head) = NULL;
+        newPoly->next = NULL;
+
+        return newPoly;
+}
+void insertToPoly(Poly* poly, Node* newNode){
+        Node* cpy = createNode(newNode->coef, newNode->exp);
+
+        if(*(poly->head) == NULL){
+                *(poly->head) = cpy;
+        }
+        else{
+                Node* cur = *(poly->head);
+
+                while(cur->next != NULL){
+                        cur = cur->next;
+                }
+                cur->next = cpy;
+        }
+}
+void sortPoly(Poly* poly){
+        Node* sorted = NULL;
+        Node* cur = *(poly->head);
+
+        while(cur){
+                Node* _next = cur->next;
+
+                if(!sorted || cur->exp > sorted->exp){
+                        cur->next = sorted;
+                        sorted = cur;
+                }
+                else{
+                        Node* tmp = sorted;
+
+                        while(tmp->next  && tmp->next->exp >= cur->exp){
+                                tmp = tmp->next;
+                        }
+
+                        cur->next = tmp->next;
+                        tmp->next = cur;
+                }
+                cur = _next;
+        }
+        *(poly->head) = sorted;
+}
+int getPriority(char op, int depth){
+        int weight;
+
+        if(op == '*') weight = 2;
+        else weight = 1;
+
+        return depth * 10 + weight;
+}
+void parseExpr(char* arr, Poly* head){
+        int len = strlen(arr);
+        int i = 0, depth = 0;
+
+        Poly* curpoly = head;
+
+        while(i < len){
+                char tmp = arr[i];
+
+                if(tmp == '(' || tmp == '[' || tmp == '{'){
+                        depth++; i++;
+                        continue;
+                }
+
+                if(tmp == ')' || tmp == ']' || tmp == '}'){
+                        depth--; i++;
+
+                        while(arr[i] == ')' || arr[i] == ']' || arr[i] == '}'){
+                                depth--; i++;
+                        }
+
+                        if(arr[i] == '+' || arr[i] == '-' || arr[i] == '*'){
+                                opList[opcnt] = arr[i];
+                                priority[opcnt] = getPriority(arr[i], depth);
+                                opcnt++;
+                                i++;
+                        }
+
+                        Poly* nextPoly = createPoly();
+                        curpoly->next = nextPoly;
+                        curpoly = nextPoly;
+
+                        continue;
+                }
+                if(!isdigit(arr[i]) && !isalpha(arr[i]) & arr[i] != '+' && arr[i] != '-'){
+                        i++;
+                        continue;
+                }
+
+                int sign = 1, c = 0, e = 0, coefset = 0;
+
+                if(arr[i] == '+'){
+                        sign = 1;
+                        i++;
+                }
+                else if(arr[i] == '-'){
+                        sign = -1;
+                        i++;
+                }
+
+                if(!isdigit(arr[i]) && !isalpha(arr[i])) continue;
+
+                while(isdigit(arr[i])){
+                        c = c * 10 + (arr[i] - '0');
+                        i++; coefset = 1;
+                }
+
+                if(!coefset) c = 1;
+
+                if(isalpha(arr[i])){
+                        int idx = 0;
+
+                        while(isalpha(arr[i])){
+                                if(chk == 0) var[idx] = arr[i];
+
+                                idx++; i++;
+                        }
+
+                        chk = 1;
+
+                        if(arr[i] == '^'){
+                                i++;
+                                while(isdigit(arr[i])){
+                                        e = e * 10 + (arr[i] - '0');
+                                        i++;
+                                }
+                        }
+                }
+                else e = 0;
+
+                Node* newNode = createNode(sign * c, e);
+                insertToPoly(curpoly, newNode);
+
+        }
+}
+Poly* Add(Poly* a, Poly* b){
+        Poly* res = createPoly();
+        Node* tmp_a = *(a->head);
+
+        while(tmp_a != NULL){
+                insertToPoly(res, createNode(tmp_a->coef, tmp_a->exp));
+                tmp_a = tmp_a->next;
+        }
+
+        Node* tmp_b = *(b->head);
+        while(tmp_b != NULL){
+                Node* cur = *(res->head);
+                int found = 0;
+
+                while(cur != NULL){
+                        if(cur->exp == tmp_b->exp){
+                                cur->coef += tmp_b->coef;
+                                found = 1;
+                                break;
+                        }
+                        cur = cur->next;
+                }
+
+                if(!found){
+                        insertToPoly(res, createNode(tmp_b->coef, tmp_b->exp));
+                }
+
+                tmp_b = tmp_b->next;
+        }
+        sortPoly(res);
+
+        return res;
+}
+Poly* Sub(Poly* a, Poly* b){
+        Poly* negB = createPoly();
+        Node* tmp_b = *(b->head);
+
+        while(tmp_b != NULL){
+                insertToPoly(negB, createNode((-1) * tmp_b->coef, tmp_b->exp));
+                tmp_b = tmp_b->next;
+        }
+
+        return Add(a, negB);
+}
+Poly* Mul(Poly* a, Poly* b){
+        Poly* res = createPoly();
+        Node* tmp_a = *(a->head);
+
+        while(tmp_a != NULL){
+                Node* tmp_b = *(b->head);
+
+                while(tmp_b != NULL){
+                        int c = tmp_a->coef * tmp_b->coef;
+                        int e = tmp_a->exp + tmp_b->exp;
+                        int found = 0;
+                        Node* cur = *(res->head);
+
+                        while(cur != NULL){
+                                if(cur->exp == e){
+                                        cur->coef += c;
+                                        found = 1;
+                                        break;
+                                }
+                                cur = cur->next;
+                        }
+
+                        if(!found) insertToPoly(res, createNode(c, e));
+
+                        tmp_b = tmp_b->next;
+                }
+                tmp_a = tmp_a->next;
+        }
+        sortPoly(res);
+
+        return res;
+}
+void freePoly(Poly* poly){
+        Node* cur = *(poly->head);
+        while(cur != NULL){
+                Node* next = cur->next;
+                free(cur);
+                cur = next;
+        }
+        free(poly->head);
+        free(poly);
+}
+void evaluatePriority(Poly** head){
+        while(opcnt > 0){
+                int maxidx = 0;
+
+                for(int i = 1; i < opcnt; i++){
+                        if(priority[i] > priority[maxidx]){
+                                maxidx = i;
+                        }
+                }
+
+                Poly* pre = NULL;
+                Poly* cur = (*head);
+
+                for(int i = 0; i < maxidx; i++){
+                        pre = cur;
+                        cur = cur->next;
+                }
+
+                Poly* _next = cur->next;
+                Poly* res = NULL;
+
+                if(opList[maxidx] == '+') res = Add(cur, _next);
+                else if(opList[maxidx] == '-') res = Sub(cur, _next);
+                else res = Mul(cur, _next);
+
+                *(cur->head) = *(res->head);
+                cur->next = _next->next;
+
+                freePoly(_next);
+                free(res);
+
+                for(int i = maxidx; i < opcnt - 1; i++){
+                        opList[i] = opList[i + 1];
+                        priority[i] = priority[i + 1];
+                }
+                opcnt--;
+        }
+}
+void printRes(Poly* polys){
+        Node* cur = *(polys->head);
+
+        int chkF = 0;
+
+        while(cur != NULL){
+                if(cur->coef >= 0 && chkF == 1) printf("+");
+
+                if(cur->exp == 0) printf("%d", cur->coef);
+                else printf("%d%s^%d", cur->coef, var, cur->exp);
+                cur = cur->next;
+                chkF = 1;
+        }
+        printf("\n");
+}
+int main(){
+        char arr[100];
+
+        scanf("%s", arr);
+
+        Poly* polys = createPoly();
+        parseExpr(arr, polys);
+
+        evaluatePriority(&polys);
+
+        printRes(polys);
+
+        freePoly(polys);
+
+        return 0;
+}
