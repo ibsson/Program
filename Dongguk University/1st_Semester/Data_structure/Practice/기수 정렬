@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define RADIX 10
+#define DIGIT 2
+
+// 노드 정의
+typedef struct QNode {
+    int data;
+    struct QNode* link;
+} QNode;
+
+// 연결 큐 정의
+typedef struct LQueueType {
+    QNode* front, * rear;
+} LQueueType;
+
+// 큐 생성
+LQueueType* createQueue() {
+    LQueueType* LQ = (LQueueType*)malloc(sizeof(LQueueType));
+    LQ->front = NULL;
+    LQ->rear = NULL;
+    return LQ;
+}
+
+// 큐가 비었는지 확인
+int isEmpty(LQueueType* LQ) {
+    return (LQ->front == NULL);
+}
+
+// 큐에 삽입
+void enQueue(LQueueType* LQ, int item) {
+    QNode* newNode = (QNode*)malloc(sizeof(QNode));
+    newNode->data = item;
+    newNode->link = NULL;
+    if (isEmpty(LQ)) {
+        LQ->front = newNode;
+        LQ->rear = newNode;
+    }
+    else {
+        LQ->rear->link = newNode;
+        LQ->rear = newNode;
+    }
+}
+
+// 큐에서 삭제
+int deQueue(LQueueType* LQ) {
+    if (isEmpty(LQ)) return -1;
+
+    QNode* old = LQ->front;
+    int item = old->data;
+    LQ->front = old->link;
+    if (LQ->front == NULL)
+        LQ->rear = NULL;
+    free(old);
+    return item;
+}
+
+// 기수 정렬
+void radixSort(int a[], int n) {
+    int i, bucket, d, factor = 1;
+    LQueueType* Q[RADIX];
+
+    // 큐 생성
+    for (bucket = 0; bucket < RADIX; bucket++) {
+        Q[bucket] = createQueue();
+    }
+
+    for (d = 0; d < DIGIT; d++) {
+        // 1. 숫자들을 해당 자리 기준으로 큐에 분배
+        for (i = 0; i < n; i++) {
+            int digit = (a[i] / factor) % RADIX;
+            enQueue(Q[digit], a[i]);
+        }
+
+        // 2. 큐에서 꺼내어 다시 배열로 저장
+        for (bucket = 0, i = 0; bucket < RADIX; bucket++) {
+            while (!isEmpty(Q[bucket])) {
+                a[i++] = deQueue(Q[bucket]);
+            }
+        }
+
+        // 3. 단계 출력
+        printf("\n%d단계 : ", d + 1);
+        for (i = 0; i < n; i++) {
+            printf("%3d ", a[i]);
+        }
+
+        factor *= RADIX;  // 다음 자릿수로 이동
+    }
+}
+
+int main() {
+    int list[8] = { 69, 10, 30, 2, 16, 8, 31, 22 };
+    int size = sizeof(list) / sizeof(list[0]);
+
+    printf("정렬할 원소 : ");
+    for (int i = 0; i < size; i++) {
+        printf("%3d ", list[i]);
+    }
+
+    printf("\n기수 정렬 수행");
+    radixSort(list, size);
+
+    printf("\n\n최종 결과 : ");
+    for (int i = 0; i < size; i++) {
+        printf("%3d ", list[i]);
+    }
+
+    return 0;
+}
