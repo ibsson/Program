@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct QNode {
+	char data;
+	struct QNode* link;
+}QNode;
+
+typedef struct LQueueType {
+	QNode* front, *rear;
+}LQueueType;
+
+LQueueType* radixSort(int a[], int n) {
+	LQueueType* LQ;
+	LQ = (LQueueType*)malloc(sizeof(LQueueType));
+	LQ->front = NULL;
+	LQ->rear = NULL;
+
+	return LQ;
+}
+
+int isEmpty(LQueueType* LQ) {
+	if (LQ->front == NULL) {
+		printf(" Linked Queue is empty! ");
+		return 1;
+	}
+	else return 0;
+}
+
+void enQueue(LQueueType* LQ, char item) {
+	QNode* newNode = (QNode*)malloc(sizeof(QNode));
+	newNode->data = item;
+	newNode->link = NULL;
+	if (LQ->front == NULL) {
+		LQ->front = newNode;
+		LQ->rear = newNode;
+	}
+	else {
+		LQ->rear->link = newNode;
+		LQ->rear = newNode;
+	}
+}
+
+char deQueue(LQueueType* LQ) {
+	QNode* old = LQ->front;
+	char item;
+	if (isEmpty(LQ)) return;
+	else {
+		item = old->data;
+		LQ->front = LQ->front->link;
+		if (LQ->front == NULL) {
+			LQ->rear = NULL;
+		}
+		free(old);
+		return item;
+	}
+}
