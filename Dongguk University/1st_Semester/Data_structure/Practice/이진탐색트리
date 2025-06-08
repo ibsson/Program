@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -117,9 +118,61 @@ void deleteNode(treeNode* root, char key) {
 	free(p);
 }
 
+void menu() {
+	printf("1. 트리 출력, 2. 문자 삽입, 3. 문자 삭제, 4. 문자 검색, 5. 종료\n");
+}
+
 int main() {
 
+	treeNode* root = NULL;
+	treeNode* foundedNode = NULL;
+	char choice, key;
 
+	root = insertNode(root, 'G');
+	insertNode(root, 'I');
+	insertNode(root, 'H');
+	insertNode(root, 'D');
+	insertNode(root, 'B');
+	insertNode(root, 'M');
+	insertNode(root, 'N');
+	insertNode(root, 'A');
+	insertNode(root, 'J');
+	insertNode(root, 'E');
+	insertNode(root, 'Q');
+
+	while (1) {
+		menu();
+		scanf(" %c", &choice);
+
+		switch (choice - '0') {
+		case 1:
+			printf("\t 이진트리 출력");
+			displayInorder(root);
+			break;
+		case 2:
+			printf("삽입할 문자를 입력하세요 : ");
+			scanf(" %c", &key);
+			break;
+		case 3:
+			printf("삭제할 문자를 입력하세요 : ");
+			scanf(" %c", &key);
+			break;
+		case 4:
+			printf("찾을 문자를 입력하세요 : ");
+			foundedNode = searchNode(root, key);
+
+			if (foundedNode != NULL) {
+				printf("\n %c를 찾았습니다 \n", foundedNode->key);
+			}
+			else printf("\n 문자를 찾지 못했습니다 \n");
+			break;
+		case 5:
+			return 0;
+		default:
+			printf("다시 입력하세요\n");
+			break;
+		}
+	}
 
 	return 0;
 }
