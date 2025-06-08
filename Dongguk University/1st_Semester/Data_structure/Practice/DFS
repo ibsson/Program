@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 30
+
+typedef struct stackNode {
+	char data;
+	struct stackNode* link;
+}stackNode;
+
+stackNode* top;
+
+int isEmpty() {
+	if (top == NULL) return 1;
+	else return 0;
+}
+
+void push(int item) {
+	stackNode* tmp = (stackNode*)malloc(sizeof(stackNode));
+	tmp->data = item;
+	tmp->link = top;
+	top = tmp;
+}
+
+int pop() {
+	int item;
+	stackNode* tmp = top;
+
+	if (isEmpty()) {
+		return 0;
+	}
+	else {
+		item = tmp->data;
+		top = tmp->link;
+		free(tmp);
+		return item;
+	}
+}
+
+typedef struct graphNode {
+	int vertex;
+	struct graphNode* link;
+}graphNode;
+
+typedef struct graphType {
+	int n;
+	graphNode* List[MAX];
+	int visited[MAX];
+}graphType;
+
+void createGraph(graphType* g) {
+	g->n = 0;
+	for (int v = 0; v < MAX; v++) {
+		g->List[v] = NULL;
+		g->visited[v] = 0;
+	}
+}
+
+void insertVertex(graphType* g, int v) {
+	if (((g->n) + 1) > MAX) {
+		printf("\n정점 개수 초과\n");
+		return;
+	}
+
+	g->n++;
+}
+
+void insertEdge(graphType* g, int from, int to) {
+	graphNode* node;
+
+	if (from >= g->n || to >= g->n) {
+		printf("\n 그래프에 없는 정점입니다\n");
+		return;
+	}
+
+	node = (graphNode*)malloc(sizeof(graphNode));
+	node->vertex = to;
+	node->link = g->List[from];
+	g->List[from] = node;
+}
+
+void printList(graphType* g) {
+	graphNode* p;
+	for (int i = 0; i < g->n; i++) {
+		printf("\n 정점 %d의 인접리스트: ", i);
+		p = g->List[i];
+		while (p) {
+			printf(" -> %d", p->vertex);
+			p = p->link;
+		}
+	}
+}
+
+void DFS(graphType* g, int v) {
+	graphNode* w;
+	top = NULL;
+	push(v);
+	g->visited[v] = 1;
+	printf(" %d", v);
+
+	while (!isEmpty()) {
+		w = g->List[v];
+
+		while (w) {
+			if (g->visited[w->vertex] == 0) {
+				push(w->vertex);
+				g->visited[w->vertex] = 1;
+				printf(" %d", w->vertex);
+				v = w->vertex;
+				w = g->List[v];
+			}
+			else w = w->link;
+		}
+
+		v = pop();
+	}
+}
+
+int main() {
+
+	graphType* G1 = (graphType*)malloc(sizeof(graphType));
+	createGraph(G1);
+
+	for (int i = 0; i < 7; i++) {
+		insertVertex(G1, i);
+	}
+
+	insertEdge(G1, 0, 2);
+	insertEdge(G1, 0, 1);
+	insertEdge(G1, 1, 4);
+	insertEdge(G1, 1, 3);
+	insertEdge(G1, 1, 0);
+	insertEdge(G1, 2, 4);
+	insertEdge(G1, 2, 0);
+	insertEdge(G1, 3, 6);
+	insertEdge(G1, 3, 1);
+	insertEdge(G1, 4, 6);
+	insertEdge(G1, 4, 2);
+	insertEdge(G1, 4, 1);
+	insertEdge(G1, 5, 6);
+	insertEdge(G1, 6, 5);
+	insertEdge(G1, 6, 4);
+	insertEdge(G1, 6, 3);
+
+	printf("\n G1의 인접리스트 \n");
+	printList(G1);
+
+	printf("\n깊이 우선 탐색\n");
+	DFS(G1, 0);
+
+
+	return 0;
+}
