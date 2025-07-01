@@ -24,8 +24,6 @@ int main() {
 		r = (r * (31 % NUM)) % NUM;
 	}
 
-	res %= NUM;
-
 	cout << res << "\n";
 
 	return 0;
