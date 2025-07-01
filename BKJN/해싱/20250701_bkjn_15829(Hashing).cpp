@@ -28,3 +28,5 @@ int main() {
 
 	return 0;
 }
+
+//모든 항을 modular연산을 한 후 전체를 modular연산을 하면 된다.
