@@ -22,7 +22,7 @@ int main() {
 
 	long long int res = -1;
 	long long int begin = 1, finish = _max;
-	while (1) {
+	while (begin <= finish) {
 		int cnt = 0;
 		long long int pivot = (begin + finish) / 2;
 
@@ -38,8 +38,6 @@ int main() {
 
 			begin = pivot + 1;
 		}
-
-		if (begin > finish) break;
 	}
 
 	cout << res << "\n";
