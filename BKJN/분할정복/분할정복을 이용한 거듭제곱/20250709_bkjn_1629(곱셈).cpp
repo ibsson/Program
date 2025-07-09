@@ -18,7 +18,6 @@ int cal(long long int A, int B, int C) {
 }
 
 int main() {
-
 	long long int A;
 	int B, C;
 	cin >> A >> B >> C;
