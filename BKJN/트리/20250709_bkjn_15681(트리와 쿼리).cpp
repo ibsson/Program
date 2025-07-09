@@ -34,7 +34,7 @@ int main() {
 		v[U].push_back(V);
 		v[V].push_back(U);
 	}
-	for (int i = 0; i <= MAX; i++) {
+	for (int i = 0; i < MAX; i++) {
 		DP[i] = 1;
 	}
 
