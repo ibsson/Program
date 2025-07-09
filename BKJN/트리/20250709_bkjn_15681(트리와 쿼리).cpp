@@ -13,7 +13,7 @@ void DFS(int vertex, int parent) {
 
 	visited[vertex] = true;
 
-	for (long unsigned int i = 0; i < v[vertex].size(); i++) {
+	for (int i = 0; i < v[vertex].size(); i++) {
 		DFS(v[vertex][i], vertex);
 	}
 
