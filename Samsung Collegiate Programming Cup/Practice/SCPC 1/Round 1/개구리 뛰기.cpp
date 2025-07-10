@@ -7,48 +7,36 @@ using namespace std;
 int stone[MAX];
 int DP[MAX];
 
-int getResult(int N, int K) {
-    DP[0] = 0;
-    int left = 0;
+void getResult(int N, int K) {
+	int left = 0;
+	for (int i = 1; i <= N; i++) {
+		DP[i] = INF;
 
-    for (int i = 1; i <= N; i++) {
-        DP[i] = INF;
+		while ((left < i) && (stone[left] + K < stone[i])) left++;
 
-        while (left < i && stone[left] + K < stone[i]) {
-            left++;
-        }
-
-        if (left < i && DP[left] != INF) {
-            DP[i] = DP[left] + 1;
-        }
-    }
-
-    return DP[N];
+		if (left < i && DP[left] != INF) DP[i] = DP[left] + 1;
+	}
 }
 
 int main() {
-    int T;
-    cin >> T;
+	int T;
+	cin >> T;
+	
+	int N, K;
+	for (int i = 1; i <= T; i++) {
+		cin >> N;
+		for (int j = 1; j <= N; j++) {
+			cin >> stone[j];
+		}
 
-    while (T--) {
-        int N, K;
-        cin >> N;
+		cin >> K;
 
-        stone[0] = 0;
+		getResult(N, K);
+		
+		cout << "Case #" << i << '\n';
+		if (DP[N] == INF) cout << "-1\n";
+		else cout << DP[N] << '\n';
+	}
 
-        for (int i = 1; i <= N; i++) {
-            cin >> stone[i];
-        }
-
-        cin >> K;
-
-        int result = getResult(N, K);
-
-        static int case_num = 1;
-        cout << "Case #" << case_num++ << '\n';
-        if (result == INF) cout << "-1\n";
-        else cout << result << '\n';
-    }
-
-    return 0;
+	return 0;
 }
