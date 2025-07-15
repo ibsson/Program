@@ -40,7 +40,7 @@ int main() {
 	cout << "2부터 4까지의 구간 합: " << sum(0, NUMBER - 1, 1, 2, 4) << '\n';
 	cout << "인덱스 4의 원소를 -4만큼 수정" << '\n';
 	update(0, NUMBER - 1, 1, 4, -4);
-	cout << "0부터 4까지의 구간 합: " << sum(0, NUMBER - 1, 1, 0, 4) << '\n';
+	cout << "2부터 4까지의 구간 합: " << sum(0, NUMBER - 1, 1, 2, 4) << '\n';
  
 	return 0;
 }
