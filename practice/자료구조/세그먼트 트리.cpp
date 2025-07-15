@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
-#define NUMBER 12
+#define NUMBER 5
 using namespace std;
 
-int a[] = { 1, 9, 3, 8, 4, 5, 5, 9, 10, 3, 4, 5 };
+int a[] = { 1, 2, 3, 4, 5 };
 int tree[4 * NUMBER];
 
 int init(int start, int end, int node) {
@@ -36,11 +36,11 @@ void update(int start, int end, int node, int idx, int dif) {
 int main() {
 	init(0, NUMBER - 1, 1);
 
-	cout << "0부터 12까지의 구간 합: " << sum(0, NUMBER - 1, 1, 0, 12) << '\n';
-	cout << "3부터 8까지의 구간 합: " << sum(0, NUMBER - 1, 1, 0, 12) << '\n';
-	cout << "인덱스 5의 원소를 -5만큼 수정" << '\n';
-	update(0, NUMBER - 1, 1, 5, -5);
-	cout << "3부터 8까지의 구간 합: " << sum(0, NUMBER - 1, 1, 0, 12) << '\n';
+	cout << "0부터 4까지의 구간 합: " << sum(0, NUMBER - 1, 1, 0, 4) << '\n';
+	cout << "2부터 4까지의 구간 합: " << sum(0, NUMBER - 1, 1, 2, 4) << '\n';
+	cout << "인덱스 4의 원소를 -4만큼 수정" << '\n';
+	update(0, NUMBER - 1, 1, 4, -4);
+	cout << "0부터 4까지의 구간 합: " << sum(0, NUMBER - 1, 1, 0, 4) << '\n';
  
 	return 0;
 }
