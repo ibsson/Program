@@ -13,7 +13,7 @@ double res = 0;
 
 int Find(int x) {
 	if (x == parent[x]) return x;
-	return x = Find(parent[x]);
+	return parent[x] = Find(parent[x]);
 }
 
 void Union(int x, int y) {
