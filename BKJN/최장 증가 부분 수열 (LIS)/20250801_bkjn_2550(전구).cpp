@@ -36,7 +36,7 @@ int main() {
 
 	int res = 1;
 	int last = 0;
-	for (int i = 0; i < N; i++) {
+	for (int i = 1; i < N; i++) {
 		for (int j = 0; j < i; j++) {
 			if (v2[i].idx > v2[j].idx && dp[i] < dp[j] + 1) {
 				dp[i] = dp[j] + 1;
