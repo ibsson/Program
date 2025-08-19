@@ -1,3 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <stack>
+using namespace std;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int n;
+	cin >> n;
+
+	vector <int> v;
+	deque <int> num;
+	stack <int> s;
+	vector <char> res;
+
+	for (int i = 0; i < n; i++) {
+		int tmp;
+		cin >> tmp;
+		v.push_back(tmp);
+		num.push_back(i + 1);
+	}
+
+	int idx = 0;
+	bool chk = true;
+	while (idx != n) {
+		if (!s.empty()) {
+			if (s.top() == v[idx]) {
+				s.pop();
+				res.push_back('-');
+				idx++;
+			}
+			else if (s.top() < v[idx]) {
+				if (num.empty()) {
+					chk = false;
+					break;
+				}
+				s.push(num.front());
+				num.pop_front();
+				res.push_back('+');
+			}
+			else {
+				chk = false;
+				break;
+			}
+		}
+		else {
+			s.push(num.front());
+			num.pop_front();
+			res.push_back('+');
+		}
+	}
+
+	if (chk) {
+		for (int i = 0; i < res.size(); i++) {
+			cout << res[i] << '\n';
+		}
+	}
+	else {
+		cout << "NO\n";
+	}
+
+	return 0;
+}
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -102,4 +171,5 @@ int main(void) {
 한번에 풀어내서 기분이 좋다.
 NO가 출력되는 조건을 찾기 힘들었는데, i가 n을 넘겼는데도 같은 수가 나오지 않으면 그 수열은 나올 수가 없다는 규칙을 찾아내서 쉽게 풀 수 있었다.
 이제 어느정도 스택을 자유자재로 사용할 수 있을 것 같다. 이제 큐도 공부를 해야겠다.
+*/
 */
