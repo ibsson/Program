@@ -1,3 +1,43 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int T;
+	cin >> T;
+	cin.ignore();
+
+	for (int t = 1; t <= T; t++) {
+		stack <char> s;
+		string str;
+		cin >> str;
+
+		bool chk = true;
+		for (int i = 0; i < str.length(); i++) {
+			if (str[i] == '(') s.push(str[i]);
+			else if (str[i] == ')') {
+				if (s.empty()) {
+					chk = false;
+					break;
+				}
+				else {
+					s.pop();
+				}
+			}
+		}
+
+		if (!s.empty() || !chk) cout << "NO\n";
+		else cout << "YES\n";
+	}
+
+	return 0;
+}
+
+/*
 #include <stdio.h>
 
 char par[51];
@@ -46,3 +86,4 @@ int main() {
 
 	return 0;
 }
+*/
