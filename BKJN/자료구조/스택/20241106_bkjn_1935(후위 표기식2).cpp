@@ -1,5 +1,76 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector <double> v;
+stack <double> s;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N;
+	cin >> N;
+
+	string str;
+	cin >> str;
+
+	for (int i = 0; i < N; i++) {
+		double tmp;
+		cin >> tmp;
+		v.push_back(tmp);
+	}
+
+	for (int i = 0; i < str.length(); i++) {
+		if (str[i] == '+') {
+			double num1 = s.top();
+			s.pop();
+			double num2 = s.top();
+			s.pop();
+			s.push(num2 + num1);
+		}
+		else if (str[i] == '-') {
+			double num1 = s.top();
+			s.pop();
+			double num2 = s.top();
+			s.pop();
+			s.push(num2 - num1);
+		}
+		else if (str[i] == '*') {
+			double num1 = s.top();
+			s.pop();
+			double num2 = s.top();
+			s.pop();
+			s.push(num2 * num1);
+		}
+		else if (str[i] == '/') {
+			double num1 = s.top();
+			s.pop();
+			double num2 = s.top();
+			s.pop();
+			s.push(num2 / num1);
+		}
+		else {
+			s.push(v[str[i] - 'A']);
+		}
+	}
+
+	double res = s.top();
+	s.pop();
+
+	cout << fixed;
+	cout.precision(2);
+	cout << res << '\n';
+
+	return 0;
+}
+
+/*
+#include <iostream>
+#include <string>
 using namespace std;
 
 class Node {
@@ -88,4 +159,5 @@ c++은 c언어와 유사하지만 약간 차이점이 있어서 헷갈렸다.
 전에 후위표기식을 계산하는 문제를 구현해보아서 구현은 쉬웠다. 하지만 c++로 처음 스택을 구현해서 스택을 구현하는 부분에서 조금 시간이 걸렸다.
 처음으로 class를 사용해서 푼 백준 문제다.
 c++을 계속 사용해서 더욱 익숙해져야겠다.
+*/
 */
