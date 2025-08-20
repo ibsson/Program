@@ -1,4 +1,55 @@
 #include <iostream>
+#include <vector>
+#include <stack>
+#define MAX 1000001
+using namespace std;
+
+int cnt[MAX];
+vector <int> v;
+stack <int> s;
+stack <int> res;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N;
+	cin >> N;
+
+	for (int i = 0; i < N; i++) {
+		int tmp;
+		cin >> tmp;
+		v.push_back(tmp);
+		cnt[tmp]++;
+	}
+
+	s.push(v[N - 1]);
+	res.push(-1);
+
+	for (int i = (N - 2); i >= 0; i--) {
+		while (!s.empty()) {
+			if (cnt[v[i]] >= cnt[s.top()]) s.pop();
+			else break;
+		}
+
+		if (s.empty()) res.push(-1);
+		else res.push(s.top());
+
+		s.push(v[i]);
+	}
+
+	while (!res.empty()) {
+		cout << res.top() << ' ';
+		res.pop();
+	}
+	cout << '\n';
+
+	return 0;
+}
+
+/*
+#include <iostream>
 #include <stack>
 using namespace std;
 
@@ -45,3 +96,4 @@ int main(void) {
 
 	return 0;
 }
+*/
