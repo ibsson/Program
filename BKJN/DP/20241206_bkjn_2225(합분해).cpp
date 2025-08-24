@@ -1,4 +1,33 @@
 #include <iostream>
+#define MAX 202
+#define MOD 1000000000
+using namespace std;
+
+int dp[MAX][MAX];
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N, K;
+	cin >> N >> K;
+
+	for (int i = 1; i <= K; i++) {
+		for (int j = 1; j <= N; j++) {
+			if (i == 1 && j == 1) dp[i][j] = 1;
+			else if (j == 1) dp[i][j] = i;
+			else dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % MOD;
+		}
+	}
+
+	cout << dp[K][N] << '\n';
+
+	return 0;
+}
+
+/*
+#include <iostream>
 using namespace std;
 
 int N, K;
@@ -52,4 +81,5 @@ int main(void) {
 처음으로 골드티어 문제를 온전히 내 힘으로 풀어냈다.
 계속 쓰면서 규칙을 찾다보니 점화식을 찾을 수 있었다.
 시간이 오래 걸리더라도 계속 써보면서 규칙을 찾아보면 결국에는 나온다고 생각했고 앞으로 이걸 잊지 말고 계속 이렇게 풀어야겠다고 생각했다.
+*/
 */
