@@ -1,4 +1,33 @@
 #include <iostream>
+#define MAX 100002
+#define MOD 9901
+using namespace std;
+
+int dp[MAX][3];
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N;
+	cin >> N;
+
+	dp[1][0] = 1, dp[1][1] = 1, dp[1][2] = 1;
+	for (int i = 2; i <= N; i++) {
+		dp[i][0] = (dp[i - 1][1] + dp[i - 1][2]) % MOD;
+		dp[i][1] = (dp[i - 1][0] + dp[i - 1][2]) % MOD;
+		dp[i][2] = (dp[i - 1][0] + dp[i - 1][1] + dp[i - 1][2]) % MOD;
+	}
+
+	int res = (dp[N][0] + dp[N][1] + dp[N][2]) % MOD;
+	cout << res << '\n';
+
+	return 0;
+}
+
+/*
+#include <iostream>
 using namespace std;
 
 int dp[100001][3];
@@ -36,4 +65,5 @@ N번째에 위치하는 사자의 경우의 수는
 
 도저히 풀리지가 않아서 찾아서 풀었다.
 이런 점화식을 스스로 생각해내기 위해 더 노력해야겠다.
+*/
 */
