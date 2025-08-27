@@ -1,4 +1,90 @@
 #include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#define MAX 1002
+using namespace std;
+
+vector <int> graph[MAX];
+bool visited[MAX];
+vector <int> dfs;
+vector <int> bfs;
+
+void DFS(int cur) {
+	dfs.push_back(cur);
+
+	for (int i = 0; i < graph[cur].size(); i++) {
+		if (!visited[graph[cur][i]]) {
+			visited[graph[cur][i]] = true;
+			DFS(graph[cur][i]);
+		}
+	}
+}
+
+void BFS(int cur) {
+	queue <int> q;
+
+	visited[cur] = true;
+	q.push(cur);
+	bfs.push_back(cur);
+
+	while (!q.empty()) {
+		int x = q.front();
+		q.pop();
+
+		for (int i = 0; i < graph[x].size(); i++) {
+			if (!visited[graph[x][i]]) {
+				visited[graph[x][i]] = true;
+				bfs.push_back(graph[x][i]);
+				q.push(graph[x][i]);
+			}
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N, M, V;
+	cin >> N >> M >> V;
+
+	for (int i = 0; i < M; i++) {
+		int u, v;
+		cin >> u >> v;
+		graph[u].push_back(v);
+		graph[v].push_back(u);
+	}
+
+	for (int i = 1; i <= N; i++) {
+		sort(graph[i].begin(), graph[i].end());
+	}
+
+	visited[V] = true;
+	DFS(V);
+
+	for (int i = 1; i <= N; i++) {
+		visited[i] = false;
+	}
+
+	BFS(V);
+
+	for (auto it : dfs) {
+		cout << it << ' ';
+	}
+	cout << '\n';
+	
+	for (auto it : bfs) {
+		cout << it << ' ';
+	}
+	cout << '\n';
+
+	return 0;
+}
+
+/*
+#include <iostream>
 #include <queue>
 #include <string.h>
 using namespace std;
@@ -66,6 +152,7 @@ void BFS() {
 
 	cout << "\n";
 }
+*/
 
 /*
 #include <stdio.h>
