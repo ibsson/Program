@@ -1,3 +1,79 @@
+#include <iostream>
+#include <queue>
+#define MAX 52
+using namespace std;
+
+int arr[MAX][MAX];
+bool visited[MAX][MAX];
+int dy[8] = { -1, -1, -1, 0, 1, 1, 1, 0 };
+int dx[8] = { -1, 0, 1, 1, 1, 0, -1 ,-1 };
+
+struct Node {
+	int y, x;
+};
+
+void BFS(int i, int j, int w, int h) {
+	queue <Node> q;
+	q.push({ i, j });
+	visited[i][j] = true;
+
+	while (!q.empty()) {
+		int y = q.front().y, x = q.front().x;
+		q.pop();
+
+		for (int k = 0; k < 8; k++) {
+			int ny = y + dy[k], nx = x + dx[k];
+
+			if (ny < 0 || ny >= h || nx < 0 || nx >= w) continue;
+			if (arr[ny][nx] == 0) continue;
+			if (visited[ny][nx]) continue;
+
+			q.push({ ny, nx });
+			visited[ny][nx] = true;
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	while (1) {
+		int w, h;
+		cin >> w >> h;
+
+		if (w == 0 && h == 0) break;
+
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				cin >> arr[i][j];
+			}
+		}
+
+		int cnt = 0;
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				if (arr[i][j] == 1 && !visited[i][j]) {
+					BFS(i ,j, w, h);
+					cnt++;
+				}
+			}
+		}
+		
+		cout << cnt << '\n';
+
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				visited[i][j] = false;
+			}
+		}
+	}
+
+	return 0;
+}
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -136,4 +212,5 @@ Node* Dequeue(LinkedQueue* Queue) {
 그냥 BFS의 기본 문제라서 한번에 쉽게 풀었다.
 한 점에서 상하좌우, 대각선까지 모두 고려해서 문제를 푸는것이 관건이었다.
 BFS문제의 감을 잃지 않도록 BFS문제도 계속 풀어봐야겠다.
+*/
 */
