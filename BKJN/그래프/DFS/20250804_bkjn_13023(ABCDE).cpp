@@ -3,6 +3,61 @@
 #define MAX 2001
 using namespace std;
 
+vector <int> graph[MAX];
+bool visited[MAX];
+bool isfound = false;
+
+void DFS(int cur, int cnt) {
+	if (cnt == 4) {
+		isfound = true;
+		return;
+	}
+
+	for (int i = 0; i < graph[cur].size(); i++) {
+		if (isfound) return;
+
+		if (!visited[graph[cur][i]]) {
+			visited[graph[cur][i]] = true;
+			DFS(graph[cur][i], cnt + 1);
+			visited[graph[cur][i]] = false;
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N, M;
+	cin >> N >> M;
+
+	for (int i = 0; i < M; i++) {
+		int u, v;
+		cin >> u >> v;
+		graph[u].push_back(v);
+		graph[v].push_back(u);
+	}
+
+	for (int i = 0; i < N; i++) {
+		if (isfound) break;
+
+		visited[i] = true;
+		DFS(i, 0);
+		visited[i] = false;
+	}
+
+	cout << isfound << '\n';
+
+	return 0;
+}
+
+/*
+#include <iostream>
+#include <vector>
+#define MAX 2001
+using namespace std;
+
 vector <int> v[MAX];
 bool visited[MAX];
 int res = 0;
@@ -52,3 +107,4 @@ int main() {
 
 	return 0;
 }
+*/
