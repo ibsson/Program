@@ -1,3 +1,59 @@
+#include <iostream>
+#include <queue>
+#define MAX 101
+using namespace std;
+
+struct Node {
+	int y, x;
+};
+
+string str[MAX];
+int dist[MAX][MAX];
+int dy[4] = { -1, 0, 1, 0 };
+int dx[4] = { 0, -1, 0, 1 };
+
+void BFS(int N, int M) {
+	queue <Node> q;
+	q.push({ 0, 0 });
+	dist[0][0] = 1;
+
+	while (!q.empty()) {
+		int y = q.front().y, x = q.front().x;
+		q.pop();
+		
+		for (int i = 0; i < 4; i++) {
+			int ny = y + dy[i], nx = x + dx[i];
+
+			if (ny < 0 || ny >= N || nx < 0 || nx >= M) continue;
+			if (str[ny][nx] == '0') continue;
+			if (dist[ny][nx] != 0) continue;
+
+			q.push({ ny, nx });
+			dist[ny][nx] = dist[y][x] + 1;
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N, M;
+	cin >> N >> M;
+
+	for (int i = 0; i < N; i++) {
+		cin >> str[i];
+	}
+
+	BFS(N, M);
+
+	cout << dist[N - 1][M - 1] << '\n';
+
+	return 0;
+}
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -116,4 +172,5 @@ Node* Dequeue(LinkedQueue* Queue) {
 대부분 최단거리를 찾는 문제는 BFS로 푸는 것으로 알고 있어서 BFS를 이용했다.
 오랜만에 BFS 문제를 풀어서 조금 헤맸지만, 천천히 만들다보니 잘 만들어졌다.
 앞으로 BFS 알고리즘을 구현하는 것을 까먹지 않도록 계속 BFS 문제를 풀어봐야겠다.
+*/
 */
