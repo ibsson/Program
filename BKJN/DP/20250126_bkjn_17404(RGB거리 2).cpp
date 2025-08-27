@@ -1,3 +1,60 @@
+#include <iostream>
+#define MAX 1002
+#define INF 1000000
+using namespace std;
+
+int home[MAX][3];
+int dp[MAX][3];
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int N;
+	cin >> N;
+
+	for (int i = 0; i < N; i++) {
+		cin >> home[i][0] >> home[i][1] >> home[i][2];
+	}
+
+	int res = INF;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < N; j++) {
+			for (int k = 0; k < 3; k++) {
+				dp[j][k] = INF;
+			}
+		}
+		dp[0][0] = home[0][0], dp[0][1] = home[0][1], dp[0][2] = home[0][2];
+
+		for (int j = 1; j < N; j++) {
+			if (j == 1) {
+				for (int k = 0; k < 3; k++) {
+					if (i == k) continue;
+					
+					dp[j][k] = dp[j - 1][i] + home[j][k];
+				}
+			}
+			else {
+				dp[j][0] = min(dp[j - 1][1], dp[j - 1][2]) + home[j][0];
+				dp[j][1] = min(dp[j - 1][0], dp[j - 1][2]) + home[j][1];
+				dp[j][2] = min(dp[j - 1][0], dp[j - 1][1]) + home[j][2];
+			}
+		}
+
+		for (int j = 0; j < 3; j++) {
+			if (j == i) continue;
+
+			res = min(res, dp[N - 1][j]);
+		}
+	}
+	
+	cout << res << '\n';
+
+	return 0;
+}
+
+/*
 #include<iostream>
 using namespace std;
 
@@ -39,3 +96,4 @@ int main() {
 
 	return 0;
 }
+*/
