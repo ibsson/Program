@@ -1,3 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector <int> v;
+vector <int> res;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
+	int sum = 0;
+
+	for (int i = 0; i < 9; i++) {
+		int tmp;
+		cin >> tmp;
+		v.push_back(tmp);
+		sum += tmp;
+	}
+
+	sort(v.begin(), v.end());
+
+	int tmp = 0;
+	int n1, n2;
+	bool chk = false;
+	for (int i = 0; i < 8; i++) {
+		tmp += v[i];
+		for (int j = (i + 1); j < 9; j++) {
+			tmp += v[j];
+
+			if (sum - tmp == 100) {
+				n1 = i, n2 = j;
+				chk = true;
+				break;
+			}
+			else {
+				tmp -= v[j];
+			}
+		}
+		if (chk) break;
+
+		tmp -= v[i];
+	}
+
+	for (int i = 0; i < 9; i++) {
+		if (i == n1 || i == n2) continue;
+
+		cout << v[i] << ' ';
+	}
+	cout << '\n';
+
+	return 0;
+}
+
+/*
 #Sol_2(function)_____________________________________________________________________________________________________________________________________________
 
 #include <stdio.h>
@@ -155,3 +212,4 @@ int main(void) {
 
 	return 0;
 }
+*/
