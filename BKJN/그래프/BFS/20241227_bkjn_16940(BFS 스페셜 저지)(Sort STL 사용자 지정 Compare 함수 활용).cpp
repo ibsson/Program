@@ -36,10 +36,6 @@ bool BFS(int x) {
 	return true;
 }
 
-bool Compare(int& a, int& b) {
-	return num[a] < num[b];
-}
-
 int main(void) {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
